@@ -8,7 +8,7 @@ on:
 jobs:
   promote-to-main:
     runs-on: ubuntu-latest
-    if: ${{ success() }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout
@@ -16,6 +16,8 @@ jobs:
 
       - name: Merge to main
         run: |
+          git config --global user.name "WesleySardi"
+          git config --global user.email "wesley.sardi@gmail.com"
           git checkout main
           git merge sat
           git push origin main
