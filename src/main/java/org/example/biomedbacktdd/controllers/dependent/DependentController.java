@@ -38,12 +38,6 @@ public class DependentController {
         this.handler = handler;
     }
 
-    @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
-    @GetMapping("/commonuser/hello")
-    public String hello() {
-        return "Hello, World!";
-    }
-
     @GetMapping(
             value = "/commonuser/findAll",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
