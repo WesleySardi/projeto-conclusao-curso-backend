@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
 import org.example.biomedbacktdd.services.ResponsibleService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,12 @@ public class ResponsibleController {
     private Logger logger = Logger.getLogger(ResponsibleService.class.getName());
 
     @Autowired
-    private ResponsibleService service;
+    private final ResponsibleHandler handler;
+
+    @Autowired
+    public ResponsibleController(ResponsibleHandler handler) {
+        this.handler = handler;
+    }
 
     @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
     @GetMapping("/hello")
@@ -66,7 +72,7 @@ public class ResponsibleController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeRes"));
 
-        return ResponseEntity.ok(service.findAll(pageable));
+        return ResponseEntity.ok(handler.handleFindAll(pageable));
     }
 
     @GetMapping(
@@ -98,7 +104,7 @@ public class ResponsibleController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeRes"));
 
-        return ResponseEntity.ok(service.findResponsiblesByName(nomeRes, pageable));
+        return ResponseEntity.ok(handler.handleFindResponsiblesByName(nomeRes, pageable));
     }
 
     @GetMapping(
@@ -124,7 +130,7 @@ public class ResponsibleController {
             @RequestParam(value = "emailRes") String emailRes,
             @RequestParam(value = "senhaRes") String senhaRes
     ) {
-        return service.findResponsiblesCpfAndName(emailRes, senhaRes);
+        return handler.handleFindResponsiblesCpfAndName(emailRes, senhaRes);
     }
 
     @GetMapping(
@@ -144,7 +150,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponsibleDTO findById(@PathVariable(value = "id") String id) {
-        return service.findById(id);
+        return handler.handleFindById(id);
     }
 
     @PostMapping(
@@ -162,7 +168,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponsibleDTO create(@RequestBody ResponsibleDTO responsibleVO) {
-        return service.create(responsibleVO);
+        return handler.handleCreate(responsibleVO);
     }
 
     @PutMapping(
@@ -181,7 +187,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponsibleDTO update(@RequestBody ResponsibleDTO responsibleVO) {
-        return service.update(responsibleVO);
+        return handler.handleUpdate(responsibleVO);
     }
 
     @DeleteMapping(value = "/commonuser/delete/{id}")
@@ -195,7 +201,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponseEntity<?> delete(@PathVariable(value = "id") String id) {
-        service.delete(id);
+        handler.handleDelete(id);
 
         return ResponseEntity.noContent().build();
     }

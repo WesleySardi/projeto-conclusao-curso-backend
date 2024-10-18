@@ -4,11 +4,11 @@ import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.DTO.commands.DependentWebDataDTO;
 import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
-import org.example.biomedbacktdd.repositories.DependentRepository;
-import org.example.biomedbacktdd.repositories.ResponsibleRepository;
+import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
+import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.repositories.mapper.DozerMapper;
+import org.example.biomedbacktdd.services.interfaces.mixed.IMixedService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.stereotype.Service;
 
 import java.util.logging.Logger;
@@ -17,18 +17,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class MixedService {
-
-    private Logger logger = Logger.getLogger(DependentService.class.getName());
-
-    @Autowired
-    DependentRepository depRepository;
+public class MixedService implements IMixedService {
+    private final Logger logger = Logger.getLogger(DependentService.class.getName());
+    private final IDependentRepository depRepository;
+    private final IResponsibleRepository resRepository;
 
     @Autowired
-    ResponsibleRepository resRepository;
-
-    @Autowired
-    PagedResourcesAssembler<DependentDTO> assembler;
+    public MixedService(IDependentRepository depRepository,
+                        IResponsibleRepository resRepository) {
+        this.depRepository = depRepository;
+        this.resRepository = resRepository;
+    }
 
     public DependentDTO findByIdWithSecurity(String cpfDep, String emergePhone) {
         Integer emergePhoneByCpf = Integer.valueOf(resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep));

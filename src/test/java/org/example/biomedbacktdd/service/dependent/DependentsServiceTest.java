@@ -2,7 +2,6 @@ package org.example.biomedbacktdd.service.dependent;
 
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.entities.dependent.Dependent;
-import org.example.biomedbacktdd.repositories.DependentRepository;
 import org.example.biomedbacktdd.services.DependentService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

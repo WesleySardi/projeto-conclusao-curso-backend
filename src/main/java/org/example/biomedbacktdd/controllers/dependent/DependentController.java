@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
 import org.example.biomedbacktdd.services.DependentService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,12 @@ public class DependentController {
     private Logger logger = Logger.getLogger(DependentService.class.getName());
 
     @Autowired
-    private DependentService service;
+    private final DependentHandler handler;
+
+    @Autowired
+    public DependentController(DependentHandler handler) {
+        this.handler = handler;
+    }
 
     @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
     @GetMapping("/commonuser/hello")
@@ -66,7 +72,7 @@ public class DependentController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
 
-        return ResponseEntity.ok(service.findAll(pageable));
+        return ResponseEntity.ok(handler.handleFindAll(pageable));
     }
 
     @GetMapping(
@@ -98,7 +104,7 @@ public class DependentController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
 
-        return ResponseEntity.ok(service.findDependentsByName(nomeDep, pageable));
+        return ResponseEntity.ok(handler.handleFindDependentsByName(nomeDep, pageable));
     }
 
     @GetMapping(
@@ -130,7 +136,7 @@ public class DependentController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
 
-        return ResponseEntity.ok(service.findDependentsByCpfRes(cpfRes, pageable));
+        return ResponseEntity.ok(handler.handleFindDependentsByCpfRes(cpfRes, pageable));
     }
 
     @GetMapping(
@@ -150,7 +156,7 @@ public class DependentController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public DependentDTO findById(@PathVariable(value = "id") String id) {
-        return service.findById(id);
+        return handler.handleFindById(id);
     }
 
     @GetMapping(
@@ -158,7 +164,7 @@ public class DependentController {
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}
     )
     @Operation(summary = "Finds a CPF and Emergency Phone", description = "Finds a CPF and Emergency Phone",
-            tags = {"DependentMainData"},
+            tags = {"Dependent"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(schema = @Schema(implementation = SmsHandlerDTO.class))
@@ -170,7 +176,7 @@ public class DependentController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public Map<String, String> verifyDependentsCpfAndEmergPhone(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return service.verifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+        return handler.handleVerifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
     }
 
     @PostMapping(
@@ -188,7 +194,7 @@ public class DependentController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public DependentDTO create(@RequestBody DependentDTO dependentVO) {
-        return service.create(dependentVO);
+        return handler.handleCreate(dependentVO);
     }
 
     @PutMapping(
@@ -207,7 +213,7 @@ public class DependentController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public DependentDTO update(@RequestBody DependentDTO dependentVO) {
-        return service.update(dependentVO);
+        return handler.handleUpdate(dependentVO);
     }
 
     @DeleteMapping(value = "/commonuser/delete/{id}")
@@ -221,7 +227,7 @@ public class DependentController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponseEntity<?> delete(@PathVariable(value = "id") String id) {
-        service.delete(id);
+        handler.handleDelete(id);
 
         return ResponseEntity.noContent().build();
     }

@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.VO.auth.AccountCredentialsVO;
 import org.example.biomedbacktdd.entities.auth.User;
-import org.example.biomedbacktdd.services.AuthService;
+import org.example.biomedbacktdd.handlers.auth.AuthHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,18 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
-    AuthService authService;
+    private final AuthHandler handler;
+
+    @Autowired
+    public AuthController(AuthHandler handler) {
+        this.handler = handler;
+    }
 
     @Operation(summary = "Register a user")
     @PostMapping(value = "/register")
     public User register(@RequestBody User newUser) {
 
-        authService.register(newUser);
+        handler.handleRegister(newUser);
 
         return newUser;
     }
@@ -34,7 +39,7 @@ public class AuthController {
         if (checkIfParamsIsNotNull(data))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
 
-        var token = authService.signin(data);
+        var token = handler.handleSignin(data);
 
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;
@@ -47,7 +52,7 @@ public class AuthController {
         if (checkIfParamsIsNotNull(username, refreshToken))
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
 
-        var token = authService.refreshToken(username, refreshToken);
+        var token = handler.handleRefreshToken(username, refreshToken);
 
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;

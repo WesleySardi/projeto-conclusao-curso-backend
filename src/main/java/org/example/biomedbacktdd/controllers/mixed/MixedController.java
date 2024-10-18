@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.DTO.commands.DependentWebDataDTO;
 import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
-import org.example.biomedbacktdd.services.MixedService;
+import org.example.biomedbacktdd.handlers.mixed.MixedHandler;
 import org.example.biomedbacktdd.services.ResponsibleService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,12 @@ public class MixedController {
     private Logger logger = Logger.getLogger(ResponsibleService.class.getName());
 
     @Autowired
-    private MixedService service;
+    private final MixedHandler handler;
+
+    @Autowired
+    public MixedController(MixedHandler handler) {
+        this.handler = handler;
+    }
 
     @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
     @GetMapping("/hello")
@@ -52,7 +57,7 @@ public class MixedController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public DependentDTO findByIdWithSecurity(@RequestParam(value = "idDep") String idDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return service.findByIdWithSecurity(idDep, emergPhone);
+        return handler.handleFindByIdWithSecurity(idDep, emergPhone);
     }
 
     @GetMapping(
@@ -72,6 +77,6 @@ public class MixedController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public DependentWebDataDTO findWebDataByIdWithSecurity(@RequestParam(value = "idDep") String idDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return service.findWebDataByIdWithSecurity(idDep, emergPhone);
+        return handler.handleFindWebDataByIdWithSecurity(idDep, emergPhone);
     }
 }

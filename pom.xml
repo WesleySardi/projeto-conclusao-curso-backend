@@ -96,7 +96,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
-            <version>3.0.0</version> <!-- Verifique a versão compatível com seu projeto -->
+            <version>3.0.0</version>
         </dependency>
 
         <dependency>
@@ -110,6 +110,11 @@
             <artifactId>twilio</artifactId>
             <version>9.2.5</version>
             <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
     </dependencies>
 

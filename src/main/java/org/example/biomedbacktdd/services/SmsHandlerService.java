@@ -5,8 +5,9 @@ import org.example.biomedbacktdd.controllers.sms.SmsHandlerController;
 import org.example.biomedbacktdd.entities.sms.SmsHandler;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
-import org.example.biomedbacktdd.repositories.SmsHandlerRepository;
+import org.example.biomedbacktdd.repositories.interfaces.sms.ISmsHandlerRepository;
 import org.example.biomedbacktdd.repositories.mapper.DozerMapper;
+import org.example.biomedbacktdd.services.interfaces.sms.ISmsHandlerService;
 import org.example.biomedbacktdd.sms.MessageSms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -25,15 +26,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class SmsHandlerService {
-
-    private Logger logger = Logger.getLogger(SmsHandlerService.class.getName());
-
-    @Autowired
-    SmsHandlerRepository repository;
+public class SmsHandlerService implements ISmsHandlerService {
+    private final Logger logger = Logger.getLogger(SmsHandlerService.class.getName());
+    private final ISmsHandlerRepository repository;
+    private final PagedResourcesAssembler<SmsHandlerDTO> assembler;
 
     @Autowired
-    PagedResourcesAssembler<SmsHandlerDTO> assembler;
+    public SmsHandlerService(ISmsHandlerRepository repository,
+                             PagedResourcesAssembler<SmsHandlerDTO> assembler) {
+        this.repository = repository;
+        this.assembler = assembler;
+    }
 
     public PagedModel<EntityModel<SmsHandlerDTO>> findAll(Pageable pageable) {
         logger.info("Finding all SMS!");

@@ -5,8 +5,8 @@ import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
-import org.example.biomedbacktdd.repositories.DependentRepository;
-import org.example.biomedbacktdd.repositories.ResponsibleRepository;
+import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
+import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.repositories.mapper.DozerMapper;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,16 +27,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Service
 public class DependentService implements IDependentService {
 
-    private Logger logger = Logger.getLogger(DependentService.class.getName());
+    private final Logger logger = Logger.getLogger(DependentService.class.getName());
+    private final IDependentRepository repository;
+    private final IResponsibleRepository resRepository;
+    private final PagedResourcesAssembler<DependentDTO> assembler;
 
     @Autowired
-    DependentRepository repository;
-
-    @Autowired
-    ResponsibleRepository resRepository;
-
-    @Autowired
-    PagedResourcesAssembler<DependentDTO> assembler;
+    public DependentService(IDependentRepository repository,
+                            IResponsibleRepository resRepository,
+                            PagedResourcesAssembler<DependentDTO> assembler) {
+        this.repository = repository;
+        this.resRepository = resRepository;
+        this.assembler = assembler;
+    }
 
     public PagedModel<EntityModel<DependentDTO>> findAll(Pageable pageable) {
         logger.info("Finding all dependents!");

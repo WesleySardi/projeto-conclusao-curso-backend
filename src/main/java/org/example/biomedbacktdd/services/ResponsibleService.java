@@ -5,8 +5,9 @@ import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
-import org.example.biomedbacktdd.repositories.ResponsibleRepository;
+import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.repositories.mapper.DozerMapper;
+import org.example.biomedbacktdd.services.interfaces.responsible.IResponsibleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -22,14 +23,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class ResponsibleService {
-    private Logger logger = Logger.getLogger(ResponsibleService.class.getName());
+public class ResponsibleService implements IResponsibleService {
+    private final Logger logger = Logger.getLogger(ResponsibleService.class.getName());
+    private final IResponsibleRepository repository;
+    private final PagedResourcesAssembler<ResponsibleDTO> assembler;
 
     @Autowired
-    ResponsibleRepository repository;
-
-    @Autowired
-    PagedResourcesAssembler<ResponsibleDTO> assembler;
+    public ResponsibleService(IResponsibleRepository repository,
+                              PagedResourcesAssembler<ResponsibleDTO> assembler) {
+        this.repository = repository;
+        this.assembler = assembler;
+    }
 
     public PagedModel<EntityModel<ResponsibleDTO>> findAll(Pageable pageable) {
         logger.info("Finding all responsibles!");

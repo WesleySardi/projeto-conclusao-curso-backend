@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
+import org.example.biomedbacktdd.handlers.sms.SmsHandlerHandler;
 import org.example.biomedbacktdd.services.SmsHandlerService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,12 @@ public class SmsHandlerController {
     private Logger logger = Logger.getLogger(SmsHandlerService.class.getName());
 
     @Autowired
-    private SmsHandlerService service;
+    private final SmsHandlerHandler handler;
+
+    @Autowired
+    public SmsHandlerController(SmsHandlerHandler handler) {
+        this.handler = handler;
+    }
 
     @GetMapping(produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Finds all SmsHandlers", description = "Finds all SmsHandlers",
@@ -57,7 +64,7 @@ public class SmsHandlerController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "smsCode"));
 
-        return ResponseEntity.ok(service.findAll(pageable));
+        return ResponseEntity.ok(handler.handleFindAll(pageable));
     }
 
     @GetMapping(
@@ -77,7 +84,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public SmsHandlerDTO findById(@PathVariable(value = "id") Integer id) {
-        return service.findById(id);
+        return handler.handleFindById(id);
     }
 
     @PostMapping(
@@ -94,7 +101,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public SmsHandlerDTO create(@RequestBody SmsHandlerDTO smsHandlerVO) {
-        return service.create(smsHandlerVO);
+        return handler.handleCreate(smsHandlerVO);
     }
 
     @PutMapping(
@@ -112,7 +119,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public SmsHandlerDTO update(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate) {
-        return service.update(smsCode, returnDate);
+        return handler.handleUpdate(smsCode, returnDate);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -126,7 +133,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public ResponseEntity<?> delete(@PathVariable(value = "id") Integer id) {
-        service.delete(id);
+        handler.handleDelete(id);
 
         return ResponseEntity.noContent().build();
     }
@@ -142,6 +149,6 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
     public boolean verifySmsCode(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate, @RequestParam(value = "cpfDep") String cpfDep) {
-        return service.verifySmsCode(smsCode, returnDate, cpfDep);
+        return handler.handleVerifySmsCode(smsCode, returnDate, cpfDep);
     }
 }
