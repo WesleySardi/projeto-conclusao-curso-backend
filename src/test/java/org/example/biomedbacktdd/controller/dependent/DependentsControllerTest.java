@@ -1,103 +1,160 @@
 package org.example.biomedbacktdd.controller.dependent;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.controllers.dependent.DependentController;
-import org.example.biomedbacktdd.services.DependentService;
+import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
+import org.example.biomedbacktdd.security.jwt.JwtTokenProvider;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(DependentController.class)
-public class DependentsControllerTest {
+class DependentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private DependentService service;
+    private DependentHandler handler;
+
+    private ObjectMapper objectMapper;
+
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        objectMapper = new ObjectMapper();
+    }
 
     @Test
-    public void testFindAll() throws Exception {
-        // Mock response expected from service layer
-        Pageable pageable = PageRequest.of(0, 12, Sort.by(Sort.Direction.ASC, "nomeDep"));
+    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
+    void testFindAll() throws Exception {
+        // Given
+        DependentDTO dependentDTO = new DependentDTO();
+        dependentDTO.setNomeDep("Test");
+        List<DependentDTO> dependents = List.of(dependentDTO);
+        List<EntityModel<DependentDTO>> entityModels = dependents.stream()
+                .map(dependent -> EntityModel.of(dependent))
+                .toList();
 
-        // Creating instances of DependentDTO with mock data
-        DependentDTO dependent1 = new DependentDTO();
-        dependent1.setKey("12345678901");
-        dependent1.setNomeDep("Dependent 1");
-        dependent1.setIdadeDep(25);
-        dependent1.setTipoSanguineo("O+");
-        dependent1.setLaudo("Healthy");
-        dependent1.setGeneroDep("Male");
-        dependent1.setRgDep("12345678");
-        dependent1.setCpfResDep("98765432109");
-        dependent1.setPiTagIdDep(1001);
-        dependent1.setCpfTerDep("11223344556");
-        dependent1.setIdCirurgiaDep(1);
-        dependent1.setIdScanDep(1);
+        PagedModel<EntityModel<DependentDTO>> pagedModel = PagedModel.of(entityModels,
+                new PagedModel.PageMetadata(1, 0, dependents.size()));
 
-        DependentDTO dependent2 = new DependentDTO();
-        dependent2.setKey("10987654321");
-        dependent2.setNomeDep("Dependent 2");
-        dependent2.setIdadeDep(30);
-        dependent2.setTipoSanguineo("A+");
-        dependent2.setLaudo("Minor Allergies");
-        dependent2.setGeneroDep("Female");
-        dependent2.setRgDep("87654321");
-        dependent2.setCpfResDep("99887766554");
-        dependent2.setPiTagIdDep(1002);
-        dependent2.setCpfTerDep("22334455667");
-        dependent2.setIdCirurgiaDep(2);
-        dependent2.setIdScanDep(2);
+        when(handler.handleFindAll(any(Pageable.class))).thenReturn(pagedModel);
 
-        List<DependentDTO> dependents = Arrays.asList(dependent1, dependent2);
-        Page<DependentDTO> page = new PageImpl<>(dependents, pageable, dependents.size());
-
-        // Convert the dependent DTOs to EntityModel
-        List<EntityModel<DependentDTO>> dependentEntities = dependents.stream()
-                .map(dependent -> EntityModel.of(dependent, Link.of("/dependents/" + dependent.getKey()).withSelfRel()))
-                .collect(Collectors.toList());
-
-        // Create PageMetadata for the PagedModel
-        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-                page.getSize(),
-                page.getNumber(),
-                page.getTotalElements()
-        );
-
-        // Create the PagedModel object with metadata and content
-        PagedModel<EntityModel<DependentDTO>> pagedModel = PagedModel.of(dependentEntities, pageMetadata, Link.of("/commonuser/findAll").withSelfRel());
-
-        // When the service is called, return the mocked response
-        when(service.findAll(pageable)).thenReturn(pagedModel);
-
-        // Perform the GET request and validate the response
-        mockMvc.perform(get("/commonuser/findAll")
-                        .param("page", "0")
-                        .param("size", "12")
-                        .param("direction", "asc")
+        // When & Then
+        mockMvc.perform(get("/api/dependent/commonuser/findAll?page=0&size=12&direction=asc")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()) // Validate the status is OK (200)
-                .andExpect(jsonPath("$.content[0].nomeDep").value("Dependent 1"))
-                .andExpect(jsonPath("$.content[1].nomeDep").value("Dependent 2"))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$._embedded.dependentDTOes[0].nomeDep").value("Test"));
+    }
+
+    @Test
+    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
+    void testFindDependentsByName() throws Exception {
+        // Given
+        String nomeDep = "Test";
+        DependentDTO dependentDTO = new DependentDTO();
+        dependentDTO.setNomeDep(nomeDep);
+        List<DependentDTO> dependents = List.of(dependentDTO);
+        List<EntityModel<DependentDTO>> entityModels = dependents.stream()
+                .map(dependent -> EntityModel.of(dependent))
+                .toList();
+
+        PagedModel<EntityModel<DependentDTO>> pagedModel = PagedModel.of(entityModels,
+                new PagedModel.PageMetadata(1, 0, dependents.size()));
+
+        when(handler.handleFindDependentsByName(anyString(), any(Pageable.class))).thenReturn(pagedModel);
+
+        // When & Then
+        mockMvc.perform(get("/api/dependent/commonuser/findDependentsByName/{nomeDep}?page=0&size=12&direction=asc", nomeDep)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$._embedded.dependentDTOes[0].nomeDep").value(nomeDep));
+    }
+
+    @Test
+    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
+    void testFindDependentsByCpfRes() throws Exception {
+        // Given
+        String cpfRes = "12345678901";
+        DependentDTO dependentDTO = new DependentDTO();
+        dependentDTO.setNomeDep("Test");
+        List<DependentDTO> dependents = List.of(dependentDTO);
+        List<EntityModel<DependentDTO>> entityModels = dependents.stream()
+                .map(dependent -> EntityModel.of(dependent))
+                .toList();
+
+        PagedModel<EntityModel<DependentDTO>> pagedModel = PagedModel.of(entityModels,
+                new PagedModel.PageMetadata(1, 0, dependents.size()));
+
+        when(handler.handleFindDependentsByCpfRes(anyString(), any(Pageable.class))).thenReturn(pagedModel);
+
+        // When & Then
+        mockMvc.perform(get("/api/dependent/commonuser/findDependentsByCpfRes/{cpfRes}?page=0&size=12&direction=asc", cpfRes)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$._embedded.dependentDTOes[0].nomeDep").value("Test"));
+    }
+
+    @Test
+    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
+    void testFindById() throws Exception {
+        // Given
+        String id = "1";
+        DependentDTO dependentDTO = new DependentDTO();
+        dependentDTO.setNomeDep("Test");
+
+        when(handler.handleFindById(id)).thenReturn(dependentDTO);
+
+        // When & Then
+        mockMvc.perform(get("/api/dependent/commonuser/findById/{id}", id)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.nomeDep").value("Test"));
+    }
+
+    @Test
+    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
+    void testVerifyDependentsCpfAndEmergPhone() throws Exception {
+        // Given
+        String cpfDep = "12345678901";
+        String emergPhone = "987654321";
+        Map<String, String> response = Map.of("cpfDep", cpfDep, "emergPhone", emergPhone);
+
+        when(handler.handleVerifyDependentsCpfAndEmergPhone(cpfDep, emergPhone)).thenReturn(response);
+
+        // When & Then
+        mockMvc.perform(get("/api/dependent/commonuser/verifyDependentsCPFandEmergPhone/params?cpfDep={cpfDep}&emergPhone={emergPhone}", cpfDep, emergPhone)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.cpfDep").value(cpfDep))
+                .andExpect(jsonPath("$.emergPhone").value(emergPhone));
     }
 }
