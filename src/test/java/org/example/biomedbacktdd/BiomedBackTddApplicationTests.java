@@ -9,5 +9,4 @@ class BiomedBackTddApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
