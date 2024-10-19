@@ -24,4 +24,4 @@ jobs:
         run: ls -la target/surefire-reports
 
       - name: Run tests with debug
-        run: mvn test -X
+        run: mvn test -X -Dspring.profiles.active=test
