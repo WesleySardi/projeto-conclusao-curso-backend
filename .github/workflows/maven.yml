@@ -1,23 +1,30 @@
+name: TestActions
 on:
-  workflow_run:
-    workflows: ["build-and-test"]
-    branches: ["sat"]
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
-  promote-to-main:
+  build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: echo Hello, world!
 
-      - name: Merge to main
-        run: |
-          git config --global user.name "WesleySardi"
-          git config --global user.email "wesley.sardi@gmail.com"
-          git checkout main
-          git merge sat
-          git push origin main
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: 'teste.com.br'
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy DEV
+      
+  deploy-sat:
+    runs-on: ubuntu-latest
+    environment:
+      name: sat
+      url: 'teste.com.br'
+    needs: deploy-dev
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy SAT
