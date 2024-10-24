@@ -34,12 +34,6 @@ public class MixedController {
         this.handler = handler;
     }
 
-    @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, World!";
-    }
-
     @GetMapping(
             value = "/commonuser/params",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}

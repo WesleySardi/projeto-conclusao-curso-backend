@@ -38,12 +38,6 @@ public class ResponsibleController {
         this.handler = handler;
     }
 
-    @Operation(summary = "Saudação simples", description = "Retorna uma saudação simples 'Hello, World!'")
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello, World!";
-    }
-
     @GetMapping(
             value = "/commonuser/findAll",
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
