@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Authorization", description = "Endpoints para lidar com a Autorização.")
 public class AuthController {
 
-    @Autowired
     private final AuthHandler handler;
 
     @Autowired
