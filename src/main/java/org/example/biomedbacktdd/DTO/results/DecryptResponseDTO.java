@@ -4,18 +4,18 @@ public class DecryptResponseDTO {
     private String decryptedUrl;
     private String message;
 
-    public DecryptResponseDTO(String encryptedUrl, String message) {
-        this.decryptedUrl = encryptedUrl;
+    public DecryptResponseDTO(String decryptedUrl, String message) {
+        this.decryptedUrl = decryptedUrl;
         this.message = message;
     }
 
     // Getters and setters
-    public String getEncryptedUrl() {
+    public String getDecryptedUrl() {
         return decryptedUrl;
     }
 
-    public void setEncryptedUrl(String encryptedUrl) {
-        this.decryptedUrl = encryptedUrl;
+    public void setDecryptedUrl(String decryptedUrl) {
+        this.decryptedUrl = decryptedUrl;
     }
 
     public String getMessage() {
