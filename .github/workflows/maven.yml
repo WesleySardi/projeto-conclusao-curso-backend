@@ -1,24 +1,36 @@
-name: CI
+name: Run Tests
 
 on:
   push:
     branches:
-      - main
+      - sat  # Altere para a branch que você deseja monitorar
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v1
-      with:
-        java-version: '17'
+      - name: Set up JDK 17  # Configuração do JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'  # Adoptium distribution
+          java-version: '17'  # Altere para a versão de Java do projeto
 
-    - name: Build with Gradle
-      run: ./gradlew build
-      env:
-        SPRING_PROFILES_ACTIVE: test
+      - name: Cache Maven dependencies  # Cache do Maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build with Maven  # Compilação com Maven
+        run: mvn clean install --no-transfer-progress
+
+      - name: Run tests  # Execução dos testes com perfil de teste
+        run: mvn test --no-transfer-progress
+        env:
+          SPRING_PROFILES_ACTIVE: test  # Ativa o perfil de teste
