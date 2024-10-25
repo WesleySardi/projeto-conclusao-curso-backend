@@ -1,27 +1,30 @@
+name: TestActions
 on:
-  push:
-    branches:
-      - sat
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Run a one-line script
+        run: echo Hello, world!
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: 'teste.com.br'
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy DEV
 
-      - name: Build with Maven
-        run: mvn clean install
-
-      - name: Show test reports
-        run: ls -la target/surefire-reports
-
-      - name: Run tests with debug
-        run: mvn test -X -Dspring.profiles.active=test
+  deploy-sat:
+    runs-on: ubuntu-latest
+    environment:
+      name: sat
+      url: 'teste.com.br'
+    needs: deploy-dev
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy SAT
