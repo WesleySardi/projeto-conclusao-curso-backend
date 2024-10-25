@@ -1,36 +1,30 @@
-name: Run Tests
-
+name: TestActions
 on:
-  push:
-    branches:
-      - sat  # Altere para a branch que você deseja monitorar
+  workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: echo Hello, world!
 
-      - name: Set up JDK 17  # Configuração do JDK
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'  # Adoptium distribution
-          java-version: '17'  # Altere para a versão de Java do projeto
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: 'teste.com.br'
+    needs: build
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy DEV
 
-      - name: Cache Maven dependencies  # Cache do Maven
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
-      - name: Build with Maven  # Compilação com Maven
-        run: mvn clean install --no-transfer-progress
-
-      - name: Run tests  # Execução dos testes com perfil de teste
-        run: mvn test --no-transfer-progress
-        env:
-          SPRING_PROFILES_ACTIVE: test  # Ativa o perfil de teste
+  deploy-sat:
+    runs-on: ubuntu-latest
+    environment:
+      name: sat
+      url: 'teste.com.br'
+    needs: deploy-dev
+    steps:
+      - name: Run a one-line script
+        run: echo Deploy SAT
