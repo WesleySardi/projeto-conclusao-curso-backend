@@ -39,7 +39,7 @@ public class MixedController {
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}
     )
     @Operation(summary = "Finds a Dependent", description = "Finds a Dependent",
-            tags = {"Dependent"},
+            tags = {"Mixed"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(schema = @Schema(implementation = ResponsibleDTO.class))
@@ -50,8 +50,8 @@ public class MixedController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentDTO findByIdWithSecurity(@RequestParam(value = "idDep") String idDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return handler.handleFindByIdWithSecurity(idDep, emergPhone);
+    public DependentDTO findByIdWithSecurity(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
+        return handler.handleFindByIdWithSecurity(cpfDep, emergPhone);
     }
 
     @GetMapping(
@@ -59,7 +59,7 @@ public class MixedController {
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML}
     )
     @Operation(summary = "Finds a Dependent", description = "Finds a Dependent",
-            tags = {"Dependent"},
+            tags = {"Mixed"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
                             content = @Content(schema = @Schema(implementation = ResponsibleDTO.class))

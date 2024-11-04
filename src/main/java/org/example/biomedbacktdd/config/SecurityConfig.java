@@ -40,21 +40,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
                                 .requestMatchers(
-                                        "/api/dependents/admin/**",
-                                        "/api/responsiblesAndDependents/admin/**",
-                                        "/api/responsibles/admin/**").hasRole("ADMIN")
+                                        "/api/dependent/admin/**",
+                                        "/api/mixed/admin/**",
+                                        "/api/email/admin/**",
+                                        "/api/responsible/admin/**").hasRole("ADMIN")
                                 .requestMatchers(
-                                        "/api/dependents/manager/**",
-                                        "/api/responsiblesAndDependents/manager/**",
-                                        "/api/responsibles/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                                        "/api/dependent/manager/**",
+                                        "/api/mixed/manager/**",
+                                        "/api/email/manager/**",
+                                        "/api/responsible/manager/**").hasAnyRole("MANAGER", "ADMIN")
                                 .requestMatchers(
-                                        "/api/dependents/commonuser/**",
-                                        "/api/responsiblesAndDependents/commonuser/**",
-                                        "/api/responsibles/commonuser/**").hasAnyRole("COMMON_USER", "MANAGER", "ADMIN")
+                                        "/api/dependent/commonuser/**",
+                                        "/api/mixed/commonuser/**",
+                                        "/api/email/commonuser/**",
+                                        "/api/responsible/commonuser/**").hasAnyRole("COMMON_USER", "MANAGER", "ADMIN")
                                 .requestMatchers(
                                         "/auth/signin",
                                         "/auth/register",
                                         "/auth/refreshToken/**",
+                                        "/api/email/sendQrCode",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
                                         "/v2/api-docs",
