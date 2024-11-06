@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IResponsibleRepository extends JpaRepository<Responsible, String> {
@@ -20,4 +21,10 @@ public interface IResponsibleRepository extends JpaRepository<Responsible, Strin
 
     @Query("SELECT r.cpfRes, r.nomeRes, r.contato1Res FROM Responsible r WHERE r.emailRes = :emailRes AND r.senhaRes = :senhaRes")
     List<Object[]> findResponsiblesCpfAndName(@Param("emailRes") String emailRes, @Param("senhaRes") String senhaRes);
+
+    @Query("SELECT r FROM Responsible r WHERE r.contato1Res = :telefone")
+    Optional<Responsible> findResponsibleByTelefone(@Param("telefone") String telefone);
+
+    @Query("SELECT r FROM Responsible r WHERE r.emailRes = :emailRes")
+    Optional<Responsible> findResponsibleByEmail(@Param("emailRes") String emailRes);
 }

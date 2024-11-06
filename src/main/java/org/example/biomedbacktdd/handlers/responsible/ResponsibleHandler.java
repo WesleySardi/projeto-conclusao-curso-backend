@@ -79,4 +79,31 @@ public class ResponsibleHandler {
             return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public ResponsibleDTO handleUpdatePassword(ResponsibleDTO responsibleDTO) {
+        try {
+            return responsibleService.updatePassword(responsibleDTO);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public ResponsibleDTO handleFindByTelefone(String id) {
+        try {
+            return responsibleService.findByTelefone(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public ResponsibleDTO handleFindByEmail(String id) {
+        try {
+            return responsibleService.findByEmail(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

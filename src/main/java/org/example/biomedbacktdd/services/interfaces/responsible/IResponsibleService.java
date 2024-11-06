@@ -15,4 +15,7 @@ public interface IResponsibleService {
     ResponsibleDTO create(ResponsibleDTO responsible);
     ResponsibleDTO update(ResponsibleDTO responsible);
     void delete(String id);
+    ResponsibleDTO updatePassword(ResponsibleDTO responsible);
+    ResponsibleDTO findByTelefone(String telefone);
+    ResponsibleDTO findByEmail(String email);
 }

@@ -199,4 +199,67 @@ public class ResponsibleController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping(
+            value = "/updatePassword",
+            consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
+            produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @Operation(summary = "Updates a Responsible", description = "Updates a Responsible by passing in a JSON, XML or YML representation of the Responsible!",
+            tags = {"Responsibles"},
+            responses = {
+                    @ApiResponse(description = "Updated", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = ResponsibleDTO.class))
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            })
+    public ResponsibleDTO updatePassword(@RequestBody ResponsibleDTO responsibleVO) {
+        return handler.handleUpdatePassword(responsibleVO);
+    }
+
+    @GetMapping(value = "/findByTelefone/{telefone}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @Operation(summary = "Finds Responsible by Telephone", description = "Finds Responsible by any of their Telephone numbers",
+            tags = {"Responsible"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = ResponsibleDTO.class))
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            })
+    public ResponseEntity<ResponsibleDTO> findByTelefone(@PathVariable(value = "telefone") String telefone) {
+        ResponsibleDTO responsible = handler.handleFindByTelefone(telefone);
+        if (responsible != null) {
+            return ResponseEntity.ok(responsible);
+        } else {
+            // Directly return a 404 Not Found response if the responsible is not found
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @GetMapping(value = "/findByEmail/{email}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @Operation(summary = "Finds Responsible by Email", description = "Finds Responsible by his Email",
+            tags = {"Responsible"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = ResponsibleDTO.class))
+                    ),
+                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+                    @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            })
+    public ResponseEntity<ResponsibleDTO> findByEmail(@PathVariable(value = "email") String emailRes) {
+        ResponsibleDTO responsible = handler.handleFindByEmail(emailRes);
+        if (responsible != null) {
+            return ResponseEntity.ok(responsible);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

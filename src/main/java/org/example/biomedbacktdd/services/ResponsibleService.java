@@ -124,4 +124,38 @@ public class ResponsibleService implements IResponsibleService {
 
         repository.delete(entity);
     }
+
+    public ResponsibleDTO updatePassword(ResponsibleDTO responsible) {
+        if (responsible == null) throw new RequiredObjectIsNullException();
+
+        logger.info("Updating a responsible password!");
+
+        var entity = repository.findById(responsible.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+        entity.setSenhaRes(responsible.getSenhaRes());
+
+        var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+
+        vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+
+        return vo;
+    }
+
+    public ResponsibleDTO findByTelefone(String telefone) {
+        logger.info("Finding Responsible by Telephone!");
+
+        Responsible result = repository.findResponsibleByTelefone(telefone)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this telephone!"));
+
+        return DozerMapper.parseObject(result, ResponsibleDTO.class);
+    }
+
+    public ResponsibleDTO findByEmail(String email) {
+        logger.info("Finding Responsible by Email!");
+
+        Responsible result = repository.findResponsibleByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("No records found for this e-mail!"));
+
+        return DozerMapper.parseObject(result, ResponsibleDTO.class);
+    }
 }
