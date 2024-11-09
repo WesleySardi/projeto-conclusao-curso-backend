@@ -8,19 +8,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
 import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
 import org.example.biomedbacktdd.services.DependentService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -57,16 +54,14 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<DependentDTO>>> findAll(
+    public ResponseEntity<StatusResponseDTO> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindAll(PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "nomeDep")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
-
-        return ResponseEntity.ok(handler.handleFindAll(pageable));
+        return response;
     }
 
     @GetMapping(
@@ -88,17 +83,15 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<DependentDTO>>> findDependentsByName(
+    public ResponseEntity<StatusResponseDTO> findDependentsByName(
             @PathVariable(value = "nomeDep") String nomeDep,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindDependentsByName(nomeDep, PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "nomeDep")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
-
-        return ResponseEntity.ok(handler.handleFindDependentsByName(nomeDep, pageable));
+        return response;
     }
 
     @GetMapping(
@@ -120,17 +113,15 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<DependentDTO>>> findDependentsByCpfRes(
+    public ResponseEntity<StatusResponseDTO> findDependentsByCpfRes(
             @PathVariable(value = "cpfRes") String cpfRes,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindDependentsByCpfRes(cpfRes, PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "nomeDep")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeDep"));
-
-        return ResponseEntity.ok(handler.handleFindDependentsByCpfRes(cpfRes, pageable));
+        return response;
     }
 
     @GetMapping(
@@ -149,8 +140,10 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentDTO findById(@PathVariable(value = "id") String id) {
-        return handler.handleFindById(id);
+    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") String id) {
+        var response = handler.handleFindById(id);
+
+        return response;
     }
 
     @GetMapping(
@@ -169,8 +162,10 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public Map<String, String> verifyDependentsCpfAndEmergPhone(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return handler.handleVerifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+    public ResponseEntity<StatusResponseDTO> verifyDependentsCpfAndEmergPhone(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
+        var response = handler.handleVerifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+
+        return response;
     }
 
     @PostMapping(
@@ -187,8 +182,10 @@ public class DependentController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentDTO create(@RequestBody DependentDTO dependentVO) {
-        return handler.handleCreate(dependentVO);
+    public ResponseEntity<StatusResponseDTO> create(@RequestBody DependentDTO dependentVO) {
+        var response = handler.handleCreate(dependentVO);
+
+        return response;
     }
 
     @PutMapping(
@@ -206,8 +203,10 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentDTO update(@RequestBody DependentDTO dependentVO) {
-        return handler.handleUpdate(dependentVO);
+    public ResponseEntity<StatusResponseDTO> update(@RequestBody DependentDTO dependentVO) {
+        var response = handler.handleUpdate(dependentVO);
+
+        return response;
     }
 
     @DeleteMapping(value = "/commonuser/delete/{id}")
@@ -220,9 +219,9 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<?> delete(@PathVariable(value = "id") String id) {
-        handler.handleDelete(id);
+    public ResponseEntity<StatusResponseDTO> delete(@PathVariable(value = "id") String id) {
+        var response = handler.handleDelete(id);
 
-        return ResponseEntity.noContent().build();
+        return response;
     }
 }

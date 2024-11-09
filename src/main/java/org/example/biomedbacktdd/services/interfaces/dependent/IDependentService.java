@@ -15,5 +15,5 @@ public interface IDependentService {
     Map<String, String> verifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone);
     DependentDTO create(DependentDTO dependent);
     DependentDTO update(DependentDTO dependent);
-    void delete(String id);
+    String delete(String id);
 }

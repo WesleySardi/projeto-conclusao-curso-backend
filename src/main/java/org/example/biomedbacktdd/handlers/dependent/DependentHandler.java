@@ -1,16 +1,13 @@
 package org.example.biomedbacktdd.handlers.dependent;
 
 import org.example.biomedbacktdd.DTO.commands.DependentDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 public class DependentHandler {
@@ -22,69 +19,155 @@ public class DependentHandler {
         this.dependentService = dependentService;
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseDTO> handleFindAll(Pageable pageable) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.findAll(pageable);
+            var response = dependentService.findAll(pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindDependentsByName(String firstname, Pageable pageable) {
+    public ResponseEntity<StatusResponseDTO> handleFindDependentsByName(String firstname, Pageable pageable) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.findDependentsByName(firstname, pageable);
+            var response = dependentService.findDependentsByName(firstname, pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
+    public ResponseEntity<StatusResponseDTO> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.findDependentsByCpfRes(cpfRes, pageable);
+            var response = dependentService.findDependentsByCpfRes(cpfRes, pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public DependentDTO handleFindById(String id) {
+    public ResponseEntity<StatusResponseDTO> handleFindById(String id) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.findById(id);
+            var response = dependentService.findById(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public Map<String, String> handleVerifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone) {
+    public ResponseEntity<StatusResponseDTO> handleVerifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.verifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+            var response = dependentService.verifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public DependentDTO handleCreate(DependentDTO dependent) {
+    public ResponseEntity<StatusResponseDTO> handleCreate(DependentDTO dependent) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.create(dependent);
+            var response = dependentService.create(dependent);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public DependentDTO handleUpdate(DependentDTO dependent) {
+    public ResponseEntity<StatusResponseDTO> handleUpdate(DependentDTO dependent) {
+        StatusResponseDTO errorResponse;
+
         try {
-            return dependentService.update(dependent);
+            var response = dependentService.update(dependent);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public ResponseEntity<String> handleDelete(String id) {
-        try {
-            dependentService.delete(id);
+    public ResponseEntity<StatusResponseDTO> handleDelete(String id) {
+        StatusResponseDTO errorResponse;
 
-            return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+        try {
+            var response = dependentService.delete(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 }

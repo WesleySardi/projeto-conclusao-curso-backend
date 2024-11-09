@@ -8,11 +8,8 @@ import org.example.biomedbacktdd.repositories.interfaces.auth.IUserRepository;
 import org.example.biomedbacktdd.security.jwt.JwtTokenProvider;
 import org.example.biomedbacktdd.services.interfaces.auth.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,14 +25,23 @@ public class AuthService implements IAuthService {
     private IUserRepository repository;
 
     public User register(@RequestBody User newUser) {
+        User response = null;
 
-        repository.save(newUser);
+        try {
+            repository.save(newUser);
 
-        return newUser;
+            response = newUser;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     @SuppressWarnings("rawtypes")
-    public ResponseEntity signin(AccountCredentialsVO data) {
+    public TokenVO signin(AccountCredentialsVO data) {
+        TokenVO response = null;
+
         try {
             var username = data.getUsername();
             var password = data.getPassword();
@@ -44,32 +50,30 @@ public class AuthService implements IAuthService {
 
             var user = repository.findByUsername(username);
 
-            var tokenResponse = new TokenVO();
-
             if (user != null) {
-                tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
-            } else {
-                throw new UsernameNotFoundException("Username " + username + " not found!");
+                response = tokenProvider.createAccessToken(username, user.getRoles());
             }
-
-            return ResponseEntity.ok(tokenResponse);
         } catch (Exception e) {
-            throw new BadCredentialsException("Invalid username/password supplied!");
+            return null;
         }
+
+        return response;
     }
 
     @SuppressWarnings("rawtypes")
-    public ResponseEntity refreshToken(String username, String refreshToken) {
-        var user = repository.findByUsername(username);
+    public TokenVO refreshToken(String username, String refreshToken) {
+        TokenVO response = null;
 
-        var tokenResponse = new TokenVO();
+        try {
+            var user = repository.findByUsername(username);
 
-        if (user != null) {
-            tokenResponse = tokenProvider.refreshToken(refreshToken);
-        } else {
-            throw new UsernameNotFoundException("Username " + username + " not found!");
+            if (user != null) {
+                response = tokenProvider.refreshToken(refreshToken);
+            }
+        } catch (Exception e) {
+            return null;
         }
 
-        return ResponseEntity.ok(tokenResponse);
+        return response;
     }
 }

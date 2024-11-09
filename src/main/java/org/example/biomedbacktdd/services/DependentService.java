@@ -42,117 +42,182 @@ public class DependentService implements IDependentService {
     }
 
     public PagedModel<EntityModel<DependentDTO>> findAll(Pageable pageable) {
-        logger.info("Finding all dependents!");
+        PagedModel<EntityModel<DependentDTO>> response = null;
 
-        var dependentPage = repository.findAll(pageable);
-        var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
-        dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
+        try {
+            logger.info("Finding all dependents!");
 
-        Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-        return assembler.toModel(dependentVosPage, link);
+            var dependentPage = repository.findAll(pageable);
+            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
+            dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
+
+            Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+            response = assembler.toModel(dependentVosPage, link);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public PagedModel<EntityModel<DependentDTO>> findDependentsByName(String firstname, Pageable pageable) {
-        logger.info("Finding all people by Name!");
+        PagedModel<EntityModel<DependentDTO>> response = null;
 
-        var dependentPage = repository.findDependentsByName(firstname, pageable);
+        try {
+            logger.info("Finding all people by Name!");
 
-        var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
-        dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
+            var dependentPage = repository.findDependentsByName(firstname, pageable);
 
-        Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-        return assembler.toModel(dependentVosPage, link);
+            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
+            dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
+
+            Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+            response = assembler.toModel(dependentVosPage, link);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public PagedModel<EntityModel<DependentDTO>> findDependentsByCpfRes(String cpfRes, Pageable pageable) {
+        PagedModel<EntityModel<DependentDTO>> response = null;
 
-        logger.info("Finding all people by CpfRes!");
+        try {
+            logger.info("Finding all people by CpfRes!");
 
-        var dependentPage = repository.findDependentsByCpfRes(cpfRes, pageable);
+            var dependentPage = repository.findDependentsByCpfRes(cpfRes, pageable);
 
-        var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
-        dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
+            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
+            dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
 
-        Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-        return assembler.toModel(dependentVosPage, link);
+            Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+            response = assembler.toModel(dependentVosPage, link);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public DependentDTO findById(String id) {
+        DependentDTO response = null;
 
-        logger.info("Finding a dependent!");
+        try {
+            logger.info("Finding a dependent!");
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        var vo = DozerMapper.parseObject(entity, DependentDTO.class);
+            var vo = DozerMapper.parseObject(entity, DependentDTO.class);
 
-        vo.add(linkTo(methodOn(DependentController.class).findById(id)).withSelfRel());
+            vo.add(linkTo(methodOn(DependentController.class).findById(id)).withSelfRel());
 
-        return vo;
+            response = vo;
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public Map<String, String> verifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone) {
+        Map<String, String> response = null;
 
-        logger.info("Verifying Dependents CPF and Emergency Phone!");
+        try {
+            logger.info("Verifying Dependents CPF and Emergency Phone!");
 
-        String emergePhoneByCpf = resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep);
-        String emergePhoneByPath = emergPhone;
-        if (emergePhoneByCpf.equals(emergePhoneByPath)) {
-            Map<String, String> data = new HashMap<>();
+            String emergePhoneByCpf = resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep);
+            String emergePhoneByPath = emergPhone;
+            if (emergePhoneByCpf.equals(emergePhoneByPath)) {
+                Map<String, String> data = new HashMap<>();
 
-            data.put("emergPhone", emergPhone);
-            data.put("cpfDep", cpfDep);
+                data.put("emergPhone", emergPhone);
+                data.put("cpfDep", cpfDep);
 
-            return data;
-        } else {
-            throw new RuntimeException("The emergency phones " + emergePhoneByCpf + " and " + emergePhoneByPath + " aren't the same.");
+                response = data;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
+
+        return response;
     }
 
     public DependentDTO create(DependentDTO dependent) {
-        if (dependent == null) throw new RequiredObjectIsNullException();
+        DependentDTO response = null;
 
-        logger.info("Creating a dependent!");
+        try {
+            if (dependent == null) throw new RequiredObjectIsNullException();
 
-        var entity = DozerMapper.parseObject(dependent, Dependent.class);
+            logger.info("Creating a dependent!");
 
-        var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
+            var entity = DozerMapper.parseObject(dependent, Dependent.class);
 
-        vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
+            var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
 
-        return vo;
+            vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
+
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public DependentDTO update(DependentDTO dependent) {
-        if (dependent == null) throw new RequiredObjectIsNullException();
+        DependentDTO response = null;
 
-        logger.info("Updating a dependent!");
+        try {
+            if (dependent == null) throw new RequiredObjectIsNullException();
 
-        var entity = repository.findById(dependent.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            logger.info("Updating a dependent!");
 
-        entity.setNomeDep(dependent.getNomeDep());
-        entity.setIdadeDep(dependent.getIdadeDep());
-        entity.setTipoSanguineo(dependent.getTipoSanguineo());
-        entity.setLaudo(dependent.getLaudo());
-        entity.setGeneroDep(dependent.getGeneroDep());
-        entity.setRgDep(dependent.getRgDep());
-        entity.setCpfResDep(dependent.getCpfResDep());
-        entity.setPiTagIdDep(dependent.getPiTagIdDep());
-        entity.setCpfTerDep(dependent.getCpfTerDep());
-        entity.setIdCirurgiaDep(dependent.getIdCirurgiaDep());
-        entity.setIdScanDep(dependent.getIdScanDep());
+            var entity = repository.findById(dependent.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
+            entity.setNomeDep(dependent.getNomeDep());
+            entity.setIdadeDep(dependent.getIdadeDep());
+            entity.setTipoSanguineo(dependent.getTipoSanguineo());
+            entity.setLaudo(dependent.getLaudo());
+            entity.setGeneroDep(dependent.getGeneroDep());
+            entity.setRgDep(dependent.getRgDep());
+            entity.setCpfResDep(dependent.getCpfResDep());
+            entity.setPiTagIdDep(dependent.getPiTagIdDep());
+            entity.setCpfTerDep(dependent.getCpfTerDep());
+            entity.setIdCirurgiaDep(dependent.getIdCirurgiaDep());
+            entity.setIdScanDep(dependent.getIdScanDep());
 
-        vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
+            var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
 
-        return vo;
+            vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
+
+            response = vo;
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public void delete(String id) {
-        logger.info("Deleting a Dependent!");
+    public String delete(String id) {
+        String response = null;
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        try {
+            logger.info("Deleting a Dependent!");
 
-        repository.delete(entity);
+            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+            repository.delete(entity);
+
+            response = id;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 }
