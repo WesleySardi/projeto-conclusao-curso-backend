@@ -7,25 +7,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.EmailDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.handlers.email.EmailHandler;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/email")
 @Tag(name = "Email", description = "Endpoints para lidar com o envio de email.")
 public class EmailController {
-
-    private Logger logger = Logger.getLogger(EmailController.class.getName());
 
     @Autowired
     private final EmailHandler handler;
@@ -51,16 +45,14 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<EmailDTO>>> findAll(
+    public ResponseEntity<StatusResponseDTO> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindAll(PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "emailCode")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "emailCode"));
-
-        return ResponseEntity.ok(handler.handleFindAll(pageable));
+        return response;
     }
 
     @GetMapping(value = "/commonuser/{id}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
@@ -76,9 +68,10 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<EmailDTO> findById(@PathVariable(value = "id") Integer id) {
-        EmailDTO emailHandlerVO = handler.handleFindById(id);
-        return ResponseEntity.ok(emailHandlerVO);
+    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") Integer id) {
+        var response = handler.handleFindById(id);
+
+        return response;
     }
 
     @PostMapping(value = "/commonuser/create", consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
@@ -93,9 +86,10 @@ public class EmailController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<EmailDTO> create(@RequestBody EmailDTO emailHandlerVO) {
-        EmailDTO createdVO = handler.handleCreate(emailHandlerVO);
-        return ResponseEntity.ok(createdVO);
+    public ResponseEntity<StatusResponseDTO> create(@RequestBody EmailDTO emailHandlerVO) {
+        var response =  handler.handleCreate(emailHandlerVO);
+
+        return response;
     }
 
     @GetMapping(value = "/commonuser/verifyEmailCode")
@@ -108,8 +102,10 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<?> verifyEmailCode(@RequestParam(value = "email") String email, @RequestParam(value = "code") int code) {
-        return handler.handleVerifyEmailCode(email, code);
+    public ResponseEntity<StatusResponseDTO> verifyEmailCode(@RequestParam(value = "email") String email, @RequestParam(value = "code") int code) {
+        var response =  handler.handleVerifyEmailCode(email, code);
+
+        return response;
     }
 
     @GetMapping(value = "/sendQrCode")
@@ -122,7 +118,9 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public void sendQrCodeWithSendGrid(@RequestParam(value = "toEmail") String toEmail) {
-        handler.handleSendQrCodeWithSendGrid(toEmail);
+    public ResponseEntity<StatusResponseDTO> sendQrCodeWithSendGrid(@RequestParam(value = "toEmail") String toEmail) {
+        var response = handler.handleSendQrCodeWithSendGrid(toEmail);
+
+        return response;
     }
 }

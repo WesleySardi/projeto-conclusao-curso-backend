@@ -11,7 +11,7 @@ public interface IEmailService {
     PagedModel<EntityModel<EmailDTO>> findAll(Pageable pageable);
 
     EmailDTO findById(Integer id);
-    void deleteByEmail(String emailUser);
+    String deleteByEmail(String emailUser);
     boolean verifyEmailCode(String email, int code);
-    void sendQrCodeWithSendGrid(String toEmail);
+    String sendQrCodeWithSendGrid(String toEmail);
 }

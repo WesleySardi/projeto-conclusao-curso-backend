@@ -1,7 +1,6 @@
 package org.example.biomedbacktdd.handlers.other;
 
-import org.example.biomedbacktdd.DTO.results.DecryptResponseDTO;
-import org.example.biomedbacktdd.DTO.results.EncryptResponseDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.services.interfaces.other.IOtherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,25 +16,41 @@ public class OtherHandler {
         this.otherService = otherService;
     }
 
-    public ResponseEntity<EncryptResponseDTO> handleEncryptUrl(String url) {
+    public ResponseEntity<StatusResponseDTO> handleEncryptUrl(String url) {
+        StatusResponseDTO errorResponse;
+
         try {
-            String encryptedUrl = otherService.encryptUrl(url);
-            EncryptResponseDTO response = new EncryptResponseDTO(encryptedUrl, "URL successfully encrypted");
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            EncryptResponseDTO response = new EncryptResponseDTO(null, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            var response =otherService.encryptUrl(url);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Mensagem codificada com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao codificar a mensagem.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+        } catch (Exception e) {
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public ResponseEntity<DecryptResponseDTO> handleDecryptUrl(String url) {
+    public ResponseEntity<StatusResponseDTO> handleDecryptUrl(String url) {
+        StatusResponseDTO errorResponse;
+
         try {
-            String decryptedUrl = otherService.decryptUrl(url);
-            DecryptResponseDTO response = new DecryptResponseDTO(decryptedUrl, "URL successfully decrypted");
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            DecryptResponseDTO response = new DecryptResponseDTO(null, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            var response = otherService.decryptUrl(url);
+
+            if (response != null) {
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Mensagem codificada com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao decodificar a mensagem.", HttpStatus.UNAUTHORIZED.value(), false);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            }
+        } catch (Exception e) {
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 }

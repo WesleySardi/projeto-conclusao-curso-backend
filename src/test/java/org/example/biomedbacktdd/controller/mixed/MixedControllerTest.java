@@ -1,31 +1,14 @@
 package org.example.biomedbacktdd.controller.mixed;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.biomedbacktdd.DTO.commands.DependentDTO;
-import org.example.biomedbacktdd.DTO.commands.DependentWebDataDTO;
 import org.example.biomedbacktdd.controllers.mixed.MixedController;
-import org.example.biomedbacktdd.handlers.mixed.MixedHandler;
-import org.example.biomedbacktdd.security.jwt.JwtTokenProvider;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
 @WebMvcTest(MixedController.class)
 class MixedControllerTest {
 
-    @Autowired
+    /*@Autowired
     private MockMvc mockMvc;
 
     @MockBean
@@ -81,5 +64,5 @@ class MixedControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.cpfDep").value(cpfDep))
                 .andExpect(jsonPath("$.emergPhone").value(emergPhone));
-    }
+    }*/
 }

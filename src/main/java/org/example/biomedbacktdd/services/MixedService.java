@@ -30,38 +30,54 @@ public class MixedService implements IMixedService {
     }
 
     public DependentDTO findByIdWithSecurity(String cpfDep, String emergePhone) {
-        Integer emergePhoneByCpf = Integer.valueOf(resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep));
-        Integer emergePhoneByPath = Integer.valueOf(emergePhone);
-        if (emergePhoneByCpf.equals(emergePhoneByPath)) {
-            logger.info("Finding a dependent!");
+        DependentDTO response = null;
 
-            var entity = depRepository.findById(cpfDep).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        try {
+            Integer emergePhoneByCpf = Integer.valueOf(resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep));
+            Integer emergePhoneByPath = Integer.valueOf(emergePhone);
+            if (emergePhoneByCpf.equals(emergePhoneByPath)) {
+                logger.info("Finding a dependent!");
 
-            var vo = DozerMapper.parseObject(entity, DependentDTO.class);
+                var entity = depRepository.findById(cpfDep).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            vo.add(linkTo(methodOn(DependentController.class).findById(cpfDep)).withSelfRel());
+                var vo = DozerMapper.parseObject(entity, DependentDTO.class);
 
-            return vo;
-        } else {
-            throw new RuntimeException("The emergency phones " + emergePhoneByCpf + " and " + emergePhoneByPath + " aren't the same.");
+                vo.add(linkTo(methodOn(DependentController.class).findById(cpfDep)).withSelfRel());
+
+                response = vo;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
+
+        return response;
     }
 
     public DependentWebDataDTO findWebDataByIdWithSecurity(String cpfDep, String emergePhone) {
-        String emergePhoneByCpf = resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep);
-        String emergePhoneByPath = emergePhone;
-        if (emergePhoneByCpf.equals(emergePhoneByPath)) {
-            logger.info("Finding a dependent!");
+        DependentWebDataDTO response = null;
 
-            var entity = depRepository.findById(cpfDep).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        try {
+            String emergePhoneByCpf = resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep);
+            String emergePhoneByPath = emergePhone;
+            if (emergePhoneByCpf.equals(emergePhoneByPath)) {
+                logger.info("Finding a dependent!");
 
-            var vo = DozerMapper.parseObject(entity, DependentWebDataDTO.class);
+                var entity = depRepository.findById(cpfDep).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            vo.add(linkTo(methodOn(DependentController.class).findById(cpfDep)).withSelfRel());
+                var vo = DozerMapper.parseObject(entity, DependentWebDataDTO.class);
 
-            return vo;
-        } else {
-            throw new RuntimeException("The emergency phones " + emergePhoneByCpf + " and " + emergePhoneByPath + " aren't the same.");
+                vo.add(linkTo(methodOn(DependentController.class).findById(cpfDep)).withSelfRel());
+
+                response = vo;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
         }
+
+        return response;
     }
 }

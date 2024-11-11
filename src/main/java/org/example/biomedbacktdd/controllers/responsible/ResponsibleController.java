@@ -8,27 +8,19 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
-import org.example.biomedbacktdd.services.ResponsibleService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/responsible")
 @Tag(name = "Responsible", description = "Endpoints para lidar com Responsáveis.")
 public class ResponsibleController {
-
-    private Logger logger = Logger.getLogger(ResponsibleService.class.getName());
 
     @Autowired
     private final ResponsibleHandler handler;
@@ -57,16 +49,14 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<ResponsibleDTO>>> findAll(
+    public ResponseEntity<StatusResponseDTO> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindAll(PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "nomeRes")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeRes"));
-
-        return ResponseEntity.ok(handler.handleFindAll(pageable));
+        return response;
     }
 
     @GetMapping(
@@ -88,17 +78,15 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<ResponsibleDTO>>> findResponsibleByName(
+    public ResponseEntity<StatusResponseDTO> findResponsibleByName(
             @PathVariable(value = "nomeRes") String nomeRes,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindResponsiblesByName(nomeRes, PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "nomeRes")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "nomeRes"));
-
-        return ResponseEntity.ok(handler.handleFindResponsiblesByName(nomeRes, pageable));
+        return response;
     }
 
     @GetMapping(
@@ -120,11 +108,13 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public List<Object[]> findResponsibleCpfAndName(
+    public ResponseEntity<StatusResponseDTO> findResponsibleCpfAndName(
             @RequestParam(value = "emailRes") String emailRes,
             @RequestParam(value = "senhaRes") String senhaRes
     ) {
-        return handler.handleFindResponsiblesCpfAndName(emailRes, senhaRes);
+        var response = handler.handleFindResponsiblesCpfAndName(emailRes, senhaRes);
+
+        return response;
     }
 
     @GetMapping(
@@ -143,8 +133,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponsibleDTO findById(@PathVariable(value = "id") String id) {
-        return handler.handleFindById(id);
+    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") String id) {
+        var response = handler.handleFindById(id);
+
+        return response;
     }
 
     @PostMapping(
@@ -161,8 +153,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponsibleDTO create(@RequestBody ResponsibleDTO responsibleVO) {
-        return handler.handleCreate(responsibleVO);
+    public ResponseEntity<StatusResponseDTO> create(@RequestBody ResponsibleDTO responsibleVO) {
+        var response = handler.handleCreate(responsibleVO);
+
+        return response;
     }
 
     @PutMapping(
@@ -180,8 +174,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponsibleDTO update(@RequestBody ResponsibleDTO responsibleVO) {
-        return handler.handleUpdate(responsibleVO);
+    public ResponseEntity<StatusResponseDTO> update(@RequestBody ResponsibleDTO responsibleVO) {
+        var response = handler.handleUpdate(responsibleVO);
+
+        return response;
     }
 
     @DeleteMapping(value = "/commonuser/delete/{id}")
@@ -194,10 +190,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<?> delete(@PathVariable(value = "id") String id) {
-        handler.handleDelete(id);
+    public ResponseEntity<StatusResponseDTO> delete(@PathVariable(value = "id") String id) {
+        var response = handler.handleDelete(id);
 
-        return ResponseEntity.noContent().build();
+        return response;
     }
 
     @PutMapping(
@@ -215,8 +211,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponsibleDTO updatePassword(@RequestBody ResponsibleDTO responsibleVO) {
-        return handler.handleUpdatePassword(responsibleVO);
+    public ResponseEntity<StatusResponseDTO> updatePassword(@RequestBody ResponsibleDTO responsibleVO) {
+        var response = handler.handleUpdatePassword(responsibleVO);
+
+        return response;
     }
 
     @GetMapping(value = "/findByTelefone/{telefone}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
@@ -231,14 +229,10 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<ResponsibleDTO> findByTelefone(@PathVariable(value = "telefone") String telefone) {
-        ResponsibleDTO responsible = handler.handleFindByTelefone(telefone);
-        if (responsible != null) {
-            return ResponseEntity.ok(responsible);
-        } else {
-            // Directly return a 404 Not Found response if the responsible is not found
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<StatusResponseDTO> findByTelefone(@PathVariable(value = "telefone") String telefone) {
+        var response = handler.handleFindByTelefone(telefone);
+
+        return response;
     }
 
 
@@ -254,12 +248,9 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<ResponsibleDTO> findByEmail(@PathVariable(value = "email") String emailRes) {
-        ResponsibleDTO responsible = handler.handleFindByEmail(emailRes);
-        if (responsible != null) {
-            return ResponseEntity.ok(responsible);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<StatusResponseDTO> findByEmail(@PathVariable(value = "email") String emailRes) {
+        var response = handler.handleFindByEmail(emailRes);
+
+        return response;
     }
 }

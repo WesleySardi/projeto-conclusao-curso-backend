@@ -5,27 +5,21 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.biomedbacktdd.DTO.commands.DependentDTO;
-import org.example.biomedbacktdd.DTO.commands.DependentWebDataDTO;
 import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.handlers.mixed.MixedHandler;
-import org.example.biomedbacktdd.services.ResponsibleService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.logging.Logger;
-
 @RestController
 @RequestMapping("/api/mixed")
 @Tag(name = "Mixed", description = "Endpoints para lidar com Dependentes e Responsáveis.")
 public class MixedController {
-
-    private Logger logger = Logger.getLogger(ResponsibleService.class.getName());
-
     @Autowired
     private final MixedHandler handler;
 
@@ -50,8 +44,10 @@ public class MixedController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentDTO findByIdWithSecurity(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return handler.handleFindByIdWithSecurity(cpfDep, emergPhone);
+    public ResponseEntity<StatusResponseDTO> findByIdWithSecurity(@RequestParam(value = "cpfDep") String cpfDep, @RequestParam(value = "emergPhone") String emergPhone) {
+        var response = handler.handleFindByIdWithSecurity(cpfDep, emergPhone);
+
+        return response;
     }
 
     @GetMapping(
@@ -70,7 +66,9 @@ public class MixedController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public DependentWebDataDTO findWebDataByIdWithSecurity(@RequestParam(value = "idDep") String idDep, @RequestParam(value = "emergPhone") String emergPhone) {
-        return handler.handleFindWebDataByIdWithSecurity(idDep, emergPhone);
+    public ResponseEntity<StatusResponseDTO> findWebDataByIdWithSecurity(@RequestParam(value = "idDep") String idDep, @RequestParam(value = "emergPhone") String emergPhone) {
+        var response = handler.handleFindWebDataByIdWithSecurity(idDep, emergPhone);
+
+        return response;
     }
 }

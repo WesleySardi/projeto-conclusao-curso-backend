@@ -26,14 +26,14 @@ public class DependentHandler {
             var response = dependentService.findAll(pageable);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependentes encontrados com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -45,14 +45,14 @@ public class DependentHandler {
             var response = dependentService.findDependentsByName(firstname, pageable);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente encontrado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -64,14 +64,14 @@ public class DependentHandler {
             var response = dependentService.findDependentsByCpfRes(cpfRes, pageable);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente encontrado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -83,14 +83,14 @@ public class DependentHandler {
             var response = dependentService.findById(id);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente encontrado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -102,14 +102,14 @@ public class DependentHandler {
             var response = dependentService.verifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dados válidos.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Cpf e emergPhone não possuem relação.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -121,14 +121,14 @@ public class DependentHandler {
             var response = dependentService.create(dependent);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente criado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao criar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -140,14 +140,14 @@ public class DependentHandler {
             var response = dependentService.update(dependent);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente alterado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao alterar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
@@ -159,14 +159,14 @@ public class DependentHandler {
             var response = dependentService.delete(id);
 
             if (response != null) {
-                errorResponse = new StatusResponseDTO(response, "Autenticação concluída!", "Dados validos.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseDTO(response, "Sucesso", "Dependente deletado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseDTO(null, "Falha na autenticação!", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
+                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao deletar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseDTO(null, "An unexpected error occurred.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }

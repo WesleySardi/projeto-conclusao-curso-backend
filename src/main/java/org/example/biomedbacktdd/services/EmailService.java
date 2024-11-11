@@ -50,112 +50,128 @@ public class EmailService implements IEmailService {
     private String sendGridApiKey;
 
     public EmailDTO create(EmailDTO emailVO) {
-        if (emailVO == null) throw new RequiredObjectIsNullException();
+        EmailDTO response = null;
 
-        logger.info("Creating an email entry and sending email!");
+        try {
+            if (emailVO == null) throw new RequiredObjectIsNullException();
 
-        int emailCode = generateRandomCode();
+            logger.info("Creating an email entry and sending email!");
 
-        String emailContent = "Your verification code is: " + emailCode;
-        sendEmailWithSendGrid(emailVO.getEmailUser(), emailContent);
+            int emailCode = generateRandomCode();
 
-        Timestamp sendDate = new Timestamp(System.currentTimeMillis());
+            String emailContent = "Your verification code is: " + emailCode;
+            sendEmailWithSendGrid(emailVO.getEmailUser(), emailContent);
 
-        Timestamp returnDate = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
+            Timestamp sendDate = new Timestamp(System.currentTimeMillis());
 
-        EmailHandler emailHandler = DozerMapper.parseObject(emailVO, EmailHandler.class);
-        emailHandler.setEmailCode(emailCode);
-        emailHandler.setSendDate(sendDate);
-        emailHandler.setReturnDate(returnDate);
-        emailHandler.setEmailUser(emailHandler.getEmailUser());
-        emailHandler.setCpfDep(emailHandler.getCpfDep());
+            Timestamp returnDate = new Timestamp(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
 
-        emailHandler = repository.save(emailHandler);
+            EmailHandler emailHandler = DozerMapper.parseObject(emailVO, EmailHandler.class);
+            emailHandler.setEmailCode(emailCode);
+            emailHandler.setSendDate(sendDate);
+            emailHandler.setReturnDate(returnDate);
+            emailHandler.setEmailUser(emailHandler.getEmailUser());
+            emailHandler.setCpfDep(emailHandler.getCpfDep());
 
-        EmailDTO vo = DozerMapper.parseObject(emailHandler, EmailDTO.class);
-        vo.add(linkTo(methodOn(EmailController.class).findById(emailHandler.getEmailCode())).withSelfRel());
+            emailHandler = repository.save(emailHandler);
 
-        return vo;
+            EmailDTO vo = DozerMapper.parseObject(emailHandler, EmailDTO.class);
+            vo.add(linkTo(methodOn(EmailController.class).findById(emailHandler.getEmailCode())).withSelfRel());
+
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public void sendQrCodeWithSendGrid(String toEmail) {
-        Email from = new Email("wesleysardi.random@gmail.com");
-        String subject = "Seu código de verificação!";
-        Email to = new Email(toEmail);
+    public String sendQrCodeWithSendGrid(String toEmail) {
+        String response = null;
 
-        String htmlContent = """
-        <!DOCTYPE html>
-       <html lang="pt-BR">
-       
-       <head>
-           <meta charset="UTF-8">
-           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-           <title>Email com QR Code</title>
-           <style>
-               body {
-                   font-family: Arial, sans-serif;
-                   background-color: #f4f4f4;
-                   margin: 0;
-                   padding: 0;
-                   text-align: center;
-               }
-       
-               .container {
-                   max-width: 600px;
-                   margin: 0 auto;
-                   padding: 20px;
-                   background-color: #ffffff;
-                   border-radius: 8px;
-                   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                   text-align: center;
-                   justify-content: center;
-                   align-items: center;
-               }
-       
-               .title {
-                   font-size: 24px;
-                   color: #333333;
-                   margin-bottom: 20px;
-                   max-width: 600px;
-                   width: 100%;
-                   text-align: center;
-                   justify-content: center;
-                   align-items: center;
-               }
-       
-               .qr-code {
-                   width: 100%;
-                   /* Ajusta a largura para ocupar todo o espaço disponível */
-                   height: auto;
-                   /* Ajusta a altura automaticamente */
-               }
-           </style>
-       </head>
-       
-       <body>
-           <div class="container">
-               <h1 class="title">Baixe o aplicativo lendo o QR Code abaixo!</h1>
-               <img src="https://i.imgur.com/6fOfcTT.png" alt="QR Code para baixar o aplicativo" class="qr-code">
-           </div>
-       </body>
-       
-       </html>
-        """;
-
-        Content emailContent = new Content("text/html", htmlContent);
-        Mail mail = new Mail(from, subject, to, emailContent);
-
-        SendGrid sg = new SendGrid(sendGridApiKey);
-        Request request = new Request();
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            Response response = sg.api(request);
-            logger.info("Email sent. Status Code: " + response.getStatusCode());
-        } catch (IOException ex) {
-            logger.severe("Error sending email: " + ex.getMessage());
+            Email from = new Email("wesleysardi.random@gmail.com");
+            String subject = "Seu código de verificação!";
+            Email to = new Email(toEmail);
+
+            String htmlContent = """
+                        <!DOCTYPE html>
+                       <html lang="pt-BR">
+                       
+                       <head>
+                           <meta charset="UTF-8">
+                           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                           <title>Email com QR Code</title>
+                           <style>
+                               body {
+                                   font-family: Arial, sans-serif;
+                                   background-color: #f4f4f4;
+                                   margin: 0;
+                                   padding: 0;
+                                   text-align: center;
+                               }
+                       
+                               .container {
+                                   max-width: 600px;
+                                   margin: 0 auto;
+                                   padding: 20px;
+                                   background-color: #ffffff;
+                                   border-radius: 8px;
+                                   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                   text-align: center;
+                                   justify-content: center;
+                                   align-items: center;
+                               }
+                       
+                               .title {
+                                   font-size: 24px;
+                                   color: #333333;
+                                   margin-bottom: 20px;
+                                   max-width: 600px;
+                                   width: 100%;
+                                   text-align: center;
+                                   justify-content: center;
+                                   align-items: center;
+                               }
+                       
+                               .qr-code {
+                                   width: 100%;
+                                   /* Ajusta a largura para ocupar todo o espaço disponível */
+                                   height: auto;
+                                   /* Ajusta a altura automaticamente */
+                               }
+                           </style>
+                       </head>
+                       
+                       <body>
+                           <div class="container">
+                               <h1 class="title">Baixe o aplicativo lendo o QR Code abaixo!</h1>
+                               <img src="https://i.imgur.com/6fOfcTT.png" alt="QR Code para baixar o aplicativo" class="qr-code">
+                           </div>
+                       </body>
+                       
+                       </html>
+                    """;
+
+            Content emailContent = new Content("text/html", htmlContent);
+            Mail mail = new Mail(from, subject, to, emailContent);
+
+            SendGrid sg = new SendGrid(sendGridApiKey);
+            Request request = new Request();
+            try {
+                request.setMethod(Method.POST);
+                request.setEndpoint("mail/send");
+                request.setBody(mail.build());
+                Response responseApi = sg.api(request);
+                response = "Email sent. Status Code: " + responseApi.getStatusCode();
+            } catch (IOException ex) {
+                response = "Error sending email: " + ex.getMessage();
+            }
+        } catch (Exception e) {
+            return null;
         }
+
+        return response;
     }
 
     private void sendEmailWithSendGrid(String toEmail, String content) {
@@ -183,56 +199,94 @@ public class EmailService implements IEmailService {
     }
 
     public PagedModel<EntityModel<EmailDTO>> findAll(Pageable pageable) {
-        logger.info("Finding all emails!");
+        PagedModel<EntityModel<EmailDTO>> response = null;
 
-        var emailPage = repository.findAll(pageable);
+        try {
+            logger.info("Finding all emails!");
 
-        var emailVosPage = emailPage.map(p -> {
-            EmailDTO vo = DozerMapper.parseObject(p, EmailDTO.class);
-            vo.add(linkTo(methodOn(EmailController.class).findById(vo.getKey())).withSelfRel());
-            return vo;
-        });
+            var emailPage = repository.findAll(pageable);
 
-        Link link = linkTo(methodOn(EmailController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().toString())).withSelfRel();
+            var emailVosPage = emailPage.map(p -> {
+                EmailDTO vo = DozerMapper.parseObject(p, EmailDTO.class);
+                vo.add(linkTo(methodOn(EmailController.class).findById(vo.getKey())).withSelfRel());
+                return vo;
+            });
 
-        return assembler.toModel(emailVosPage, link);
+            Link link = linkTo(methodOn(EmailController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().toString())).withSelfRel();
+
+            response = assembler.toModel(emailVosPage, link);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
     public EmailDTO findById(Integer id) {
-        logger.info("Finding an email!");
+        EmailDTO response = null;
 
-        EmailHandler entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        try {
+            logger.info("Finding an email!");
 
-        EmailDTO vo = DozerMapper.parseObject(entity, EmailDTO.class);
+            EmailHandler entity = repository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        vo.add(linkTo(methodOn(EmailController.class).findById(id)).withSelfRel());
+            EmailDTO vo = DozerMapper.parseObject(entity, EmailDTO.class);
 
-        return vo;
+            vo.add(linkTo(methodOn(EmailController.class).findById(id)).withSelfRel());
+
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public void deleteByEmail(String emailUser) {
-        logger.info("Deleting all Email entries for email: " + emailUser);
-        boolean exists = repository.existsByEmailUser(emailUser);
-        if (!exists) {
-            logger.info("No records found for this email: " + emailUser);
-            throw new ResourceNotFoundException("No records found for this email: " + emailUser);
+    public String deleteByEmail(String emailUser) {
+        String response = null;
+
+        try {
+            logger.info("Deleting all Email entries for email: " + emailUser);
+            boolean exists = repository.existsByEmailUser(emailUser);
+            if (!exists) {
+                logger.info("No records found for this email: " + emailUser);
+                throw new ResourceNotFoundException("No records found for this email: " + emailUser);
+            }
+            repository.deleteByEmailUser(emailUser);
+
+            response = emailUser;
+        } catch (Exception e) {
+            response = null;
         }
-        repository.deleteByEmailUser(emailUser);
+
+        return response;
     }
 
     public boolean verifyEmailCode(String email, int code) {
-        logger.info("Verifying an email code for: " + email);
+        boolean response = false;
 
-        EmailHandler entity = repository.findByEmailUserAndEmailCode(email, code)
-                .orElseThrow(() -> new ResourceNotFoundException("No records found for this email and code!"));
+        try {
+            logger.info("Verifying an email code for: " + email);
 
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        if (entity.getReturnDate() != null && currentTime.before(entity.getReturnDate())) {
-            deleteByEmail(entity.getEmailUser());
-            return true;
-        } else {
-            throw new ResourceNotFoundException("Code expired or not valid!");
+            EmailHandler entity = repository.findByEmailUserAndEmailCode(email, code)
+                    .orElseThrow(() -> new ResourceNotFoundException("No records found for this email and code!"));
+
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            if (entity.getReturnDate() != null && currentTime.before(entity.getReturnDate())) {
+                var deletedEmail = deleteByEmail(entity.getEmailUser());
+                if (deletedEmail != null) {
+                    response = true;
+                } else {
+                    response = false;
+                }
+            } else {
+                response = false;
+            }
+        } catch (Exception e) {
+            return false;
         }
+
+        return response;
     }
 }

@@ -13,6 +13,6 @@ public interface ISmsHandlerService {
     SmsHandlerDTO create(SmsHandlerDTO sms);
     SmsHandlerDTO update(Integer smsCode, Timestamp returnDate);
     boolean verifySmsCode(Integer smsCode, Timestamp returnDate, String cpfDep);
-    void delete(Integer id);
-    void deleteByCpfDep(String cpfDep);
+    Integer delete(Integer id);
+    String deleteByCpfDep(String cpfDep);
 }

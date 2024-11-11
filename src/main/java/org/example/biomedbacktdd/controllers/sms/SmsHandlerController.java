@@ -7,28 +7,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
-import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
+import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
 import org.example.biomedbacktdd.handlers.sms.SmsHandlerHandler;
-import org.example.biomedbacktdd.services.SmsHandlerService;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/smshandler/")
 @Tag(name = "SMS", description = "Endpoints for Managing SMS")
 public class SmsHandlerController {
-
-    private Logger logger = Logger.getLogger(SmsHandlerService.class.getName());
 
     @Autowired
     private final SmsHandlerHandler handler;
@@ -55,16 +48,14 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<PagedModel<EntityModel<SmsHandlerDTO>>> findAll(
+    public ResponseEntity<StatusResponseDTO> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
-        var sortDirection = "desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        var response = handler.handleFindAll(PageRequest.of(page, size, Sort.by("desc".equals(direction) ? Sort.Direction.DESC : Sort.Direction.ASC, "smsCode")));
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "smsCode"));
-
-        return ResponseEntity.ok(handler.handleFindAll(pageable));
+        return response;
     }
 
     @GetMapping(
@@ -83,8 +74,10 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public SmsHandlerDTO findById(@PathVariable(value = "id") Integer id) {
-        return handler.handleFindById(id);
+    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") Integer id) {
+        var response = handler.handleFindById(id);
+
+        return response;
     }
 
     @PostMapping(
@@ -100,8 +93,10 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public SmsHandlerDTO create(@RequestBody SmsHandlerDTO smsHandlerVO) {
-        return handler.handleCreate(smsHandlerVO);
+    public ResponseEntity<StatusResponseDTO> create(@RequestBody SmsHandlerDTO smsHandlerVO) {
+        var response = handler.handleCreate(smsHandlerVO);
+
+        return response;
     }
 
     @PutMapping(
@@ -118,8 +113,10 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public SmsHandlerDTO update(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate) {
-        return handler.handleUpdate(smsCode, returnDate);
+    public ResponseEntity<StatusResponseDTO> update(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate) {
+        var response = handler.handleUpdate(smsCode, returnDate);
+
+        return response;
     }
 
     @DeleteMapping(value = "/{id}")
@@ -132,10 +129,10 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<?> delete(@PathVariable(value = "id") Integer id) {
-        handler.handleDelete(id);
+    public ResponseEntity<StatusResponseDTO> delete(@PathVariable(value = "id") Integer id) {
+        var response = handler.handleDelete(id);
 
-        return ResponseEntity.noContent().build();
+        return response;
     }
 
     @GetMapping(value = "/verifySmsCode")
@@ -148,7 +145,9 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public boolean verifySmsCode(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate, @RequestParam(value = "cpfDep") String cpfDep) {
-        return handler.handleVerifySmsCode(smsCode, returnDate, cpfDep);
+    public ResponseEntity<StatusResponseDTO> verifySmsCode(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate, @RequestParam(value = "cpfDep") String cpfDep) {
+        var response = handler.handleVerifySmsCode(smsCode, returnDate, cpfDep);
+
+        return response;
     }
 }
