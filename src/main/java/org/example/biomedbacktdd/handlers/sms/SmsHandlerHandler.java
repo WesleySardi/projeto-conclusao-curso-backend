@@ -32,11 +32,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao encontrar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -51,11 +51,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao encontrar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -70,11 +70,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao criar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -89,11 +89,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao alterar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -108,11 +108,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Código SMS inválido.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -127,11 +127,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao deletar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -146,11 +146,11 @@ public class SmsHandlerHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao deletar o SMS.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }

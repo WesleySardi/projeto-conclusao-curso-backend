@@ -27,11 +27,11 @@ public class OtherHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao codificar a mensagem.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -46,11 +46,11 @@ public class OtherHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao decodificar a mensagem.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }

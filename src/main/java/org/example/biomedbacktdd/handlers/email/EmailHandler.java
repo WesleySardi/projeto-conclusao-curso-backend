@@ -30,11 +30,11 @@ public class EmailHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao encontrar os emails.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -49,11 +49,11 @@ public class EmailHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(false, "Erro", "Código do email inválido.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(false, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -68,11 +68,11 @@ public class EmailHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao encontrar o email.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -87,11 +87,11 @@ public class EmailHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao criar email.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -106,11 +106,11 @@ public class EmailHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao enviar o QR code.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }

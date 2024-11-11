@@ -31,11 +31,11 @@ public class AuthHandler {
                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
            } else {
                errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao registrar o usuário.", HttpStatus.NOT_FOUND.value(), false);
-               return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+               return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
            }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -46,7 +46,7 @@ public class AuthHandler {
             if (checkIfParamsIsNotNull(data)) {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Usuário ou senha estão vazios.", HttpStatus.UNAUTHORIZED.value(), false);
 
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
 
             var response = authService.signin(data);
@@ -56,11 +56,11 @@ public class AuthHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Usuário ou senha inválidos.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -71,7 +71,7 @@ public class AuthHandler {
             if (checkIfParamsIsNotNull(username, refreshToken)) {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Usuário ou senha estão vazios.", HttpStatus.UNAUTHORIZED.value(), false);
 
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
 
             var response = authService.refreshToken(username, refreshToken);
@@ -81,11 +81,11 @@ public class AuthHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Usuário inválido.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 

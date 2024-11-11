@@ -30,11 +30,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -49,11 +49,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -68,11 +68,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -87,11 +87,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -106,11 +106,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Cpf e emergPhone não possuem relação.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -125,11 +125,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao criar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -144,11 +144,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao alterar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
@@ -163,11 +163,11 @@ public class DependentHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseDTO(null, "Erro", "Erro ao deletar dependente.", HttpStatus.UNAUTHORIZED.value(), false);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseDTO(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }
