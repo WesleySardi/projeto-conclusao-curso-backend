@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
@@ -140,7 +139,7 @@ public class ResponsibleController {
     }
 
     @PostMapping(
-            value = "/commonuser/create",
+            value = "/create",
             consumes = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML},
             produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Adds a new Responsible", description = "Adds a new Responsible by passing in a JSON, XML or YML representation of the Responsible!",
@@ -153,8 +152,8 @@ public class ResponsibleController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> create(@RequestBody ResponsibleDTO responsibleVO) {
-        var response = handler.handleCreate(responsibleVO);
+    public ResponseEntity<StatusResponseDTO> create(@RequestBody ResponsibleDTO responsibleDTO) {
+        var response = handler.handleCreate(responsibleDTO);
 
         return response;
     }
@@ -174,8 +173,8 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> update(@RequestBody ResponsibleDTO responsibleVO) {
-        var response = handler.handleUpdate(responsibleVO);
+    public ResponseEntity<StatusResponseDTO> update(@RequestBody ResponsibleDTO responsibleDTO) {
+        var response = handler.handleUpdate(responsibleDTO);
 
         return response;
     }

@@ -48,12 +48,12 @@ public class SecurityConfig {
                                         "/api/dependent/manager/**",
                                         "/api/mixed/manager/**",
                                         "/api/email/manager/**",
-                                        "/api/responsible/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                                        "/api/responsible/manager/**").hasAnyRole("CUIDADOR", "ADMIN")
                                 .requestMatchers(
                                         "/api/dependent/commonuser/**",
                                         "/api/mixed/commonuser/**",
                                         "/api/email/commonuser/**",
-                                        "/api/responsible/commonuser/**").hasAnyRole("COMMON_USER", "MANAGER", "ADMIN")
+                                        "/api/responsible/commonuser/**").hasAnyRole("RESPONSÁVEL", "CUIDADOR", "ADMIN")
                                 .requestMatchers(
                                         "/auth/signin",
                                         "/auth/register",
@@ -62,6 +62,7 @@ public class SecurityConfig {
                                         "/api/responsible/updatePassword",
                                         "/api/responsible/findByTelefone/**",
                                         "/api/responsible/findByEmail/**",
+                                        "/api/responsible/create/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
                                         "/v2/api-docs",

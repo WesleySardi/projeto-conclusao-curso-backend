@@ -16,27 +16,16 @@ public class DependentDTO extends RepresentationModel<DependentDTO> implements S
 
     @JsonProperty("cpfDep")
     private String key;
-
     private String nomeDep;
-
     private Integer idadeDep;
-
     private String tipoSanguineo;
-
     private String laudo;
-
     private String generoDep;
-
     private String rgDep;
-
     private String cpfResDep;
-
     private Integer piTagIdDep;
-
     private String cpfTerDep;
-
     private Integer idCirurgiaDep;
-
     private Integer idScanDep;
 
     public DependentDTO() {
