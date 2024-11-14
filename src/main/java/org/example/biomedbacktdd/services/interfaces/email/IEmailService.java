@@ -7,9 +7,7 @@ import org.springframework.hateoas.PagedModel;
 
 public interface IEmailService {
     EmailDTO create(EmailDTO emailVO);
-
     PagedModel<EntityModel<EmailDTO>> findAll(Pageable pageable);
-
     EmailDTO findById(Integer id);
     String deleteByEmail(String emailUser);
     boolean verifyEmailCode(String email, int code);
