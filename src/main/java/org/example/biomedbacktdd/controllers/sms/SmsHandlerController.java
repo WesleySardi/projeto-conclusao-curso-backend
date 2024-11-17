@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
-import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
+import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
+import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.sms.SmsHandlerHandler;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class SmsHandlerController {
                             content = {
                                     @Content(
                                             mediaType = "application/json",
-                                            array = @ArraySchema(schema = @Schema(implementation = SmsHandlerDTO.class)
+                                            array = @ArraySchema(schema = @Schema(implementation = NewSmsCommand.class)
                                             )
                                     )
                             }),
@@ -48,7 +48,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> findAll(
+    public ResponseEntity<StatusResponseViewModel> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
@@ -66,7 +66,7 @@ public class SmsHandlerController {
             tags = {"SmsHandler"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = SmsHandlerDTO.class))
+                            content = @Content(schema = @Schema(implementation = NewSmsCommand.class))
                     ),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -74,7 +74,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<StatusResponseViewModel> findById(@PathVariable(value = "id") Integer id) {
         var response = handler.handleFindById(id);
 
         return response;
@@ -87,13 +87,13 @@ public class SmsHandlerController {
             tags = {"SmsHandlers"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = SmsHandlerDTO.class))
+                            content = @Content(schema = @Schema(implementation = NewSmsCommand.class))
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> create(@RequestBody SmsHandlerDTO smsHandlerVO) {
+    public ResponseEntity<StatusResponseViewModel> create(@RequestBody NewSmsCommand smsHandlerVO) {
         var response = handler.handleCreate(smsHandlerVO);
 
         return response;
@@ -106,14 +106,14 @@ public class SmsHandlerController {
             tags = {"SmsHandlers"},
             responses = {
                     @ApiResponse(description = "Updated", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = SmsHandlerDTO.class))
+                            content = @Content(schema = @Schema(implementation = NewSmsCommand.class))
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> update(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate) {
+    public ResponseEntity<StatusResponseViewModel> update(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate) {
         var response = handler.handleUpdate(smsCode, returnDate);
 
         return response;
@@ -129,7 +129,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> delete(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<StatusResponseViewModel> delete(@PathVariable(value = "id") Integer id) {
         var response = handler.handleDelete(id);
 
         return response;
@@ -145,7 +145,7 @@ public class SmsHandlerController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> verifySmsCode(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate, @RequestParam(value = "cpfDep") String cpfDep) {
+    public ResponseEntity<StatusResponseViewModel> verifySmsCode(@RequestParam(value = "smsCode") Integer smsCode, @RequestParam(value = "returnDate") Timestamp returnDate, @RequestParam(value = "cpfDep") String cpfDep) {
         var response = handler.handleVerifySmsCode(smsCode, returnDate, cpfDep);
 
         return response;

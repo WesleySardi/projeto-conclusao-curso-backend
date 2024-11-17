@@ -1,12 +1,13 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.DependentDTO;
+import org.example.biomedbacktdd.DTO.commands.NewDependentCommand;
+import org.example.biomedbacktdd.DTO.results.NewDependentResult;
+import org.example.biomedbacktdd.DTO.viewmodels.NewDependentViewModel;
 import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
 import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
-import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.repositories.mapper.DozerMapper;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -29,26 +28,23 @@ public class DependentService implements IDependentService {
 
     private final Logger logger = Logger.getLogger(DependentService.class.getName());
     private final IDependentRepository repository;
-    private final IResponsibleRepository resRepository;
-    private final PagedResourcesAssembler<DependentDTO> assembler;
+    private final PagedResourcesAssembler<NewDependentViewModel> assembler;
 
     @Autowired
     public DependentService(IDependentRepository repository,
-                            IResponsibleRepository resRepository,
-                            PagedResourcesAssembler<DependentDTO> assembler) {
+                            PagedResourcesAssembler<NewDependentViewModel> assembler) {
         this.repository = repository;
-        this.resRepository = resRepository;
         this.assembler = assembler;
     }
 
-    public PagedModel<EntityModel<DependentDTO>> findAll(Pageable pageable) {
-        PagedModel<EntityModel<DependentDTO>> response = null;
+    public PagedModel<EntityModel<NewDependentViewModel>> findAll(Pageable pageable) {
+        PagedModel<EntityModel<NewDependentViewModel>> response = null;
 
         try {
             logger.info("Finding all dependents!");
 
             var dependentPage = repository.findAll(pageable);
-            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
+            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, NewDependentViewModel.class));
             dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
 
             Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
@@ -60,35 +56,15 @@ public class DependentService implements IDependentService {
         return response;
     }
 
-    public PagedModel<EntityModel<DependentDTO>> findDependentsByName(String firstname, Pageable pageable) {
-        PagedModel<EntityModel<DependentDTO>> response = null;
-
-        try {
-            logger.info("Finding all people by Name!");
-
-            var dependentPage = repository.findDependentsByName(firstname, pageable);
-
-            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
-            dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
-
-            Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-            response = assembler.toModel(dependentVosPage, link);
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public PagedModel<EntityModel<DependentDTO>> findDependentsByCpfRes(String cpfRes, Pageable pageable) {
-        PagedModel<EntityModel<DependentDTO>> response = null;
+    public PagedModel<EntityModel<NewDependentViewModel>> findDependentsByCpfRes(String cpfRes, Pageable pageable) {
+        PagedModel<EntityModel<NewDependentViewModel>> response = null;
 
         try {
             logger.info("Finding all people by CpfRes!");
 
             var dependentPage = repository.findDependentsByCpfRes(cpfRes, pageable);
 
-            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, DependentDTO.class));
+            var dependentVosPage = dependentPage.map(p -> DozerMapper.parseObject(p, NewDependentViewModel.class));
             dependentVosPage.map(p -> p.add(linkTo(methodOn(DependentController.class).findById(p.getKey())).withSelfRel()));
 
             Link link = linkTo(methodOn(DependentController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
@@ -100,15 +76,15 @@ public class DependentService implements IDependentService {
         return response;
     }
 
-    public DependentDTO findById(String id) {
-        DependentDTO response = null;
+    public NewDependentViewModel findById(String id) {
+        NewDependentViewModel response = null;
 
         try {
             logger.info("Finding a dependent!");
 
             var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            var vo = DozerMapper.parseObject(entity, DependentDTO.class);
+            var vo = DozerMapper.parseObject(entity, NewDependentViewModel.class);
 
             vo.add(linkTo(methodOn(DependentController.class).findById(id)).withSelfRel());
 
@@ -121,33 +97,8 @@ public class DependentService implements IDependentService {
         return response;
     }
 
-    public Map<String, String> verifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone) {
-        Map<String, String> response = null;
-
-        try {
-            logger.info("Verifying Dependents CPF and Emergency Phone!");
-
-            String emergePhoneByCpf = resRepository.findResponsibleEmergPhoneByCpfDep(cpfDep);
-            String emergePhoneByPath = emergPhone;
-            if (emergePhoneByCpf.equals(emergePhoneByPath)) {
-                Map<String, String> data = new HashMap<>();
-
-                data.put("emergPhone", emergPhone);
-                data.put("cpfDep", cpfDep);
-
-                response = data;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public DependentDTO create(DependentDTO dependent) {
-        DependentDTO response = null;
+    public NewDependentResult create(NewDependentCommand dependent) {
+        NewDependentResult response = null;
 
         try {
             if (dependent == null) throw new RequiredObjectIsNullException();
@@ -156,7 +107,7 @@ public class DependentService implements IDependentService {
 
             var entity = DozerMapper.parseObject(dependent, Dependent.class);
 
-            var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewDependentResult.class);
 
             vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
 
@@ -168,8 +119,8 @@ public class DependentService implements IDependentService {
         return response;
     }
 
-    public DependentDTO update(DependentDTO dependent) {
-        DependentDTO response = null;
+    public NewDependentResult update(NewDependentCommand dependent) {
+        NewDependentResult response = null;
 
         try {
             if (dependent == null) throw new RequiredObjectIsNullException();
@@ -190,7 +141,7 @@ public class DependentService implements IDependentService {
             entity.setIdCirurgiaDep(dependent.getIdCirurgiaDep());
             entity.setIdScanDep(dependent.getIdScanDep());
 
-            var vo = DozerMapper.parseObject(repository.save(entity), DependentDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewDependentResult.class);
 
             vo.add(linkTo(methodOn(DependentController.class).findById(vo.getKey())).withSelfRel());
 

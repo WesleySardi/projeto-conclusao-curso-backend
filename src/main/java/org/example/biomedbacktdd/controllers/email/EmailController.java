@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.biomedbacktdd.DTO.commands.EmailDTO;
-import org.example.biomedbacktdd.DTO.results.StatusResponseDTO;
+import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
+import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.email.EmailHandler;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class EmailController {
                             content = {
                                     @Content(
                                             mediaType = "application/json",
-                                            array = @ArraySchema(schema = @Schema(implementation = EmailDTO.class))
+                                            array = @ArraySchema(schema = @Schema(implementation = NewEmailCommand.class))
                                     )
                             }),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -45,7 +45,7 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> findAll(
+    public ResponseEntity<StatusResponseViewModel> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
@@ -60,7 +60,7 @@ public class EmailController {
             tags = {"EmailHandler"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = EmailDTO.class))
+                            content = @Content(schema = @Schema(implementation = NewEmailCommand.class))
                     ),
                     @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
@@ -68,7 +68,7 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> findById(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<StatusResponseViewModel> findById(@PathVariable(value = "id") Integer id) {
         var response = handler.handleFindById(id);
 
         return response;
@@ -80,13 +80,13 @@ public class EmailController {
             tags = {"EmailHandlers"},
             responses = {
                     @ApiResponse(description = "Success", responseCode = "200",
-                            content = @Content(schema = @Schema(implementation = EmailDTO.class))
+                            content = @Content(schema = @Schema(implementation = NewEmailCommand.class))
                     ),
                     @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> create(@RequestBody EmailDTO emailHandlerVO) {
+    public ResponseEntity<StatusResponseViewModel> create(@RequestBody NewEmailCommand emailHandlerVO) {
         var response =  handler.handleCreate(emailHandlerVO);
 
         return response;
@@ -102,7 +102,7 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> verifyEmailCode(@RequestParam(value = "email") String email, @RequestParam(value = "code") int code) {
+    public ResponseEntity<StatusResponseViewModel> verifyEmailCode(@RequestParam(value = "email") String email, @RequestParam(value = "code") int code) {
         var response =  handler.handleVerifyEmailCode(email, code);
 
         return response;
@@ -118,7 +118,7 @@ public class EmailController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseDTO> sendQrCodeWithSendGrid(@RequestParam(value = "toEmail") String toEmail) {
+    public ResponseEntity<StatusResponseViewModel> sendQrCodeWithSendGrid(@RequestParam(value = "toEmail") String toEmail) {
         var response = handler.handleSendQrCodeWithSendGrid(toEmail);
 
         return response;

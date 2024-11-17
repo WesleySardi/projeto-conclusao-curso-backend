@@ -7,7 +7,9 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import org.example.biomedbacktdd.DTO.commands.EmailDTO;
+import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
+import org.example.biomedbacktdd.DTO.results.NewEmailResult;
+import org.example.biomedbacktdd.DTO.viewmodels.NewEmailViewModel;
 import org.example.biomedbacktdd.controllers.email.EmailController;
 import org.example.biomedbacktdd.entities.email.EmailHandler;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
@@ -37,11 +39,11 @@ public class EmailService implements IEmailService {
 
     private final Logger logger = Logger.getLogger(EmailService.class.getName());
     private final IEmailRepository repository;
-    private final PagedResourcesAssembler<EmailDTO> assembler;
+    private final PagedResourcesAssembler<NewEmailViewModel> assembler;
 
     @Autowired
     public EmailService(IEmailRepository repository,
-                        PagedResourcesAssembler<EmailDTO> assembler) {
+                        PagedResourcesAssembler<NewEmailViewModel> assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
@@ -49,8 +51,8 @@ public class EmailService implements IEmailService {
     @Value("${sendgrid.api.key}")
     private String sendGridApiKey;
 
-    public EmailDTO create(EmailDTO emailVO) {
-        EmailDTO response = null;
+    public NewEmailResult create(NewEmailCommand emailVO) {
+        NewEmailResult response = null;
 
         try {
             if (emailVO == null) throw new RequiredObjectIsNullException();
@@ -75,7 +77,7 @@ public class EmailService implements IEmailService {
 
             emailHandler = repository.save(emailHandler);
 
-            EmailDTO vo = DozerMapper.parseObject(emailHandler, EmailDTO.class);
+            NewEmailResult vo = DozerMapper.parseObject(emailHandler, NewEmailResult.class);
             vo.add(linkTo(methodOn(EmailController.class).findById(emailHandler.getEmailCode())).withSelfRel());
 
             response = vo;
@@ -198,8 +200,8 @@ public class EmailService implements IEmailService {
         return (int) (Math.random() * 900000) + 100000;
     }
 
-    public PagedModel<EntityModel<EmailDTO>> findAll(Pageable pageable) {
-        PagedModel<EntityModel<EmailDTO>> response = null;
+    public PagedModel<EntityModel<NewEmailViewModel>> findAll(Pageable pageable) {
+        PagedModel<EntityModel<NewEmailViewModel>> response = null;
 
         try {
             logger.info("Finding all emails!");
@@ -207,7 +209,7 @@ public class EmailService implements IEmailService {
             var emailPage = repository.findAll(pageable);
 
             var emailVosPage = emailPage.map(p -> {
-                EmailDTO vo = DozerMapper.parseObject(p, EmailDTO.class);
+                NewEmailViewModel vo = DozerMapper.parseObject(p, NewEmailViewModel.class);
                 vo.add(linkTo(methodOn(EmailController.class).findById(vo.getKey())).withSelfRel());
                 return vo;
             });
@@ -222,8 +224,8 @@ public class EmailService implements IEmailService {
         return response;
     }
 
-    public EmailDTO findById(Integer id) {
-        EmailDTO response = null;
+    public NewEmailViewModel findById(Integer id) {
+        NewEmailViewModel response = null;
 
         try {
             logger.info("Finding an email!");
@@ -231,7 +233,7 @@ public class EmailService implements IEmailService {
             EmailHandler entity = repository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            EmailDTO vo = DozerMapper.parseObject(entity, EmailDTO.class);
+            NewEmailViewModel vo = DozerMapper.parseObject(entity, NewEmailViewModel.class);
 
             vo.add(linkTo(methodOn(EmailController.class).findById(id)).withSelfRel());
 

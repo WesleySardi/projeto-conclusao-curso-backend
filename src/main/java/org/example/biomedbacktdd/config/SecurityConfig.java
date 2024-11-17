@@ -24,20 +24,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Desabilita CSRF para APIs REST
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Endpoints de autenticação estão liberados para todos
                         .requestMatchers(
                                 "/api/dependent/admin/**",
-                                "/api/mixed/admin/**",
                                 "/api/responsible/admin/**").hasRole("ADMIN")
                         .requestMatchers(
                                 "/api/dependent/manager/**",
-                                "/api/mixed/manager/**",
                                 "/api/responsible/manager/**").hasAnyRole("CUIDADOR", "ADMIN")
                         .requestMatchers(
                                 "/api/dependent/commonuser/**",
-                                "/api/mixed/commonuser/**",
                                 "/api/responsible/commonuser/**").hasAnyRole("RESPONSÁVEL", "CUIDADOR", "ADMIN")
                         .requestMatchers(
                                 "/api/email/**",
@@ -56,7 +52,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);  // Adiciona o filtro JWT antes da autenticação padrão
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

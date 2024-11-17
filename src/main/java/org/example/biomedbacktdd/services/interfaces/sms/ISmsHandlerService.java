@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.services.interfaces.sms;
 
-import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
+import org.example.biomedbacktdd.DTO.results.NewSmsResult;
+import org.example.biomedbacktdd.DTO.viewmodels.NewSmsViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -8,10 +10,10 @@ import org.springframework.hateoas.PagedModel;
 import java.sql.Timestamp;
 
 public interface ISmsHandlerService {
-    PagedModel<EntityModel<SmsHandlerDTO>> findAll(Pageable pageable);
-    SmsHandlerDTO findById(Integer id);
-    SmsHandlerDTO create(SmsHandlerDTO sms);
-    SmsHandlerDTO update(Integer smsCode, Timestamp returnDate);
+    PagedModel<EntityModel<NewSmsViewModel>> findAll(Pageable pageable);
+    NewSmsViewModel findById(Integer id);
+    NewSmsResult create(NewSmsCommand sms);
+    NewSmsResult update(Integer smsCode, Timestamp returnDate);
     boolean verifySmsCode(Integer smsCode, Timestamp returnDate, String cpfDep);
     Integer delete(Integer id);
     String deleteByCpfDep(String cpfDep);

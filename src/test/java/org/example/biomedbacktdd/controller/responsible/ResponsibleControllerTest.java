@@ -1,95 +1,106 @@
 package org.example.biomedbacktdd.controller.responsible;
 
+import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 
-@ActiveProfiles("test")
-@WebMvcTest(ResponsibleController.class)
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 class ResponsibleControllerTest {
 
-    /*@Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private ResponsibleHandler handler;
 
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private ResponsibleController controller;
 
-    @MockBean
-    private JwtTokenProvider jwtTokenProvider;
-
-    @BeforeEach
-    void setUp() {
+    ResponsibleControllerTest() {
         MockitoAnnotations.openMocks(this);
-        objectMapper = new ObjectMapper();
     }
 
     @Test
-    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
-    void testFindAll() throws Exception {
-        // Given
-        ResponsibleDTO responsibleDTO = new ResponsibleDTO();
-        responsibleDTO.setNomeRes("Test Responsible");
-        List<ResponsibleDTO> responsibles = List.of(responsibleDTO);
-        List<EntityModel<ResponsibleDTO>> entityModels = responsibles.stream()
-                .map(responsible -> EntityModel.of(responsible))
-                .toList();
+    void testFindAll() {
+        Pageable pageable = PageRequest.of(0, 12, Sort.by(Sort.Direction.ASC, "nomeRes"));
 
-        PagedModel<EntityModel<ResponsibleDTO>> pagedModel = PagedModel.of(entityModels,
-                new PagedModel.PageMetadata(1, 0, responsibles.size()));
+        StatusResponseViewModel mockResponse = new StatusResponseViewModel<>();
+        mockResponse.setStatus(200);
+        mockResponse.setIsOk(true);
 
-        when(handler.handleFindAll(any(Pageable.class))).thenReturn(pagedModel);
+        when(handler.handleFindAll(pageable)).thenReturn(ResponseEntity.ok(mockResponse));
 
-        // When & Then
-        mockMvc.perform(get("/api/responsible/commonuser/findAll?page=0&size=12&direction=asc")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$._embedded.responsibleDTOes[0].nomeRes").value("Test Responsible"));
+        var response = controller.findAll(0, 12, "asc");
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+
+        verify(handler, times(1)).handleFindAll(eq(pageable));
     }
 
     @Test
-    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
-    void testFindResponsibleByName() throws Exception {
-        // Given
-        String nomeRes = "Test Responsible";
-        ResponsibleDTO responsibleDTO = new ResponsibleDTO();
-        responsibleDTO.setNomeRes(nomeRes);
-        List<ResponsibleDTO> responsibles = List.of(responsibleDTO);
-        List<EntityModel<ResponsibleDTO>> entityModels = responsibles.stream()
-                .map(responsible -> EntityModel.of(responsible))
-                .toList();
+    void testFindById() {
+        String id = "123";
+        StatusResponseViewModel mockResponse = new StatusResponseViewModel<>();
+        mockResponse.setStatus(200);
+        mockResponse.setIsOk(true);
 
-        PagedModel<EntityModel<ResponsibleDTO>> pagedModel = PagedModel.of(entityModels,
-                new PagedModel.PageMetadata(1, 0, responsibles.size()));
+        when(handler.handleFindById(id)).thenReturn(ResponseEntity.ok(mockResponse));
 
-        when(handler.handleFindResponsiblesByName(anyString(), any(Pageable.class))).thenReturn(pagedModel);
+        var response = controller.findById(id);
 
-        // When & Then
-        mockMvc.perform(get("/api/responsible/commonuser/findResponsibleByName/{nomeRes}?page=0&size=12&direction=asc", nomeRes)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$._embedded.responsibleDTOes[0].nomeRes").value(nomeRes));
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        verify(handler, times(1)).handleFindById(id);
     }
 
     @Test
-    @WithMockUser(username = "leandro", roles = {"COMMON_USER"})
-    void testFindResponsibleCpfAndName() throws Exception {
-        // Given
-        String emailRes = "test@example.com";
-        String senhaRes = "password";
-        Object[] response = new Object[]{"Test Responsible", "123456789"};
+    void testCreate() {
+        NewResponsibleCommand command = new NewResponsibleCommand();
+        StatusResponseViewModel mockResponse = new StatusResponseViewModel<>();
+        mockResponse.setStatus(200);
+        mockResponse.setIsOk(true);
 
-        when(handler.handleFindResponsiblesCpfAndName(emailRes, senhaRes)).thenReturn(Collections.singletonList(response));
+        when(handler.handleCreate(command)).thenReturn(ResponseEntity.ok(mockResponse));
 
-        // When & Then
-        mockMvc.perform(get("/api/responsible/commonuser/findResponsibleCpfAndName/params?emailRes={emailRes}&senhaRes={senhaRes}", emailRes, senhaRes)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0][0]").value("Test Responsible"))
-                .andExpect(jsonPath("$[0][1]").value("123456789"));
-    }*/
+        var response = controller.create(command);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        verify(handler, times(1)).handleCreate(command);
+    }
+
+    @Test
+    void testFindByIdNotFound() {
+        String id = "123";
+
+        when(handler.handleFindById(id)).thenReturn(ResponseEntity.notFound().build());
+
+        var response = controller.findById(id);
+
+        assertNotNull(response);
+        assertEquals(404, response.getStatusCodeValue());
+        verify(handler, times(1)).handleFindById(id);
+    }
+
+    @Test
+    void testCreateNotFound() {
+        NewResponsibleCommand command = new NewResponsibleCommand();
+
+        when(handler.handleCreate(command)).thenReturn(ResponseEntity.notFound().build());
+
+        var response = controller.create(command);
+
+        assertNotNull(response);
+        assertEquals(404, response.getStatusCodeValue());
+        verify(handler, times(1)).handleCreate(command);
+    }
 }

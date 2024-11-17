@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
+import org.example.biomedbacktdd.DTO.results.NewSmsResult;
+import org.example.biomedbacktdd.DTO.viewmodels.NewSmsViewModel;
 import org.example.biomedbacktdd.controllers.sms.SmsHandlerController;
 import org.example.biomedbacktdd.entities.sms.SmsHandler;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
@@ -29,23 +31,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class SmsHandlerService implements ISmsHandlerService {
     private final Logger logger = Logger.getLogger(SmsHandlerService.class.getName());
     private final ISmsHandlerRepository repository;
-    private final PagedResourcesAssembler<SmsHandlerDTO> assembler;
+    private final PagedResourcesAssembler<NewSmsViewModel> assembler;
 
     @Autowired
     public SmsHandlerService(ISmsHandlerRepository repository,
-                             PagedResourcesAssembler<SmsHandlerDTO> assembler) {
+                             PagedResourcesAssembler<NewSmsViewModel> assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
 
-    public PagedModel<EntityModel<SmsHandlerDTO>> findAll(Pageable pageable) {
-        PagedModel<EntityModel<SmsHandlerDTO>> response = null;
+    public PagedModel<EntityModel<NewSmsViewModel>> findAll(Pageable pageable) {
+        PagedModel<EntityModel<NewSmsViewModel>> response = null;
 
         try {
             logger.info("Finding all SMS!");
 
             var smsPage = repository.findAll(pageable);
-            var smsVosPage = smsPage.map(p -> DozerMapper.parseObject(p, SmsHandlerDTO.class));
+            var smsVosPage = smsPage.map(p -> DozerMapper.parseObject(p, NewSmsViewModel.class));
             smsVosPage.map(p -> p.add(linkTo(methodOn(SmsHandlerController.class).findById(p.getKey())).withSelfRel()));
 
             Link link = linkTo(methodOn(SmsHandlerController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
@@ -57,15 +59,15 @@ public class SmsHandlerService implements ISmsHandlerService {
         return response;
     }
 
-    public SmsHandlerDTO findById(Integer id) {
-        SmsHandlerDTO response = null;
+    public NewSmsViewModel findById(Integer id) {
+        NewSmsViewModel response = null;
 
         try {
             logger.info("Finding a SMS!");
 
             var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            var vo = DozerMapper.parseObject(entity, SmsHandlerDTO.class);
+            var vo = DozerMapper.parseObject(entity, NewSmsViewModel.class);
 
             vo.add(linkTo(methodOn(SmsHandlerController.class).findById(id)).withSelfRel());
 
@@ -77,8 +79,8 @@ public class SmsHandlerService implements ISmsHandlerService {
         return response;
     }
 
-    public SmsHandlerDTO create(SmsHandlerDTO sms) {
-        SmsHandlerDTO response = null;
+    public NewSmsResult create(NewSmsCommand sms) {
+        NewSmsResult response = null;
 
         try {
             if (sms == null) throw new RequiredObjectIsNullException();
@@ -92,7 +94,7 @@ public class SmsHandlerService implements ISmsHandlerService {
 
             try {
                 var entity = DozerMapper.parseObject(sms, SmsHandler.class);
-                var vo = DozerMapper.parseObject(repository.save(entity), SmsHandlerDTO.class);
+                var vo = DozerMapper.parseObject(repository.save(entity), NewSmsResult.class);
                 vo.add(linkTo(methodOn(SmsHandlerController.class).findById(vo.getKey())).withSelfRel());
                 smsMessage.sendSms(sms.getPhoneUser());
 
@@ -107,8 +109,8 @@ public class SmsHandlerService implements ISmsHandlerService {
         return response;
     }
 
-    public SmsHandlerDTO update(Integer smsCode, Timestamp returnDate) {
-        SmsHandlerDTO response = null;
+    public NewSmsResult update(Integer smsCode, Timestamp returnDate) {
+        NewSmsResult response = null;
 
         try {
             if (smsCode == null || returnDate == null) throw new RequiredObjectIsNullException();
@@ -119,7 +121,7 @@ public class SmsHandlerService implements ISmsHandlerService {
 
             entity.setReturnDate(returnDate);
 
-            var vo = DozerMapper.parseObject(repository.save(entity), SmsHandlerDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewSmsResult.class);
 
             vo.add(linkTo(methodOn(SmsHandlerController.class).findById(vo.getKey())).withSelfRel());
 

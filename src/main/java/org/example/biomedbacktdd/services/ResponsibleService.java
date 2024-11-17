@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.DTO.results.NewResponsibleResult;
+import org.example.biomedbacktdd.DTO.viewmodels.NewResponsibleViewModel;
 import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
@@ -26,43 +28,23 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ResponsibleService implements IResponsibleService {
     private final Logger logger = Logger.getLogger(ResponsibleService.class.getName());
     private final IResponsibleRepository repository;
-    private final PagedResourcesAssembler<ResponsibleDTO> assembler;
+    private final PagedResourcesAssembler<NewResponsibleViewModel> assembler;
 
     @Autowired
     public ResponsibleService(IResponsibleRepository repository,
-                              PagedResourcesAssembler<ResponsibleDTO> assembler) {
+                              PagedResourcesAssembler<NewResponsibleViewModel> assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
 
-    public PagedModel<EntityModel<ResponsibleDTO>> findAll(Pageable pageable) {
-        PagedModel<EntityModel<ResponsibleDTO>> response = null;
+    public PagedModel<EntityModel<NewResponsibleViewModel>> findAll(Pageable pageable) {
+        PagedModel<EntityModel<NewResponsibleViewModel>> response = null;
 
         try {
             logger.info("Finding all responsibles!");
 
             var responsiblePage = repository.findAll(pageable);
-            var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, ResponsibleDTO.class));
-            responsibleVosPage.map(p -> p.add(linkTo(methodOn(ResponsibleController.class).findById(p.getKey())).withSelfRel()));
-
-            Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-            response = assembler.toModel(responsibleVosPage, link);
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public PagedModel<EntityModel<ResponsibleDTO>> findResponsiblesByName(String firstname, Pageable pageable) {
-        PagedModel<EntityModel<ResponsibleDTO>> response = null;
-
-        try {
-            logger.info("Finding all people!");
-
-            var responsiblePage = repository.findResponsiblesByName(firstname, pageable);
-
-            var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, ResponsibleDTO.class));
+            var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, NewResponsibleViewModel.class));
             responsibleVosPage.map(p -> p.add(linkTo(methodOn(ResponsibleController.class).findById(p.getKey())).withSelfRel()));
 
             Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
@@ -90,15 +72,15 @@ public class ResponsibleService implements IResponsibleService {
         return response;
     }
 
-    public ResponsibleDTO findById(String id) {
-        ResponsibleDTO response = null;
+    public NewResponsibleViewModel findById(String id) {
+        NewResponsibleViewModel response = null;
 
         try {
             logger.info("Finding a responsible!");
 
             var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-            var vo = DozerMapper.parseObject(entity, ResponsibleDTO.class);
+            var vo = DozerMapper.parseObject(entity, NewResponsibleViewModel.class);
 
             vo.add(linkTo(methodOn(ResponsibleController.class).findById(id)).withSelfRel());
 
@@ -110,8 +92,8 @@ public class ResponsibleService implements IResponsibleService {
         return response;
     }
 
-    public ResponsibleDTO create(ResponsibleDTO responsible) {
-        ResponsibleDTO response = null;
+    public NewResponsibleResult create(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
         try {
             if (responsible == null) throw new RequiredObjectIsNullException();
@@ -120,7 +102,7 @@ public class ResponsibleService implements IResponsibleService {
 
             var entity = DozerMapper.parseObject(responsible, Responsible.class);
 
-            var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
             vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
 
@@ -132,8 +114,8 @@ public class ResponsibleService implements IResponsibleService {
         return response;
     }
 
-    public ResponsibleDTO update(ResponsibleDTO responsible) {
-        ResponsibleDTO response = null;
+    public NewResponsibleResult update(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
         try {
             if (responsible == null) throw new RequiredObjectIsNullException();
@@ -152,7 +134,7 @@ public class ResponsibleService implements IResponsibleService {
             entity.setPlanoAssinado(responsible.getPlanoAssinado());
             entity.setEnderecoIdRes(responsible.getEnderecoIdRes());
 
-            var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
             vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
 
@@ -165,26 +147,8 @@ public class ResponsibleService implements IResponsibleService {
         return response;
     }
 
-    public String delete(String id) {
-        String response = null;
-
-        try {
-            logger.info("Deleting a Responsible!");
-
-            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-
-            repository.delete(entity);
-
-            response = id;
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public ResponsibleDTO updatePassword(ResponsibleDTO responsible) {
-        ResponsibleDTO response = null;
+    public NewResponsibleResult updatePassword(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
         try {
             if (responsible == null) throw new RequiredObjectIsNullException();
@@ -195,7 +159,7 @@ public class ResponsibleService implements IResponsibleService {
 
             entity.setSenhaRes(responsible.getSenhaRes());
 
-            var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
             vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
 
@@ -207,25 +171,8 @@ public class ResponsibleService implements IResponsibleService {
         return response;
     }
 
-    public ResponsibleDTO findByTelefone(String telefone) {
-        ResponsibleDTO response = null;
-
-        try {
-            logger.info("Finding Responsible by Telephone!");
-
-            Responsible result = repository.findResponsibleByTelefone(telefone)
-                    .orElseThrow(() -> new ResourceNotFoundException("No records found for this telephone!"));
-
-            response = DozerMapper.parseObject(result, ResponsibleDTO.class);
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public ResponsibleDTO findByEmail(String email) {
-        ResponsibleDTO response = null;
+    public NewResponsibleViewModel findByEmail(String email) {
+        NewResponsibleViewModel response = null;
 
         try {
             logger.info("Finding Responsible by Email!");
@@ -233,7 +180,7 @@ public class ResponsibleService implements IResponsibleService {
             Responsible result = repository.findResponsibleByEmail(email)
                     .orElseThrow(() -> new ResourceNotFoundException("No records found for this e-mail!"));
 
-            response = DozerMapper.parseObject(result, ResponsibleDTO.class);
+            response = DozerMapper.parseObject(result, NewResponsibleViewModel.class);
         } catch (Exception e) {
             return null;
         }
