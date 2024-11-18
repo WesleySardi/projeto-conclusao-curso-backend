@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.results;
+package org.example.biomedbacktdd.dto.results;
 
 public class EncryptedMessageResult {
     private String encryptedUrl;

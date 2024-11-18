@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.results;
+package org.example.biomedbacktdd.dto.viewmodels;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @JsonPropertyOrder({"cpfDep", "nomeDep", "idadeDep", "tipoSanguineo", "laudo", "generoDep", "rgDep", "cpfResDep", "piTagIdDep", "cpfTerDep", "idCirurgiaDep", "idScanDep"})
-public class NewDependentResult extends RepresentationModel<NewDependentResult> implements Serializable {
+public class NewDependentViewModel extends RepresentationModel<NewDependentViewModel> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -2334790843533194773L;
@@ -30,7 +30,7 @@ public class NewDependentResult extends RepresentationModel<NewDependentResult> 
     private Integer idCirurgiaDep;
     private Integer idScanDep;
 
-    public NewDependentResult() {
+    public NewDependentViewModel() {
     }
 
     public String getKey() {
@@ -132,7 +132,7 @@ public class NewDependentResult extends RepresentationModel<NewDependentResult> 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewDependentResult that)) return false;
+        if (!(o instanceof NewDependentViewModel that)) return false;
         if (!super.equals(o)) return false;
         return Objects.equals(getKey(), that.getKey()) && Objects.equals(getNomeDep(), that.getNomeDep()) && Objects.equals(getIdadeDep(), that.getIdadeDep()) && Objects.equals(getTipoSanguineo(), that.getTipoSanguineo()) && Objects.equals(getLaudo(), that.getLaudo()) && Objects.equals(getGeneroDep(), that.getGeneroDep()) && Objects.equals(getRgDep(), that.getRgDep()) && Objects.equals(getCpfResDep(), that.getCpfResDep()) && Objects.equals(getPiTagIdDep(), that.getPiTagIdDep()) && Objects.equals(getCpfTerDep(), that.getCpfTerDep()) && Objects.equals(getIdCirurgiaDep(), that.getIdCirurgiaDep()) && Objects.equals(getIdScanDep(), that.getIdScanDep());
     }

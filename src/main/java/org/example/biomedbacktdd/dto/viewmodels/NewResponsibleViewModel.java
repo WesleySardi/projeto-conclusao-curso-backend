@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.results;
+package org.example.biomedbacktdd.dto.viewmodels;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @JsonPropertyOrder({"cpfRes", "nomeRes", "idadeRes", "contato1Res", "contato2Res", "contato3Res", "planoAssinado", "emailRes", "enderecoIdRes", "rgRes", "senhaRes"})
-public class NewResponsibleResult extends RepresentationModel<NewResponsibleResult> implements Serializable {
+public class NewResponsibleViewModel extends RepresentationModel<NewResponsibleViewModel> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -1907032921662951285L;
@@ -29,7 +29,7 @@ public class NewResponsibleResult extends RepresentationModel<NewResponsibleResu
     private String rgRes;
     private String senhaRes;
 
-    public NewResponsibleResult() {
+    public NewResponsibleViewModel() {
     }
 
     public String getKey() {
@@ -123,7 +123,7 @@ public class NewResponsibleResult extends RepresentationModel<NewResponsibleResu
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewResponsibleResult that)) return false;
+        if (!(o instanceof NewResponsibleViewModel that)) return false;
         if (!super.equals(o)) return false;
         return Objects.equals(getKey(), that.getKey()) && Objects.equals(getNomeRes(), that.getNomeRes()) && Objects.equals(getIdadeRes(), that.getIdadeRes()) && Objects.equals(getContato1Res(), that.getContato1Res()) && Objects.equals(getContato2Res(), that.getContato2Res()) && Objects.equals(getContato3Res(), that.getContato3Res()) && Objects.equals(getPlanoAssinado(), that.getPlanoAssinado()) && Objects.equals(getEmailRes(), that.getEmailRes()) && Objects.equals(getEnderecoIdRes(), that.getEnderecoIdRes()) && Objects.equals(getRgRes(), that.getRgRes()) && Objects.equals(getSenhaRes(), that.getSenhaRes());
     }

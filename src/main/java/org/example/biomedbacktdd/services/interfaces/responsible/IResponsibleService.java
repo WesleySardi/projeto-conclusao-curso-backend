@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services.interfaces.responsible;
 
-import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
-import org.example.biomedbacktdd.DTO.results.NewResponsibleResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewResponsibleViewModel;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;

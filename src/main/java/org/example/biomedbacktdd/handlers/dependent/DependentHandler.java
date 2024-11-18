@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handlers.dependent;
 
-import org.example.biomedbacktdd.DTO.commands.NewDependentCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

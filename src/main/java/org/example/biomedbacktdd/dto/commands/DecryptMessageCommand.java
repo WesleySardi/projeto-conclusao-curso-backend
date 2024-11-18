@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.commands;
+package org.example.biomedbacktdd.dto.commands;
 
 public class DecryptMessageCommand {
     private String url;

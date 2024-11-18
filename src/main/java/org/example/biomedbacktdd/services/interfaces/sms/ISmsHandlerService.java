@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services.interfaces.sms;
 
-import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
-import org.example.biomedbacktdd.DTO.results.NewSmsResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewSmsViewModel;
+import org.example.biomedbacktdd.dto.commands.NewSmsCommand;
+import org.example.biomedbacktdd.dto.results.NewSmsResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewSmsViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;

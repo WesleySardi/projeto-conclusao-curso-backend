@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.controller.email;
 
-import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.email.EmailController;
 import org.example.biomedbacktdd.handlers.email.EmailHandler;
 import org.junit.jupiter.api.BeforeEach;

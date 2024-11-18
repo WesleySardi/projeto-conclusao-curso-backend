@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handlers.responsible;
 
-import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.responsible.IResponsibleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

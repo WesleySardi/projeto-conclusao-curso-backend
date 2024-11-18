@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handlers.email;
 
-import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.email.IEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

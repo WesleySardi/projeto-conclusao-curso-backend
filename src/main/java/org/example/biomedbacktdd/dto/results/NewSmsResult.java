@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.viewmodels;
+package org.example.biomedbacktdd.dto.results;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @JsonPropertyOrder({"smsCode", "sendDate", "returnDate", "cpfDep"})
-public class NewSmsViewModel extends RepresentationModel<NewSmsViewModel> implements Serializable {
+public class NewSmsResult extends RepresentationModel<NewSmsResult> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -5292945784469418597L;
@@ -36,13 +36,13 @@ public class NewSmsViewModel extends RepresentationModel<NewSmsViewModel> implem
     private String cpfDep;
 
 
-    public NewSmsViewModel() {
+    public NewSmsResult() {
     }
 
-    public NewSmsViewModel(int i, String s, String s1, String s2, String s3) {
+    public NewSmsResult(int i, String s, String s1, String s2, String s3) {
     }
 
-    public NewSmsViewModel(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
+    public NewSmsResult(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
     }
 
     public int getKey() {
@@ -88,7 +88,7 @@ public class NewSmsViewModel extends RepresentationModel<NewSmsViewModel> implem
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewSmsViewModel vo)) return false;
+        if (!(o instanceof NewSmsResult vo)) return false;
         if (!super.equals(o)) return false;
         return getKey() == vo.getKey() && Objects.equals(getSendDate(), vo.getSendDate()) && Objects.equals(getReturnDate(), vo.getReturnDate()) && Objects.equals(getPhoneUser(), vo.getPhoneUser()) && Objects.equals(getCpfDep(), vo.getCpfDep());
     }

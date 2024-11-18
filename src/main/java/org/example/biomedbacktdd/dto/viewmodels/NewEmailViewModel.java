@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.commands;
+package org.example.biomedbacktdd.dto.viewmodels;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @JsonPropertyOrder({"emailCode", "sendDate", "returnDate", "emailUser", "cpfDep"})
-public class NewEmailCommand extends RepresentationModel<NewEmailCommand> implements Serializable {
+public class NewEmailViewModel extends RepresentationModel<NewEmailViewModel> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 5633682452677692515L; // Atualize para um novo valor
@@ -36,10 +36,10 @@ public class NewEmailCommand extends RepresentationModel<NewEmailCommand> implem
     private String cpfDep;
 
     // Construtores padrão e completo
-    public NewEmailCommand() {
+    public NewEmailViewModel() {
     }
 
-    public NewEmailCommand(int key, Timestamp sendDate, Timestamp returnDate, String emailUser, String cpfDep) {
+    public NewEmailViewModel(int key, Timestamp sendDate, Timestamp returnDate, String emailUser, String cpfDep) {
         this.key = key;
         this.sendDate = sendDate;
         this.returnDate = returnDate;
@@ -92,7 +92,7 @@ public class NewEmailCommand extends RepresentationModel<NewEmailCommand> implem
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewEmailCommand vo)) return false;
+        if (!(o instanceof NewEmailViewModel vo)) return false;
         if (!super.equals(o)) return false;
         return getKey() == vo.getKey() && Objects.equals(getSendDate(), vo.getSendDate()) && Objects.equals(getReturnDate(), vo.getReturnDate()) && Objects.equals(getEmailUser(), vo.getEmailUser()) && Objects.equals(getCpfDep(), vo.getCpfDep());
     }

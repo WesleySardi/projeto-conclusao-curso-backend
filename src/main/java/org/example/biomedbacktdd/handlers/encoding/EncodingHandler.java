@@ -1,6 +1,6 @@
 package org.example.biomedbacktdd.handlers.encoding;
 
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.encoding.IEncodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

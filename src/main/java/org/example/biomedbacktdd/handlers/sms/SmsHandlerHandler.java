@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handlers.sms;
 
-import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewSmsCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.sms.ISmsHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;

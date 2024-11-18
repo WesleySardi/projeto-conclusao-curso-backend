@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.services.interfaces.encoding;
 
-import org.example.biomedbacktdd.DTO.results.DecryptedMessageResult;
-import org.example.biomedbacktdd.DTO.results.EncryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
 
 public interface IEncodingService {
     EncryptedMessageResult encryptUrl(String url);

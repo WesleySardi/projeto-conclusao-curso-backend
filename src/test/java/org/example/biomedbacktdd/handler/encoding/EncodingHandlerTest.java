@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.handler.encoding;
 
-import org.example.biomedbacktdd.DTO.results.DecryptedMessageResult;
-import org.example.biomedbacktdd.DTO.results.EncryptedMessageResult;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.encoding.EncodingHandler;
 import org.example.biomedbacktdd.services.interfaces.encoding.IEncodingService;
 import org.junit.jupiter.api.BeforeEach;

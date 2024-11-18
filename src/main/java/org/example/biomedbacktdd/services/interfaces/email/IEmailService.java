@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services.interfaces.email;
 
-import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
-import org.example.biomedbacktdd.DTO.results.NewEmailResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewEmailViewModel;
+import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.results.NewEmailResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewEmailViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;

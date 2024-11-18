@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.handler.responsible;
 
-import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
-import org.example.biomedbacktdd.DTO.results.NewResponsibleResult;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
 import org.example.biomedbacktdd.services.interfaces.responsible.IResponsibleService;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.controller.encoding;
 
-import org.example.biomedbacktdd.DTO.commands.DecryptMessageCommand;
-import org.example.biomedbacktdd.DTO.commands.EncryptMessageCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.DecryptMessageCommand;
+import org.example.biomedbacktdd.dto.commands.EncryptMessageCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.encoding.EncodingController;
 import org.example.biomedbacktdd.handlers.encoding.EncodingHandler;
 import org.junit.jupiter.api.BeforeEach;

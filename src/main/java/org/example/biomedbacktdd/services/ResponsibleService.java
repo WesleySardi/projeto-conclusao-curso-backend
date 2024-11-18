@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
-import org.example.biomedbacktdd.DTO.results.NewResponsibleResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewResponsibleViewModel;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
 import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;

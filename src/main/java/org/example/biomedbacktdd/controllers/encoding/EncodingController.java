@@ -2,9 +2,9 @@ package org.example.biomedbacktdd.controllers.encoding;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.example.biomedbacktdd.DTO.commands.DecryptMessageCommand;
-import org.example.biomedbacktdd.DTO.commands.EncryptMessageCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.DecryptMessageCommand;
+import org.example.biomedbacktdd.dto.commands.EncryptMessageCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.encoding.EncodingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

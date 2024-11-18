@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.viewmodels;
+package org.example.biomedbacktdd.dto.viewmodels;
 
 import java.util.Objects;
 

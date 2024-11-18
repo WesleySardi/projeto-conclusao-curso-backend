@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.results.DecryptedMessageResult;
-import org.example.biomedbacktdd.DTO.results.EncryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
 import org.example.biomedbacktdd.services.interfaces.encoding.IEncodingService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;

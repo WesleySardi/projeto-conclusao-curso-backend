@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services.interfaces.dependent;
 
-import org.example.biomedbacktdd.DTO.commands.NewDependentCommand;
-import org.example.biomedbacktdd.DTO.results.NewDependentResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewDependentViewModel;
+import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;

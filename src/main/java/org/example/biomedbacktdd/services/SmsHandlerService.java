@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
-import org.example.biomedbacktdd.DTO.results.NewSmsResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewSmsViewModel;
+import org.example.biomedbacktdd.dto.commands.NewSmsCommand;
+import org.example.biomedbacktdd.dto.results.NewSmsResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewSmsViewModel;
 import org.example.biomedbacktdd.controllers.sms.SmsHandlerController;
 import org.example.biomedbacktdd.entities.sms.SmsHandler;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;

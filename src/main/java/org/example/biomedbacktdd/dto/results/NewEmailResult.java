@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.DTO.results;
+package org.example.biomedbacktdd.dto.results;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,14 +11,14 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-@JsonPropertyOrder({"smsCode", "sendDate", "returnDate", "cpfDep"})
-public class NewSmsResult extends RepresentationModel<NewSmsResult> implements Serializable {
+@JsonPropertyOrder({"emailCode", "sendDate", "returnDate", "emailUser", "cpfDep"})
+public class NewEmailResult extends RepresentationModel<NewEmailResult> implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = -5292945784469418597L;
+    private static final long serialVersionUID = 5633682452677692515L; // Atualize para um novo valor
 
-    @JsonProperty("smsCode")
-    @Mapping("smsCode")
+    @JsonProperty("emailCode")
+    @Mapping("emailCode")
     private int key;
 
     @JsonProperty("sendDate")
@@ -29,22 +29,25 @@ public class NewSmsResult extends RepresentationModel<NewSmsResult> implements S
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp returnDate;
 
-    @JsonProperty("phoneUser")
-    private String phoneUser;
+    @JsonProperty("emailUser")
+    private String emailUser;
 
     @JsonProperty("cpfDep")
     private String cpfDep;
 
-
-    public NewSmsResult() {
+    // Construtores padrão e completo
+    public NewEmailResult() {
     }
 
-    public NewSmsResult(int i, String s, String s1, String s2, String s3) {
+    public NewEmailResult(int key, Timestamp sendDate, Timestamp returnDate, String emailUser, String cpfDep) {
+        this.key = key;
+        this.sendDate = sendDate;
+        this.returnDate = returnDate;
+        this.emailUser = emailUser;
+        this.cpfDep = cpfDep;
     }
 
-    public NewSmsResult(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
-    }
-
+    // Getters e Setters
     public int getKey() {
         return key;
     }
@@ -69,12 +72,12 @@ public class NewSmsResult extends RepresentationModel<NewSmsResult> implements S
         this.returnDate = returnDate;
     }
 
-    public String getPhoneUser() {
-        return phoneUser;
+    public String getEmailUser() {
+        return emailUser;
     }
 
-    public void setPhoneUser(String phoneUser) {
-        this.phoneUser = phoneUser;
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
     }
 
     public String getCpfDep() {
@@ -85,16 +88,17 @@ public class NewSmsResult extends RepresentationModel<NewSmsResult> implements S
         this.cpfDep = cpfDep;
     }
 
+    // Métodos equals e hashCode atualizados para incluir emailUser
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof NewSmsResult vo)) return false;
+        if (!(o instanceof NewEmailResult vo)) return false;
         if (!super.equals(o)) return false;
-        return getKey() == vo.getKey() && Objects.equals(getSendDate(), vo.getSendDate()) && Objects.equals(getReturnDate(), vo.getReturnDate()) && Objects.equals(getPhoneUser(), vo.getPhoneUser()) && Objects.equals(getCpfDep(), vo.getCpfDep());
+        return getKey() == vo.getKey() && Objects.equals(getSendDate(), vo.getSendDate()) && Objects.equals(getReturnDate(), vo.getReturnDate()) && Objects.equals(getEmailUser(), vo.getEmailUser()) && Objects.equals(getCpfDep(), vo.getCpfDep());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getKey(), getSendDate(), getReturnDate(), getPhoneUser(), getCpfDep());
+        return Objects.hash(super.hashCode(), getKey(), getSendDate(), getReturnDate(), getEmailUser(), getCpfDep());
     }
 }

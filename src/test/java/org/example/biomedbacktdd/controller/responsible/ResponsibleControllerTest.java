@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.controller.responsible;
 
-import org.example.biomedbacktdd.DTO.commands.NewResponsibleCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
 import org.junit.jupiter.api.Test;

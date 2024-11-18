@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.controller.dependent;
 
-import org.example.biomedbacktdd.DTO.commands.NewDependentCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.handlers.dependent.DependentHandler;

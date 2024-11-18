@@ -1,6 +1,6 @@
 package org.example.biomedbacktdd.handler.dependent;
 
-import org.example.biomedbacktdd.DTO.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
 import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.junit.jupiter.api.Test;

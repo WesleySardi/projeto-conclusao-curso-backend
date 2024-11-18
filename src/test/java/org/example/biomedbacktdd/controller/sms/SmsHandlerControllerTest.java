@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.controller.sms;
 
-import org.example.biomedbacktdd.DTO.commands.NewSmsCommand;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewSmsCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.sms.SmsHandlerController;
 import org.example.biomedbacktdd.handlers.sms.SmsHandlerHandler;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,9 +1,9 @@
 package org.example.biomedbacktdd.handler.email;
 
-import org.example.biomedbacktdd.DTO.commands.NewEmailCommand;
-import org.example.biomedbacktdd.DTO.results.NewEmailResult;
-import org.example.biomedbacktdd.DTO.viewmodels.NewEmailViewModel;
-import org.example.biomedbacktdd.DTO.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.results.NewEmailResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewEmailViewModel;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.email.EmailHandler;
 import org.example.biomedbacktdd.services.interfaces.email.IEmailService;
 import org.junit.jupiter.api.BeforeEach;
