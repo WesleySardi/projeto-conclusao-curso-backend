@@ -11,7 +11,6 @@ public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String jwtSecret;
 
-    // Valida o token JWT
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
@@ -21,15 +20,13 @@ public class JwtTokenProvider {
         }
     }
 
-    // Extrai o e-mail do token
     public String getUserEmailFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
-    // Extrai as roles do token
     public String getRolesFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-        return claims.get("roles", String.class);  // Retorna as roles do token
+        return claims.get("roles", String.class);
     }
 }

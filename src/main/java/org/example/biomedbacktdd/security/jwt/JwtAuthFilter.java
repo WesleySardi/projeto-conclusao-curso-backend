@@ -51,10 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (ExpiredJwtException ex) {
-            System.out.println("JWT Expirado: " + ex.getMessage());  // Adiciona debug para capturar a exceção
+            System.out.println("JWT Expirado: " + ex.getMessage());
             setExpiredJwtResponse(response, "Sessão expirada");
         } catch (Exception ex) {
-            System.out.println("Exceção genérica capturada: " + ex.getMessage());  // Debug para capturar outras exceções
+            System.out.println("Exceção genérica capturada: " + ex.getMessage());
             setUnauthorizedResponse(response, "Acesso não autorizado");
         }
     }
