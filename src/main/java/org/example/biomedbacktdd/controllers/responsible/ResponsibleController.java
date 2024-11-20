@@ -170,7 +170,7 @@ public class ResponsibleController {
         return response;
     }
 
-    @GetMapping(value = "/findByEmail/{email}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
+    @GetMapping(value = "/commonuser/findByEmail/{email}", produces = {MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML})
     @Operation(summary = "Finds Responsible by Email", description = "Finds Responsible by his Email",
             tags = {"Responsible"},
             responses = {

@@ -40,7 +40,6 @@ public class SecurityConfig {
                                 "/api/smshandler/**",
                                 "/api/responsible/updatePassword",
                                 "/api/responsible/findByTelefone/**",
-                                "/api/responsible/findByEmail/**",
                                 "/api/responsible/create/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
