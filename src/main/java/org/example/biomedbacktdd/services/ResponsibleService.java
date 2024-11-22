@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
 import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
@@ -26,102 +28,163 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ResponsibleService implements IResponsibleService {
     private final Logger logger = Logger.getLogger(ResponsibleService.class.getName());
     private final IResponsibleRepository repository;
-    private final PagedResourcesAssembler<ResponsibleDTO> assembler;
+    private final PagedResourcesAssembler<NewResponsibleViewModel> assembler;
 
     @Autowired
     public ResponsibleService(IResponsibleRepository repository,
-                              PagedResourcesAssembler<ResponsibleDTO> assembler) {
+                              PagedResourcesAssembler<NewResponsibleViewModel> assembler) {
         this.repository = repository;
         this.assembler = assembler;
     }
 
-    public PagedModel<EntityModel<ResponsibleDTO>> findAll(Pageable pageable) {
-        logger.info("Finding all responsibles!");
+    public PagedModel<EntityModel<NewResponsibleViewModel>> findAll(Pageable pageable) {
+        PagedModel<EntityModel<NewResponsibleViewModel>> response = null;
 
-        var responsiblePage = repository.findAll(pageable);
-        var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, ResponsibleDTO.class));
-        responsibleVosPage.map(p -> p.add(linkTo(methodOn(ResponsibleController.class).findById(p.getKey())).withSelfRel()));
+        try {
+            logger.info("Finding all responsibles!");
 
-        Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-        return assembler.toModel(responsibleVosPage, link);
-    }
+            var responsiblePage = repository.findAll(pageable);
+            var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, NewResponsibleViewModel.class));
+            responsibleVosPage.map(p -> p.add(linkTo(methodOn(ResponsibleController.class).findById(p.getKey())).withSelfRel()));
 
-    public PagedModel<EntityModel<ResponsibleDTO>> findResponsiblesByName(String firstname, Pageable pageable) {
-        logger.info("Finding all people!");
+            Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
+            response = assembler.toModel(responsibleVosPage, link);
+        } catch (Exception e) {
+            return null;
+        }
 
-        var responsiblePage = repository.findResponsiblesByName(firstname, pageable);
-
-        var responsibleVosPage = responsiblePage.map(p -> DozerMapper.parseObject(p, ResponsibleDTO.class));
-        responsibleVosPage.map(p -> p.add(linkTo(methodOn(ResponsibleController.class).findById(p.getKey())).withSelfRel()));
-
-        Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
-        return assembler.toModel(responsibleVosPage, link);
+        return response;
     }
 
     public List<Object[]> findResponsiblesCpfAndName(String emailRes, String senhaRes) {
-        logger.info("Finding Responsible by E-mail and Password!");
+        List<Object[]> response = null;
 
-        var responsiblePage = repository.findResponsiblesCpfAndName(emailRes, senhaRes);
+        try {
+            logger.info("Finding Responsible by E-mail and Password!");
 
-        return responsiblePage;
+            var responsiblePage = repository.findResponsiblesCpfAndName(emailRes, senhaRes);
+
+            response = responsiblePage;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public ResponsibleDTO findById(String id) {
+    public NewResponsibleViewModel findById(String id) {
+        NewResponsibleViewModel response = null;
 
-        logger.info("Finding a responsible!");
+        try {
+            logger.info("Finding a responsible!");
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        var vo = DozerMapper.parseObject(entity, ResponsibleDTO.class);
+            var vo = DozerMapper.parseObject(entity, NewResponsibleViewModel.class);
 
-        vo.add(linkTo(methodOn(ResponsibleController.class).findById(id)).withSelfRel());
+            vo.add(linkTo(methodOn(ResponsibleController.class).findById(id)).withSelfRel());
 
-        return vo;
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public ResponsibleDTO create(ResponsibleDTO responsible) {
-        if (responsible == null) throw new RequiredObjectIsNullException();
+    public NewResponsibleResult create(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
-        logger.info("Creating a responsible!");
+        try {
+            if (responsible == null) throw new RequiredObjectIsNullException();
 
-        var entity = DozerMapper.parseObject(responsible, Responsible.class);
+            logger.info("Creating a responsible!");
 
-        var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+            var entity = DozerMapper.parseObject(responsible, Responsible.class);
 
-        vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
-        return vo;
+            vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public ResponsibleDTO update(ResponsibleDTO responsible) {
-        if (responsible == null) throw new RequiredObjectIsNullException();
+    public NewResponsibleResult update(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
-        logger.info("Updating a responsible!");
+        try {
+            if (responsible == null) throw new RequiredObjectIsNullException();
 
-        var entity = repository.findById(responsible.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            logger.info("Updating a responsible!");
 
-        entity.setNomeRes(responsible.getNomeRes());
-        entity.setEmailRes(responsible.getEmailRes());
-        entity.setContato1Res(responsible.getContato1Res());
-        entity.setContato2Res(responsible.getContato2Res());
-        entity.setContato3Res(responsible.getContato3Res());
-        entity.setIdadeRes(responsible.getIdadeRes());
-        entity.setRgRes(responsible.getRgRes());
-        entity.setPlanoAssinado(responsible.getPlanoAssinado());
-        entity.setEnderecoIdRes(responsible.getEnderecoIdRes());
+            var entity = repository.findById(responsible.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        var vo = DozerMapper.parseObject(repository.save(entity), ResponsibleDTO.class);
+            entity.setNomeRes(responsible.getNomeRes());
+            entity.setEmailRes(responsible.getEmailRes());
+            entity.setContato1Res(responsible.getContato1Res());
+            entity.setContato2Res(responsible.getContato2Res());
+            entity.setContato3Res(responsible.getContato3Res());
+            entity.setIdadeRes(responsible.getIdadeRes());
+            entity.setRgRes(responsible.getRgRes());
+            entity.setPlanoAssinado(responsible.getPlanoAssinado());
+            entity.setEnderecoIdRes(responsible.getEnderecoIdRes());
 
-        vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
-        return vo;
+            vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+
+            response = vo;
+
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 
-    public void delete(String id) {
-        logger.info("Deleting a Responsible!");
+    public NewResponsibleResult updatePassword(NewResponsibleCommand responsible) {
+        NewResponsibleResult response = null;
 
-        var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        try {
+            if (responsible == null) throw new RequiredObjectIsNullException();
 
-        repository.delete(entity);
+            logger.info("Updating a responsible password!");
+
+            var entity = repository.findById(responsible.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+
+            entity.setSenhaRes(responsible.getSenhaRes());
+
+            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
+
+            vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
+
+            response = vo;
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
+    }
+
+    public NewResponsibleViewModel findByEmail(String email) {
+        NewResponsibleViewModel response = null;
+
+        try {
+            logger.info("Finding Responsible by Email!");
+
+            Responsible result = repository.findResponsibleByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("No records found for this e-mail!"));
+
+            response = DozerMapper.parseObject(result, NewResponsibleViewModel.class);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return response;
     }
 }

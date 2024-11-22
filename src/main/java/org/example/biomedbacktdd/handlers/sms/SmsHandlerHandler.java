@@ -1,11 +1,10 @@
 package org.example.biomedbacktdd.handlers.sms;
 
-import org.example.biomedbacktdd.DTO.commands.SmsHandlerDTO;
+import org.example.biomedbacktdd.dto.commands.NewSmsCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.sms.ISmsHandlerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,63 +21,136 @@ public class SmsHandlerHandler {
         this.smsHandlerService = smsHandlerService;
     }
 
-    public PagedModel<EntityModel<SmsHandlerDTO>> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return smsHandlerService.findAll(pageable);
+            var response = smsHandlerService.findAll(pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public SmsHandlerDTO handleFindById(Integer id) {
+    public ResponseEntity<StatusResponseViewModel> handleFindById(Integer id) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return smsHandlerService.findById(id);
+            var response = smsHandlerService.findById(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public SmsHandlerDTO handleCreate(SmsHandlerDTO sms) {
+    public ResponseEntity<StatusResponseViewModel> handleCreate(NewSmsCommand sms) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return smsHandlerService.create(sms);
+            var response = smsHandlerService.create(sms);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS criado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao criar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public SmsHandlerDTO handleUpdate(Integer smsCode, Timestamp returnDate) {
+    public ResponseEntity<StatusResponseViewModel> handleUpdate(Integer smsCode, Timestamp returnDate) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return smsHandlerService.update(smsCode, returnDate);
+            var response = smsHandlerService.update(smsCode, returnDate);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS alterado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public boolean handleVerifySmsCode(Integer smsCode, Timestamp returnDate, String cpfDep) {
+    public ResponseEntity<StatusResponseViewModel> handleVerifySmsCode(Integer smsCode, Timestamp returnDate, String cpfDep) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return smsHandlerService.verifySmsCode(smsCode, returnDate, cpfDep);
+            var response = smsHandlerService.verifySmsCode(smsCode, returnDate, cpfDep);
+
+            if (response != false) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Código SMS válido.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Código SMS inválido.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponseEntity<String> handleDelete(Integer id) {
-        try {
-            smsHandlerService.delete(id);
+    public ResponseEntity<StatusResponseViewModel> handleDelete(Integer id) {
+        StatusResponseViewModel errorResponse;
 
-            return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+        try {
+            var response = smsHandlerService.delete(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS deletado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao deletar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponseEntity<String> handleDeleteByCpfDep(String cpfDep) {
-        try {
-            smsHandlerService.deleteByCpfDep(cpfDep);
+    public ResponseEntity<StatusResponseViewModel> handleDeleteByCpfDep(String cpfDep) {
+        StatusResponseViewModel errorResponse;
 
-            return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+        try {
+            var response = smsHandlerService.deleteByCpfDep(cpfDep);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "SMS deletado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao deletar o SMS.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }

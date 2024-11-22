@@ -1,16 +1,13 @@
 package org.example.biomedbacktdd.handlers.dependent;
 
-import org.example.biomedbacktdd.DTO.commands.DependentDTO;
+import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 public class DependentHandler {
@@ -22,69 +19,117 @@ public class DependentHandler {
         this.dependentService = dependentService;
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return dependentService.findAll(pageable);
+            var response = dependentService.findAll(pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependentes encontrados com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindDependentsByName(String firstname, Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return dependentService.findDependentsByName(firstname, pageable);
+            var response = dependentService.findDependentsByCpfRes(cpfRes, pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependente encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public PagedModel<EntityModel<DependentDTO>> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindById(String id) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return dependentService.findDependentsByCpfRes(cpfRes, pageable);
+            var response = dependentService.findById(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependente encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Nenhum dependente encontrado.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public DependentDTO handleFindById(String id) {
+    public ResponseEntity<StatusResponseViewModel> handleCreate(NewDependentCommand dependent) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return dependentService.findById(id);
+            var response = dependentService.create(dependent);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependente criado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao criar dependente.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public Map<String, String> handleVerifyDependentsCpfAndEmergPhone(String cpfDep, String emergPhone) {
+    public ResponseEntity<StatusResponseViewModel> handleUpdate(NewDependentCommand dependent) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return dependentService.verifyDependentsCpfAndEmergPhone(cpfDep, emergPhone);
+            var response = dependentService.update(dependent);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependente alterado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar dependente.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public DependentDTO handleCreate(DependentDTO dependent) {
-        try {
-            return dependentService.create(dependent);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+    public ResponseEntity<StatusResponseViewModel> handleDelete(String id) {
+        StatusResponseViewModel errorResponse;
 
-    public DependentDTO handleUpdate(DependentDTO dependent) {
         try {
-            return dependentService.update(dependent);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+            var response = dependentService.delete(id);
 
-    public ResponseEntity<String> handleDelete(String id) {
-        try {
-            dependentService.delete(id);
-
-            return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Dependente deletado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao deletar dependente.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }
