@@ -29,5 +29,4 @@ public class MessageSms {
 
         System.out.println(message.getSid());
     }
-
 }

@@ -1,16 +1,13 @@
 package org.example.biomedbacktdd.handlers.responsible;
 
-import org.example.biomedbacktdd.DTO.commands.ResponsibleDTO;
+import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.responsible.IResponsibleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ResponsibleHandler {
@@ -22,61 +19,136 @@ public class ResponsibleHandler {
         this.responsibleService = responsibleService;
     }
 
-    public PagedModel<EntityModel<ResponsibleDTO>> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.findAll(pageable);
+            var response = responsibleService.findAll(pageable);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsáveis encontrados com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar os responsávei.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public PagedModel<EntityModel<ResponsibleDTO>> handleFindResponsiblesByName(String firstname, Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel> handleFindResponsiblesCpfAndName(String emailRes, String senhaRes) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.findResponsiblesByName(firstname, pageable);
+            var response = responsibleService.findResponsiblesCpfAndName(emailRes, senhaRes);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsaveis encontrados com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar os responsaveis.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public List<Object[]> handleFindResponsiblesCpfAndName(String emailRes, String senhaRes) {
+    public ResponseEntity<StatusResponseViewModel> handleFindById(String id) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.findResponsiblesCpfAndName(emailRes, senhaRes);
+            var response = responsibleService.findById(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsavel encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponsibleDTO handleFindById(String id) {
+    public ResponseEntity<StatusResponseViewModel> handleCreate(NewResponsibleCommand responsible) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.findById(id);
+            var response = responsibleService.create(responsible);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsavel criado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao criar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponsibleDTO handleCreate(ResponsibleDTO responsible) {
+    public ResponseEntity<StatusResponseViewModel> handleUpdate(NewResponsibleCommand responsible) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.create(responsible);
+            var response = responsibleService.update(responsible);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsavel alterado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponsibleDTO handleUpdate(ResponsibleDTO responsible) {
+    public ResponseEntity<StatusResponseViewModel> handleUpdatePassword(NewResponsibleCommand responsibleDTO) {
+        StatusResponseViewModel errorResponse;
+
         try {
-            return responsibleService.update(responsible);
+            var response = responsibleService.updatePassword(responsibleDTO);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Senha alterada com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar a senha.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 
-    public ResponseEntity<String> handleDelete(String id) {
-        try {
-            responsibleService.delete(id);
+    public ResponseEntity<StatusResponseViewModel> handleFindByEmail(String id) {
+        StatusResponseViewModel errorResponse;
 
-            return new ResponseEntity<>("Delete successful", HttpStatus.OK);
+        try {
+            var response = responsibleService.findByEmail(id);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsavel encontrado com sucesso.", HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
         } catch (Exception e) {
-            return new ResponseEntity<>("Delete failed: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }
