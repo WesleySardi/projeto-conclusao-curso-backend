@@ -1,30 +1,60 @@
-name: TestActions
+name: CI/CD Pipeline
+
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Run a one-line script
-        run: echo Hello, world!
 
-  deploy-dev:
-    runs-on: ubuntu-latest
-    environment:
-      name: dev
-      url: 'teste.com.br'
-    needs: build
     steps:
-      - name: Run a one-line script
-        run: echo Deploy DEV
+      - name: Check out code
+        uses: actions/checkout@v3
 
-  deploy-sat:
-    runs-on: ubuntu-latest
-    environment:
-      name: sat
-      url: 'teste.com.br'
-    needs: deploy-dev
-    steps:
-      - name: Run a one-line script
-        run: echo Deploy SAT
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: List target directory
+        run: ls -l target
+
+      - name: Set JAR filename
+        id: jarname
+        run: |
+          JAR_FILE=$(ls target/*.jar | head -n 1)
+          echo "JAR_FILE=$JAR_FILE" >> $GITHUB_ENV
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to Elastic Beanstalk
+        env:
+          APPLICATION_NAME: "zlo-main-app"
+          ENVIRONMENT_NAME: "Zlo-main-app-env"
+          S3_BUCKET: "elasticbeanstalk-us-east-1-476114126279"
+          JAR_FILE: ${{ env.JAR_FILE }}
+        run: |
+          cd target
+          zip -r application.zip "$(basename $JAR_FILE)"
+          aws s3 cp application.zip s3://$S3_BUCKET/$APPLICATION_NAME/application.zip
+          aws elasticbeanstalk create-application-version --application-name $APPLICATION_NAME --version-label $GITHUB_SHA --source-bundle S3Bucket=$S3_BUCKET,S3Key=$APPLICATION_NAME/application.zip
+          aws elasticbeanstalk update-environment --environment-name $ENVIRONMENT_NAME --version-label $GITHUB_SHA
