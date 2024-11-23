@@ -1,9 +1,9 @@
 package org.example.biomedbacktdd.services;
 
+import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
 import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
 import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
-import org.example.biomedbacktdd.controllers.responsible.ResponsibleController;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
@@ -18,7 +18,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -49,22 +48,6 @@ public class ResponsibleService implements IResponsibleService {
 
             Link link = linkTo(methodOn(ResponsibleController.class).findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")).withSelfRel();
             response = assembler.toModel(responsibleVosPage, link);
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public List<Object[]> findResponsiblesCpfAndName(String emailRes, String senhaRes) {
-        List<Object[]> response = null;
-
-        try {
-            logger.info("Finding Responsible by E-mail and Password!");
-
-            var responsiblePage = repository.findResponsiblesCpfAndName(emailRes, senhaRes);
-
-            response = responsiblePage;
         } catch (Exception e) {
             return null;
         }
@@ -130,9 +113,15 @@ public class ResponsibleService implements IResponsibleService {
             entity.setContato2Res(responsible.getContato2Res());
             entity.setContato3Res(responsible.getContato3Res());
             entity.setIdadeRes(responsible.getIdadeRes());
-            entity.setRgRes(responsible.getRgRes());
             entity.setPlanoAssinado(responsible.getPlanoAssinado());
-            entity.setEnderecoIdRes(responsible.getEnderecoIdRes());
+            entity.setRgRes(responsible.getRgRes());
+            entity.setCepRes(responsible.getCepRes());
+            entity.setLogradouro(responsible.getLogradouro());
+            entity.setNumero(responsible.getNumero());
+            entity.setComplemento(responsible.getComplemento());
+            entity.setBairro(responsible.getBairro());
+            entity.setCidade(responsible.getCidade());
+            entity.setEstado(responsible.getEstado());
 
             var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
 
@@ -140,30 +129,6 @@ public class ResponsibleService implements IResponsibleService {
 
             response = vo;
 
-        } catch (Exception e) {
-            return null;
-        }
-
-        return response;
-    }
-
-    public NewResponsibleResult updatePassword(NewResponsibleCommand responsible) {
-        NewResponsibleResult response = null;
-
-        try {
-            if (responsible == null) throw new RequiredObjectIsNullException();
-
-            logger.info("Updating a responsible password!");
-
-            var entity = repository.findById(responsible.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
-
-            entity.setSenhaRes(responsible.getSenhaRes());
-
-            var vo = DozerMapper.parseObject(repository.save(entity), NewResponsibleResult.class);
-
-            vo.add(linkTo(methodOn(ResponsibleController.class).findById(vo.getKey())).withSelfRel());
-
-            response = vo;
         } catch (Exception e) {
             return null;
         }

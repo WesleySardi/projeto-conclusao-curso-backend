@@ -38,25 +38,6 @@ public class ResponsibleHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindResponsiblesCpfAndName(String emailRes, String senhaRes) {
-        StatusResponseViewModel errorResponse;
-
-        try {
-            var response = responsibleService.findResponsiblesCpfAndName(emailRes, senhaRes);
-
-            if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Responsaveis encontrados com sucesso.", HttpStatus.OK.value(), true);
-                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-            } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar os responsaveis.", HttpStatus.BAD_REQUEST.value(), false);
-                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-            }
-        } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-        }
-    }
-
     public ResponseEntity<StatusResponseViewModel> handleFindById(String id) {
         StatusResponseViewModel errorResponse;
 
@@ -106,25 +87,6 @@ public class ResponsibleHandler {
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
                 errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
-                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-            }
-        } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
-            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-        }
-    }
-
-    public ResponseEntity<StatusResponseViewModel> handleUpdatePassword(NewResponsibleCommand responsibleDTO) {
-        StatusResponseViewModel errorResponse;
-
-        try {
-            var response = responsibleService.updatePassword(responsibleDTO);
-
-            if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Senha alterada com sucesso.", HttpStatus.OK.value(), true);
-                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
-            } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao alterar a senha.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
