@@ -41,6 +41,7 @@ public class SecurityConfig {
                                 "/api/responsible/updatePassword",
                                 "/api/responsible/findByTelefone/**",
                                 "/api/responsible/create/**",
+                                "/api/findByEmail/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",
