@@ -16,11 +16,11 @@ import java.nio.charset.StandardCharsets;
 public class BiomedBackTddApplication {
 
     public static void main(String[] args) {
-        /*try {
+        try {
             initializeFirebase();
         } catch (IOException e) {
             System.err.println("Erro ao inicializar o Firebase: " + e.getMessage());
-        }*/
+        }
 
         SpringApplication.run(BiomedBackTddApplication.class, args);
     }
