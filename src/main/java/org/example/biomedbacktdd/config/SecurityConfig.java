@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,6 +25,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .httpBasic(basic -> basic.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -38,10 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/email/**",
                                 "/api/smshandler/**",
-                                "/api/responsible/updatePassword",
-                                "/api/responsible/findByTelefone/**",
                                 "/api/responsible/create/**",
-                                "/api/findByEmail/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v2/api-docs",
@@ -52,7 +52,9 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors(cors -> {
+                });
 
         return http.build();
     }
