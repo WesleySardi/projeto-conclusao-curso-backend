@@ -7,12 +7,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.responsible.ResponsibleHandler;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +52,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findAll(
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewResponsibleViewModel>>>> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
@@ -74,7 +78,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findById(@PathVariable(value = "id") String id) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleViewModel>> findById(@PathVariable(value = "id") String id) {
         var response = handler.handleFindById(id);
 
         return response;
@@ -94,7 +98,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> create(@RequestBody NewResponsibleCommand responsibleDTO) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleResult>> create(@RequestBody NewResponsibleCommand responsibleDTO) {
         var response = handler.handleCreate(responsibleDTO);
 
         return response;
@@ -115,7 +119,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> update(@RequestBody NewResponsibleCommand responsibleDTO) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleResult>> update(@RequestBody NewResponsibleCommand responsibleDTO) {
         var response = handler.handleUpdate(responsibleDTO);
 
         return response;
@@ -133,7 +137,7 @@ public class ResponsibleController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findByEmail(@PathVariable(value = "email") String emailRes) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleViewModel>> findByEmail(@PathVariable(value = "email") String emailRes) {
         var response = handler.handleFindByEmail(emailRes);
 
         return response;

@@ -2,6 +2,8 @@ package org.example.biomedbacktdd.controller.encoding;
 
 import org.example.biomedbacktdd.dto.commands.DecryptMessageCommand;
 import org.example.biomedbacktdd.dto.commands.EncryptMessageCommand;
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.encoding.EncodingController;
 import org.example.biomedbacktdd.handlers.encoding.EncodingHandler;
@@ -31,7 +33,6 @@ public class EncodingControllerTest {
 
     @Test
     public void testEncryptUrl() {
-        // Arrange
         EncryptMessageCommand encryptMessageCommand = new EncryptMessageCommand("testUrl");
 
         StatusResponseViewModel statusResponse = new StatusResponseViewModel(
@@ -42,14 +43,12 @@ public class EncodingControllerTest {
                 true
         );
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = new ResponseEntity<>(statusResponse, HttpStatus.OK);
+        ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> responseEntity = new ResponseEntity<>(statusResponse, HttpStatus.OK);
 
         when(encodingHandler.handleEncryptUrl(encryptMessageCommand.getUrl())).thenReturn(responseEntity);
 
-        // Act
-        ResponseEntity<StatusResponseViewModel> response = encodingController.encryptUrl(encryptMessageCommand);
+        ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingController.encryptUrl(encryptMessageCommand);
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Encrypted content", response.getBody().getContentResponse());
         assertEquals("Info message", response.getBody().getInfoMessage());
@@ -62,7 +61,6 @@ public class EncodingControllerTest {
 
     @Test
     public void testDecryptUrl() {
-        // Arrange
         DecryptMessageCommand decryptMessageCommand = new DecryptMessageCommand("testUrl");
 
         StatusResponseViewModel statusResponse = new StatusResponseViewModel(
@@ -73,14 +71,12 @@ public class EncodingControllerTest {
                 true
         );
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = new ResponseEntity<>(statusResponse, HttpStatus.OK);
+        ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> responseEntity = new ResponseEntity<>(statusResponse, HttpStatus.OK);
 
         when(encodingHandler.handleDecryptUrl(decryptMessageCommand.getUrl())).thenReturn(responseEntity);
 
-        // Act
-        ResponseEntity<StatusResponseViewModel> response = encodingController.decryptUrl(decryptMessageCommand);
+        ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingController.decryptUrl(decryptMessageCommand);
 
-        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Decrypted content", response.getBody().getContentResponse());
         assertEquals("Info message", response.getBody().getInfoMessage());

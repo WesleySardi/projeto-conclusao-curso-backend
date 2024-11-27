@@ -7,12 +7,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.dependent.DependentHandler;
 import org.example.biomedbacktdd.util.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +51,7 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findAll(
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewDependentViewModel>>>> findAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
             @RequestParam(value = "direction", defaultValue = "asc") String direction
@@ -76,7 +80,7 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findDependentsByCpfRes(
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewDependentViewModel>>>> findDependentsByCpfRes(
             @PathVariable(value = "cpfRes") String cpfRes,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "12") Integer size,
@@ -103,7 +107,7 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findById(@PathVariable(value = "id") String id) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentViewModel>> findById(@PathVariable(value = "id") String id) {
         var response = handler.handleFindById(id);
 
         return response;
@@ -123,7 +127,7 @@ public class DependentController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> create(@RequestBody NewDependentCommand dependentDTO) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentResult>> create(@RequestBody NewDependentCommand dependentDTO) {
         var response = handler.handleCreate(dependentDTO);
 
         return response;
@@ -144,7 +148,7 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> update(@RequestBody NewDependentCommand dependentVO) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentResult>> update(@RequestBody NewDependentCommand dependentVO) {
         var response = handler.handleUpdate(dependentVO);
 
         return response;
@@ -160,7 +164,7 @@ public class DependentController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> delete(@PathVariable(value = "id") String id) {
+    public ResponseEntity<StatusResponseViewModel<String>> delete(@PathVariable(value = "id") String id) {
         var response = handler.handleDelete(id);
 
         return response;

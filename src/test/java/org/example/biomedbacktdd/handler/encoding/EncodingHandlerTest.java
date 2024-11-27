@@ -37,7 +37,7 @@ class EncodingHandlerTest {
 
         when(encodingService.encryptUrl(url)).thenReturn(result);
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleEncryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
         assertNotNull(body);
@@ -53,7 +53,7 @@ class EncodingHandlerTest {
 
         when(encodingService.encryptUrl(url)).thenReturn(null);
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleEncryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
 
@@ -70,7 +70,7 @@ class EncodingHandlerTest {
 
         when(encodingService.encryptUrl(url)).thenThrow(new RuntimeException("Unexpected error"));
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleEncryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
         assertNotNull(body);
@@ -88,7 +88,7 @@ class EncodingHandlerTest {
 
         when(encodingService.decryptUrl(url)).thenReturn(result);
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleDecryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
         assertNotNull(body);
@@ -104,7 +104,7 @@ class EncodingHandlerTest {
 
         when(encodingService.decryptUrl(url)).thenReturn(null);
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleDecryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
         assertNotNull(body);
@@ -120,7 +120,7 @@ class EncodingHandlerTest {
 
         when(encodingService.decryptUrl(url)).thenThrow(new RuntimeException("Unexpected error"));
 
-        ResponseEntity<StatusResponseViewModel> response = encodingHandler.handleDecryptUrl(url);
+        ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
         StatusResponseViewModel body = response.getBody();
         assertNotNull(body);

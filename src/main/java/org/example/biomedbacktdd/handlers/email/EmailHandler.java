@@ -1,10 +1,14 @@
 package org.example.biomedbacktdd.handlers.email;
 
 import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.results.NewEmailResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewEmailViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.email.IEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +23,7 @@ public class EmailHandler {
         this.emailService = emailService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewEmailViewModel>>>> handleFindAll(Pageable pageable) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -38,7 +42,7 @@ public class EmailHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleVerifyEmailCode(String email, int code) {
+    public ResponseEntity<StatusResponseViewModel<Boolean>> handleVerifyEmailCode(String email, int code) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -57,7 +61,7 @@ public class EmailHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindById(int id) {
+    public ResponseEntity<StatusResponseViewModel<NewEmailViewModel>> handleFindById(int id) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -76,7 +80,7 @@ public class EmailHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleCreate(NewEmailCommand dependent) {
+    public ResponseEntity<StatusResponseViewModel<NewEmailResult>> handleCreate(NewEmailCommand dependent) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -95,7 +99,7 @@ public class EmailHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleSendQrCodeWithSendGrid(String toEmail) {
+    public ResponseEntity<StatusResponseViewModel<String>> handleSendQrCodeWithSendGrid(String toEmail) {
         StatusResponseViewModel errorResponse;
 
         try {

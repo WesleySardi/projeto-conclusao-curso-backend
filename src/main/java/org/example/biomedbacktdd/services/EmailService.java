@@ -265,7 +265,7 @@ public class EmailService implements IEmailService {
         return response;
     }
 
-    public boolean verifyEmailCode(String email, int code) {
+    public Boolean verifyEmailCode(String email, int code) {
         boolean response = false;
 
         try {

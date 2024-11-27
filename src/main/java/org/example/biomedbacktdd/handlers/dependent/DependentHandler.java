@@ -1,10 +1,14 @@
 package org.example.biomedbacktdd.handlers.dependent;
 
 import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
+import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +23,7 @@ public class DependentHandler {
         this.dependentService = dependentService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewDependentViewModel>>>> handleFindAll(Pageable pageable) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -38,7 +42,7 @@ public class DependentHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewDependentViewModel>>>> handleFindDependentsByCpfRes(String cpfRes, Pageable pageable) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -57,7 +61,7 @@ public class DependentHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindById(String id) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentViewModel>> handleFindById(String id) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -76,7 +80,7 @@ public class DependentHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleCreate(NewDependentCommand dependent) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentResult>> handleCreate(NewDependentCommand dependent) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -95,7 +99,7 @@ public class DependentHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleUpdate(NewDependentCommand dependent) {
+    public ResponseEntity<StatusResponseViewModel<NewDependentResult>> handleUpdate(NewDependentCommand dependent) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -114,7 +118,7 @@ public class DependentHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleDelete(String id) {
+    public ResponseEntity<StatusResponseViewModel<String>> handleDelete(String id) {
         StatusResponseViewModel errorResponse;
 
         try {
