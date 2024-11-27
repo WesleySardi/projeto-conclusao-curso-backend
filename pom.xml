@@ -170,6 +170,12 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <includes>
+                                <include>org/example/biomedbacktdd/controllers/**</include>
+                                <include>org/example/biomedbacktdd/handlers/**</include>
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

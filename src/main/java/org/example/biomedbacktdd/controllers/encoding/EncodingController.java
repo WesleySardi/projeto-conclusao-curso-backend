@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.biomedbacktdd.dto.commands.DecryptMessageCommand;
 import org.example.biomedbacktdd.dto.commands.EncryptMessageCommand;
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.encoding.EncodingHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class EncodingController {
 
     @Operation(summary = "Encrypt an url")
     @PostMapping(value = "/encrypt")
-    public ResponseEntity<StatusResponseViewModel>encryptUrl(@RequestBody EncryptMessageCommand request) {
+    public ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>>encryptUrl(@RequestBody EncryptMessageCommand request) {
         var response = handler.handleEncryptUrl(request.getUrl());
 
         return response;
@@ -35,7 +37,7 @@ public class EncodingController {
 
     @Operation(summary = "Decrypt an url")
     @PostMapping(value = "/decrypt")
-    public ResponseEntity<StatusResponseViewModel> decryptUrl(@RequestBody DecryptMessageCommand request) {
+    public ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> decryptUrl(@RequestBody DecryptMessageCommand request) {
         var response = handler.handleDecryptUrl(request.getUrl());
 
         return response;

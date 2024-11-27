@@ -1,10 +1,14 @@
 package org.example.biomedbacktdd.handlers.responsible;
 
 import org.example.biomedbacktdd.dto.commands.NewResponsibleCommand;
+import org.example.biomedbacktdd.dto.results.NewResponsibleResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewResponsibleViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.responsible.IResponsibleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,7 +23,7 @@ public class ResponsibleHandler {
         this.responsibleService = responsibleService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindAll(Pageable pageable) {
+    public ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewResponsibleViewModel>>>> handleFindAll(Pageable pageable) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -38,7 +42,7 @@ public class ResponsibleHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindById(String id) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleViewModel>> handleFindById(String id) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -57,7 +61,7 @@ public class ResponsibleHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleCreate(NewResponsibleCommand responsible) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleResult>> handleCreate(NewResponsibleCommand responsible) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -76,7 +80,7 @@ public class ResponsibleHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleUpdate(NewResponsibleCommand responsible) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleResult>> handleUpdate(NewResponsibleCommand responsible) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -95,7 +99,7 @@ public class ResponsibleHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindByEmail(String id) {
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleViewModel>> handleFindByEmail(String id) {
         StatusResponseViewModel errorResponse;
 
         try {

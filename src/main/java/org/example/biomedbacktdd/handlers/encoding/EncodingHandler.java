@@ -1,5 +1,7 @@
 package org.example.biomedbacktdd.handlers.encoding;
 
+import org.example.biomedbacktdd.dto.results.DecryptedMessageResult;
+import org.example.biomedbacktdd.dto.results.EncryptedMessageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.encoding.IEncodingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ public class EncodingHandler {
         this.encodingService = encodingService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleEncryptUrl(String url) {
+    public ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> handleEncryptUrl(String url) {
         StatusResponseViewModel errorResponse;
 
         try {
@@ -35,7 +37,7 @@ public class EncodingHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleDecryptUrl(String url) {
+    public ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> handleDecryptUrl(String url) {
         StatusResponseViewModel errorResponse;
 
         try {

@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.controller.email;
 
 import org.example.biomedbacktdd.dto.commands.NewEmailCommand;
+import org.example.biomedbacktdd.dto.results.NewEmailResult;
+import org.example.biomedbacktdd.dto.viewmodels.NewEmailViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.controllers.email.EmailController;
 import org.example.biomedbacktdd.handlers.email.EmailHandler;
@@ -9,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Timestamp;
@@ -31,10 +35,10 @@ class EmailControllerTest {
 
     @Test
     void testFindAllEmails() {
-        StatusResponseViewModel<Object> mockResponse = new StatusResponseViewModel<>(null, "Success", "Success", 200, true);
+        StatusResponseViewModel<PagedModel<EntityModel<NewEmailViewModel>>> mockResponse = new StatusResponseViewModel<>(null, "Success", "Success", 200, true);
         when(emailHandler.handleFindAll(any())).thenReturn(ResponseEntity.ok(mockResponse));
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = emailController.findAll(0, 10, "asc");
+        ResponseEntity<StatusResponseViewModel<PagedModel<EntityModel<NewEmailViewModel>>>> responseEntity = emailController.findAll(0, 10, "asc");
 
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());
@@ -51,10 +55,11 @@ class EmailControllerTest {
 
         NewEmailCommand command = new NewEmailCommand(1234, sendDate, returnDate, "test@example.com", "12345678901");
 
-        StatusResponseViewModel<NewEmailCommand> mockResponse = new StatusResponseViewModel<>(command, "Email Created", "Email created successfully", 200, true);
+        StatusResponseViewModel<NewEmailResult> mockResponse = new StatusResponseViewModel<>(null, "QR Code Sent", "Email created successfully", 200, true);
+
         when(emailHandler.handleCreate(command)).thenReturn(ResponseEntity.ok(mockResponse));
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = emailController.create(command);
+        ResponseEntity<StatusResponseViewModel<NewEmailResult>> responseEntity = emailController.create(command);
 
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());
@@ -66,11 +71,11 @@ class EmailControllerTest {
 
     @Test
     void testVerifyEmailCode() {
-        StatusResponseViewModel<Object> mockResponse = new StatusResponseViewModel<>(null, "Code Verified", "Code verified successfully", 200, true);
+        StatusResponseViewModel<Boolean> mockResponse = new StatusResponseViewModel<>(null, "Code Verified", "Code verified successfully", 200, true);
         when(emailHandler.handleVerifyEmailCode("test@example.com", 1234))
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = emailController.verifyEmailCode("test@example.com", 1234);
+        ResponseEntity<StatusResponseViewModel<Boolean>> responseEntity = emailController.verifyEmailCode("test@example.com", 1234);
 
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());
@@ -82,11 +87,11 @@ class EmailControllerTest {
 
     @Test
     void testSendQrCode() {
-        StatusResponseViewModel<Object> mockResponse = new StatusResponseViewModel<>(null, "QR Code Sent", "QR code sent successfully", 200, true);
+        StatusResponseViewModel<String> mockResponse = new StatusResponseViewModel<>(null, "QR Code Sent", "QR code sent successfully", 200, true);
         when(emailHandler.handleSendQrCodeWithSendGrid("test@example.com"))
                 .thenReturn(ResponseEntity.ok(mockResponse));
 
-        ResponseEntity<StatusResponseViewModel> responseEntity = emailController.sendQrCodeWithSendGrid("test@example.com");
+        ResponseEntity<StatusResponseViewModel<String>> responseEntity = emailController.sendQrCodeWithSendGrid("test@example.com");
 
         assertNotNull(responseEntity);
         assertEquals(200, responseEntity.getStatusCodeValue());

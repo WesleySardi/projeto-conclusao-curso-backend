@@ -12,6 +12,6 @@ public interface IEmailService {
     PagedModel<EntityModel<NewEmailViewModel>> findAll(Pageable pageable);
     NewEmailViewModel findById(Integer id);
     String deleteByEmail(String emailUser);
-    boolean verifyEmailCode(String email, int code);
+    Boolean verifyEmailCode(String email, int code);
     String sendQrCodeWithSendGrid(String toEmail);
 }
