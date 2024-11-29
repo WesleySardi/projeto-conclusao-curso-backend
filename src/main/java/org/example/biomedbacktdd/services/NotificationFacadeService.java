@@ -8,7 +8,6 @@ import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.notification.NotificationRequest;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.ServiceException;
-import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
 import org.example.biomedbacktdd.repositories.interfaces.devicestorage.IDeviceStorageRepository;
 import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.services.interfaces.notification.INotificationFacadeService;
