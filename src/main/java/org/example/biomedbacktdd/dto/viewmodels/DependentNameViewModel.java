@@ -7,6 +7,10 @@ public class DependentNameViewModel {
         this.nomeDep = nomeDep;
     }
 
+    public DependentNameViewModel() {
+
+    }
+
     public String getNomeDep() {
         return nomeDep;
     }
