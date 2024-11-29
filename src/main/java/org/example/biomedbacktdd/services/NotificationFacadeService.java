@@ -4,7 +4,6 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.biomedbacktdd.dto.commands.NotificationRequestCommand;
 import org.example.biomedbacktdd.dto.commands.NotificationStorageCommand;
-import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.notification.NotificationRequest;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
@@ -36,8 +35,6 @@ public class NotificationFacadeService implements INotificationFacadeService {
         this.notificationStorageService = notificationStorageService;
         this.responsibleRepository = responsibleRepository;
         this.deviceStorageRepository = deviceStorageRepository;
-
-        this.dependentRepository = dependentRepository;
     }
 
     public void sendAndStoreNotification(NotificationRequestCommand notificationRequestCommand) {
