@@ -27,7 +27,7 @@ public class EmailHandler implements Serializable {
     @Column(name = "cpf_dep")
     private String cpfDep;
 
-    public EmailHandler() {
+    public EmailHandler() { // EMPTY CONSTRUCTOR
     }
 
     public int getEmailCode() {

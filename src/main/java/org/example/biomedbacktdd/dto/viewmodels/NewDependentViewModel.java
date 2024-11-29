@@ -30,7 +30,7 @@ public class NewDependentViewModel extends RepresentationModel<NewDependentViewM
     private Integer idCirurgiaDep;
     private Integer idScanDep;
 
-    public NewDependentViewModel() {
+    public NewDependentViewModel() { // Noncompliant - method is empty
     }
 
     public String getKey() {

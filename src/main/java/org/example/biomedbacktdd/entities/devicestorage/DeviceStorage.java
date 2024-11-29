@@ -40,8 +40,6 @@ public class DeviceStorage {
     public DeviceStorage(){
 
     }
-    public DeviceStorage(String device123, String device123token, String number, String smartphone) {
-    }
 
     @PrePersist
     protected void onCreate() {

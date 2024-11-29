@@ -30,12 +30,6 @@ public class DeviceStorageCommand implements Serializable {
     // Construtor padrão
     public DeviceStorageCommand() {}
 
-    // Construtor parametrizado
-    public DeviceStorageCommand(String tokenDispositivo, String cpfResponsavel) {
-        this.tokenDispositivo = tokenDispositivo;
-        this.cpfResponsavel = cpfResponsavel;
-    }
-
     // Getters e Setters
     public String getTokenDispositivo() {
         return tokenDispositivo;

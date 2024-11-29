@@ -7,15 +7,7 @@ public class NotificationRequestCommand {
     private String cpfDependente;
 
     // Construtor vazio
-    public NotificationRequestCommand() {
-    }
-
-    // Construtor com parâmetros
-    public NotificationRequestCommand(String title, String body, String cpfResponsavel, String cpfDependente) {
-        this.title = title;
-        this.body = body;
-        this.cpfResponsavel = cpfResponsavel;
-        this.cpfDependente = cpfDependente;
+    public NotificationRequestCommand() { // EMPTY CONSTRUCTOR
     }
 
     public String getCpfDependente() {

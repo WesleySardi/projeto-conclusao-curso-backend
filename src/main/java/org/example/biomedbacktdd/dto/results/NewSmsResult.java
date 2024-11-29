@@ -36,13 +36,7 @@ public class NewSmsResult extends RepresentationModel<NewSmsResult> implements S
     private String cpfDep;
 
 
-    public NewSmsResult() {
-    }
-
-    public NewSmsResult(int i, String s, String s1, String s2, String s3) {
-    }
-
-    public NewSmsResult(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
+    public NewSmsResult() { // EMPTY CONSTRUCTOR
     }
 
     public int getKey() {

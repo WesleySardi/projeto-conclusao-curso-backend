@@ -35,19 +35,9 @@ public class NewEmailResult extends RepresentationModel<NewEmailResult> implemen
     @JsonProperty("cpfDep")
     private String cpfDep;
 
-    // Construtores padrão e completo
-    public NewEmailResult() {
+    public NewEmailResult() { // EMPTY CONSTRUCTOR
     }
 
-    public NewEmailResult(int key, Timestamp sendDate, Timestamp returnDate, String emailUser, String cpfDep) {
-        this.key = key;
-        this.sendDate = sendDate;
-        this.returnDate = returnDate;
-        this.emailUser = emailUser;
-        this.cpfDep = cpfDep;
-    }
-
-    // Getters e Setters
     public int getKey() {
         return key;
     }

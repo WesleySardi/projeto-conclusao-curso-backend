@@ -12,7 +12,6 @@ public class ScanHistoryViewModel {
     private Double latitude;
     private Double longitude;
 
-    // Getters and Setters
     public String getScanName() {
         return scanName;
     }

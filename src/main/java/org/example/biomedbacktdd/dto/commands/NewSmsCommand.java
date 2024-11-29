@@ -39,10 +39,7 @@ public class NewSmsCommand extends RepresentationModel<NewSmsCommand> implements
     public NewSmsCommand() {
     }
 
-    public NewSmsCommand(int i, String s, String s1, String s2, String s3) {
-    }
-
-    public NewSmsCommand(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
+    public NewSmsCommand(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) { // EMPTY CONSTRUCTOR
     }
 
     public int getKey() {

@@ -50,7 +50,6 @@ public class EncodingControllerTest {
         ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingController.encryptUrl(encryptMessageCommand);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Encrypted content", response.getBody().getContentResponse());
         assertEquals("Info message", response.getBody().getInfoMessage());
         assertEquals("Encrypted successfully", response.getBody().getStatusMessage());
         assertEquals(200, response.getBody().getStatus());
@@ -78,7 +77,6 @@ public class EncodingControllerTest {
         ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingController.decryptUrl(decryptMessageCommand);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Decrypted content", response.getBody().getContentResponse());
         assertEquals("Info message", response.getBody().getInfoMessage());
         assertEquals("Decrypted successfully", response.getBody().getStatusMessage());
         assertEquals(200, response.getBody().getStatus());

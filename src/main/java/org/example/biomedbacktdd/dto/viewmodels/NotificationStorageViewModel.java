@@ -38,23 +38,6 @@ public class NotificationStorageViewModel extends RepresentationModel<Notificati
     @JsonProperty("cpfDependente")
     private String cpfDependente;
 
-    // Construtor padrão
-    public NotificationStorageViewModel() {}
-
-    // Construtor parametrizado
-    public NotificationStorageViewModel(int idNotificacao, String titulo, String mensagem, String cpfResponsavel, ZonedDateTime dataEnvio, Boolean lida, String cpfDependente) {
-        this.idNotificacao = idNotificacao;
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.cpfResponsavel = cpfResponsavel;
-        this.dataEnvio = dataEnvio;
-        this.lida = lida;
-        this.cpfDependente = cpfDependente;
-    }
-
-    // Getters e Setters
-
-
     public String getCpfDependente() {
         return cpfDependente;
     }

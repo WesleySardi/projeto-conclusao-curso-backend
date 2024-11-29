@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.controllers.scanHistory;
+package org.example.biomedbacktdd.controllers.scanhistory;
 
 import org.example.biomedbacktdd.dto.commands.ScanHistoryCommand;
 import org.example.biomedbacktdd.dto.viewmodels.ScanHistoryViewModel;
