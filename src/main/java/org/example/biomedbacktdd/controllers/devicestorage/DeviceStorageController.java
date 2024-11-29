@@ -5,21 +5,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.devicestorage.DeviceStorageHandler;
-import org.example.biomedbacktdd.services.interfaces.devicestorage.IDeviceStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/devicestorage")
 public class DeviceStorageController {
-
-    @Autowired
-    private IDeviceStorageService deviceStorageService;
 
     @Autowired
     private DeviceStorageHandler handler;
@@ -35,7 +34,7 @@ public class DeviceStorageController {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> findDispositivosByCpfDep(@PathVariable(value = "cpfDep") String cpfDep) {
+    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> findDispositivosByCpfDep(@PathVariable(value = "cpfDep") String cpfDep) {
         return handler.handleFindDispositivosByCpfDep(cpfDep);
     }
 
@@ -52,7 +51,7 @@ public class DeviceStorageController {
                     @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
                     @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
             })
-    public ResponseEntity<StatusResponseViewModel> create(@Valid @RequestBody DeviceStorageCommand deviceStorageCommand) {
+    public ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> create(@Valid @RequestBody DeviceStorageCommand deviceStorageCommand) {
         return handler.handleCreate(deviceStorageCommand);
     }
 

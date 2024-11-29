@@ -1,6 +1,8 @@
 package org.example.biomedbacktdd.config;
 
 import org.example.biomedbacktdd.security.jwt.JwtAuthFilter;
+import org.example.biomedbacktdd.util.Paths;
+import org.example.biomedbacktdd.util.Roles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
-
     public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
@@ -30,15 +31,24 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/dependent/admin/**",
-                                "/api/responsible/admin/**").hasRole("ADMIN")
+                                Paths.DEP_ADMIN_PATH.getPath()+"/**",
+                                Paths.RES_ADMIN_PATH.getPath()+"/**").hasRole(Roles.ADMIN.getRole())
                         .requestMatchers(
-                                "/api/dependent/manager/**",
-                                "/api/responsible/manager/**").hasAnyRole("CUIDADOR", "ADMIN")
+                                Paths.DEP_MANAGER_PATH.getPath()+"/**",
+                                Paths.RES_MANAGER_PATH.getPath()+"/**").hasAnyRole(Roles.CUIDADOR.getRole(), Roles.ADMIN.getRole())
                         .requestMatchers(
-                                "/api/dependent/commonuser/**",
-                                "/api/responsible/commonuser/**").hasAnyRole("RESPONSÁVEL", "CUIDADOR", "ADMIN")
+                                Paths.DEP_COMMONUSER_PATH.getPath()+"/**",
+                                Paths.RES_COMMONUSER_PATH.getPath()+"/**").hasAnyRole(Roles.RESPONSAVEL.getRole(), Roles.CUIDADOR.getRole(), Roles.ADMIN.getRole())
                         .requestMatchers(
+                                "/api/responsible/findByTelefone/**",
+                                "/api/url/*",
+                                "/api/dependent/commonuser/findById/",
+                                "/api/scanHistory/**",
+                                "/api/responsible/findByTelefone/**",
+                                "/api/url/encrypt",
+                                "/api/url/decrypt",
+                                "/api/notifications/sendAndStore",
+                                "/api/dependent/findDependentNameByCpf/**",
                                 "/api/email/**",
                                 "/api/smshandler/**",
                                 "/api/responsible/create/**",

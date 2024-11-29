@@ -10,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.Instant;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -35,12 +35,18 @@ public class DeviceStorage {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "data_cadastro")
-    private Instant dataCadastro;
+    private Date dataCadastro;
+
+    public DeviceStorage(){
+
+    }
+    public DeviceStorage(String device123, String device123token, String number, String smartphone) {
+    }
 
     @PrePersist
     protected void onCreate() {
         if (this.dataCadastro == null) {
-            this.dataCadastro = Instant.now();
+            this.dataCadastro = new Date();
         }
     }
 }

@@ -30,6 +30,7 @@ public class NewDependentCommand extends RepresentationModel<NewDependentCommand
     private Integer idCirurgiaDep;
     private Integer idScanDep;
 
+    // Gera um dependente vazio
     public NewDependentCommand() {
     }
 

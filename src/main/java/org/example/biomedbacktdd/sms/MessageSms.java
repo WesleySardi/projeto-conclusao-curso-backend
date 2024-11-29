@@ -2,11 +2,14 @@ package org.example.biomedbacktdd.sms;
 
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
+import org.springframework.beans.factory.annotation.Value;
 
 import static org.example.biomedbacktdd.sms.codeGenerator.CodeGenerator.gerarCodigoSMS;
 
 public class MessageSms {
+    @Value("${twillio.account.sid:default}")
     private static final String ACCOUNT_SID = "";
+    @Value("${twillio.account.authtoken:default}")
     private static final String AUTH_TOKEN = "";
 
     private Integer codigoSMS;
@@ -16,14 +19,14 @@ public class MessageSms {
     }
 
     public void setCodigoSMS() {
-        this.codigoSMS = Integer.valueOf(gerarCodigoSMS(8));
+        this.codigoSMS = Integer.valueOf(gerarCodigoSMS(6));
     }
 
     public void sendSms(String phoneUser) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         Message message = Message.creator(
                         new com.twilio.type.PhoneNumber(phoneUser),
-                        new com.twilio.type.PhoneNumber(""),
+                        new com.twilio.type.PhoneNumber("+15078586132"),
                         "Security code: " + codigoSMS)
                 .create();
 

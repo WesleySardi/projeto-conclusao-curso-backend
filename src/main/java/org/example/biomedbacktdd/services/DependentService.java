@@ -1,9 +1,10 @@
 package org.example.biomedbacktdd.services;
 
+import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
 import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.DependentNameViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
-import org.example.biomedbacktdd.controllers.dependent.DependentController;
 import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.exceptions.RequiredObjectIsNullException;
 import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
@@ -170,5 +171,13 @@ public class DependentService implements IDependentService {
         }
 
         return response;
+    }
+
+    public DependentNameViewModel getDependentNameByCpf(String cpfDep) {
+        String nomeDep = repository.findDependentNameByCpf(cpfDep);
+        if (nomeDep == null) {
+            throw new ResourceNotFoundException("Dependente não encontrado para o CPF: " + cpfDep);
+        }
+        return new DependentNameViewModel(nomeDep);
     }
 }

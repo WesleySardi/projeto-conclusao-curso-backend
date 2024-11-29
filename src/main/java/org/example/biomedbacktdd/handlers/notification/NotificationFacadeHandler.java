@@ -1,6 +1,7 @@
 package org.example.biomedbacktdd.handlers.notification;
 
 import org.example.biomedbacktdd.dto.commands.NotificationRequestCommand;
+import org.example.biomedbacktdd.dto.results.NotificationStorageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.notification.INotificationFacadeService;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,11 @@ public class NotificationFacadeHandler {
         this.notificationFacadeService = notificationFacadeService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleSendAndStoreNotification(NotificationRequestCommand notificationRequestCommand) {
+    public ResponseEntity<StatusResponseViewModel<NotificationRequestCommand>> handleSendAndStoreNotification(NotificationRequestCommand notificationRequestCommand) {
         try {
             notificationFacadeService.sendAndStoreNotification(notificationRequestCommand);
 
-            StatusResponseViewModel response = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationRequestCommand> response = new StatusResponseViewModel<>();
             response.setStatus(200);
             response.setIsOk(true);
             response.setInfoMessage("Notificação enviada e armazenada com sucesso.");
@@ -29,7 +30,7 @@ public class NotificationFacadeHandler {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            StatusResponseViewModel errorResponse = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationRequestCommand> errorResponse = new StatusResponseViewModel<>();
             errorResponse.setStatus(500);
             errorResponse.setIsOk(false);
             errorResponse.setInfoMessage("Erro ao enviar e armazenar notificação: " + e.getMessage());

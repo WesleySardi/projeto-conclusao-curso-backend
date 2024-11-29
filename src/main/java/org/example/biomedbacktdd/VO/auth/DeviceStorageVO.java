@@ -11,6 +11,8 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -29,18 +31,21 @@ public class DeviceStorageVO extends RepresentationModel<DeviceStorageVO> implem
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     @JsonProperty("dataCadastro")
-    private Instant dataCadastro;
+    private Date dataCadastro;
 
     public DeviceStorageVO() {
     }
 
-    public DeviceStorageVO(Integer id, String tokenDispositivo, Instant dataCadastro) {
+    public DeviceStorageVO(Integer id, String tokenDispositivo, Date dataCadastro) {
         this.id = id;
         this.tokenDispositivo = tokenDispositivo;
         this.dataCadastro = dataCadastro;
     }
 
-    public static DeviceStorageVO of(Integer id, String tokenDispositivo, Instant dataCadastro) {
+    public DeviceStorageVO(String device124, String token124, String number, String tablet) {
+    }
+
+    public static DeviceStorageVO of(Integer id, String tokenDispositivo, Date dataCadastro) {
         return new DeviceStorageVO(id, tokenDispositivo, dataCadastro);
     }
 }
