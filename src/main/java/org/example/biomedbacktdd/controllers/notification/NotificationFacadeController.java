@@ -20,8 +20,8 @@ public class NotificationFacadeController {
         this.notificationFacadeHandler = notificationFacadeHandler;
     }
 
-    @PostMapping("/send-and-store")
-    public ResponseEntity<StatusResponseViewModel> sendAndStoreNotification(@Valid @RequestBody NotificationRequestCommand notificationRequestCommand) {
+    @PostMapping("/sendAndStore")
+    public ResponseEntity<StatusResponseViewModel<NotificationRequestCommand>> sendAndStoreNotification(@Valid @RequestBody NotificationRequestCommand notificationRequestCommand) {
         return notificationFacadeHandler.handleSendAndStoreNotification(notificationRequestCommand);
     }
 }

@@ -10,15 +10,15 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-@JsonPropertyOrder({"id", "titulo", "mensagem", "cpfResponsavel", "dataEnvio", "lida"})
+@JsonPropertyOrder({"id_notificacao", "titulo", "mensagem", "cpfResponsavel", "dataEnvio", "lida", "cpfDependente"})
 public class NotificationStorageViewModel extends RepresentationModel<NotificationStorageViewModel> implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Mapping("id")
-    @JsonProperty("id")
-    private Long id;
+    @Mapping("id_notificacao")
+    @JsonProperty("id_notificacao")
+    private int idNotificacao;
 
     @JsonProperty("titulo")
     private String titulo;
@@ -35,26 +35,40 @@ public class NotificationStorageViewModel extends RepresentationModel<Notificati
     @JsonProperty("lida")
     private Boolean lida;
 
+    @JsonProperty("cpfDependente")
+    private String cpfDependente;
+
     // Construtor padrão
     public NotificationStorageViewModel() {}
 
     // Construtor parametrizado
-    public NotificationStorageViewModel(Long id, String titulo, String mensagem, String cpfResponsavel, ZonedDateTime dataEnvio, Boolean lida) {
-        this.id = id;
+    public NotificationStorageViewModel(int idNotificacao, String titulo, String mensagem, String cpfResponsavel, ZonedDateTime dataEnvio, Boolean lida, String cpfDependente) {
+        this.idNotificacao = idNotificacao;
         this.titulo = titulo;
         this.mensagem = mensagem;
         this.cpfResponsavel = cpfResponsavel;
         this.dataEnvio = dataEnvio;
         this.lida = lida;
+        this.cpfDependente = cpfDependente;
     }
 
     // Getters e Setters
-    public Long getId() {
-        return id;
+
+
+    public String getCpfDependente() {
+        return cpfDependente;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCpfDependente(String cpfDependente) {
+        this.cpfDependente = cpfDependente;
+    }
+
+    public int getIdNotificacao() {
+        return idNotificacao;
+    }
+
+    public void setId(int idNotificacao) {
+        this.idNotificacao = idNotificacao;
     }
 
     public String getTitulo() {
@@ -103,28 +117,30 @@ public class NotificationStorageViewModel extends RepresentationModel<Notificati
         if (this == o) return true;
         if (!(o instanceof NotificationStorageViewModel that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equals(getId(), that.getId()) &&
+        return Objects.equals(getIdNotificacao(), that.getIdNotificacao()) &&
                 Objects.equals(getTitulo(), that.getTitulo()) &&
                 Objects.equals(getMensagem(), that.getMensagem()) &&
                 Objects.equals(getCpfResponsavel(), that.getCpfResponsavel()) &&
                 Objects.equals(getDataEnvio(), that.getDataEnvio()) &&
-                Objects.equals(getLida(), that.getLida());
+                Objects.equals(getLida(), that.getLida()) &&
+                Objects.equals(getCpfDependente(), that.getCpfDependente());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), getTitulo(), getMensagem(), getCpfResponsavel(), getDataEnvio(), getLida());
+        return Objects.hash(super.hashCode(), getIdNotificacao(), getTitulo(), getMensagem(), getCpfResponsavel(), getDataEnvio(), getLida(), getCpfDependente());
     }
 
     @Override
     public String toString() {
         return "NotificationStorageViewModel{" +
-                "id=" + id +
+                "id=" + idNotificacao +
                 ", titulo='" + titulo + '\'' +
                 ", mensagem='" + mensagem + '\'' +
                 ", cpfResponsavel='" + cpfResponsavel + '\'' +
                 ", dataEnvio=" + dataEnvio +
                 ", lida=" + lida +
+                ", cpfDependente="+ cpfDependente +
                 '}';
     }
 }

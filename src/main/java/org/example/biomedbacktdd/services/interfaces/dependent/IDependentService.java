@@ -2,6 +2,7 @@ package org.example.biomedbacktdd.services.interfaces.dependent;
 
 import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
 import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.DependentNameViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -14,4 +15,5 @@ public interface IDependentService {
     NewDependentResult create(NewDependentCommand dependent);
     NewDependentResult update(NewDependentCommand dependent);
     String delete(String id);
+    DependentNameViewModel getDependentNameByCpf(String cpfDep);
 }

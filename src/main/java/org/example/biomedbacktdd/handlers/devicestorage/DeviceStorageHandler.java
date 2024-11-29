@@ -1,11 +1,15 @@
 package org.example.biomedbacktdd.handlers.devicestorage;
 
+import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.exceptions.ServiceException;
 import org.example.biomedbacktdd.services.interfaces.devicestorage.IDeviceStorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class DeviceStorageHandler {
@@ -16,24 +20,57 @@ public class DeviceStorageHandler {
         this.deviceStorageService = deviceStorageService;
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleCreate(DeviceStorageCommand deviceStorageCommand) {
+    public ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> handleCreate(DeviceStorageCommand deviceStorageCommand) {
         try {
-            var createdDevice = deviceStorageService.createDevice(deviceStorageCommand);
-            var response = new StatusResponseViewModel<>(createdDevice, "Sucesso", "Dispositivo criado com sucesso.", HttpStatus.OK.value(), true);
+            DeviceStorageVO createdDevice = deviceStorageService.createDevice(deviceStorageCommand);
+            StatusResponseViewModel<DeviceStorageVO> response = new StatusResponseViewModel<>(
+                    createdDevice,
+                    "Sucesso",
+                    "Dispositivo registrado com sucesso.",
+                    HttpStatus.OK.value(),
+                    true
+            );
             return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (ServiceException se) {
+            StatusResponseViewModel<DeviceStorageVO> errorResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Erro",
+                    se.getMessage(),
+                    HttpStatus.CONFLICT.value(),
+                    false
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         } catch (Exception e) {
-            var errorResponse = new StatusResponseViewModel<>(null, "Erro", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            StatusResponseViewModel<DeviceStorageVO> errorResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Erro",
+                    "Erro interno do servidor.",
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    false
+            );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleFindDispositivosByCpfDep(String cpfDep) {
+    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> handleFindDispositivosByCpfDep(String cpfDep) {
         try {
-            var devices = deviceStorageService.findDispositivosByCpfDep(cpfDep);
-            var response = new StatusResponseViewModel<>(devices, "Sucesso", "Dispositivos encontrados com sucesso.", HttpStatus.OK.value(), true);
+            List<DeviceStorageVO> devices = deviceStorageService.findDispositivosByCpfDep(cpfDep);
+            StatusResponseViewModel<List<DeviceStorageVO>> response = new StatusResponseViewModel<>(
+                    devices,
+                    "Sucesso",
+                    "Dispositivos encontrados com sucesso.",
+                    HttpStatus.OK.value(),
+                    true
+            );
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            var errorResponse = new StatusResponseViewModel<>(null, "Erro", e.getMessage(), HttpStatus.NOT_FOUND.value(), false);
+            StatusResponseViewModel<List<DeviceStorageVO>> errorResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Erro",
+                    e.getMessage(),
+                    HttpStatus.NOT_FOUND.value(),
+                    false
+            );
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }

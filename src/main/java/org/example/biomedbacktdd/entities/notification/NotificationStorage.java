@@ -1,6 +1,7 @@
 package org.example.biomedbacktdd.entities.notification;
 
 import jakarta.persistence.*;
+import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 
 import java.time.ZonedDateTime;
@@ -11,7 +12,7 @@ public class NotificationStorage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_notificacao")
-    private Long id;
+    private int idNotificacao;
 
     @Column(name = "titulo", nullable = false)
     private String titulo;
@@ -29,12 +30,22 @@ public class NotificationStorage {
     @JoinColumn(name = "cpf_responsavel", referencedColumnName = "cpf_res")
     private Responsible responsavel;
 
-    public Long getId() {
-        return id;
+    @JoinColumn(name = "cpf_dependente", referencedColumnName = "cpf_dep")
+    private String cpfDependente;
+
+    public String getCpfDependente() {
+        return cpfDependente;
+    }
+    public void setCpfDependente(String cpfDependente) {
+        this.cpfDependente = cpfDependente;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public int getIdNotificacao() {
+        return idNotificacao;
+    }
+
+    public void setIdNotificacao(int id) {
+        this.idNotificacao = idNotificacao;
     }
 
     public String getTitulo() {

@@ -41,7 +41,7 @@ public class NotificationRequestController {
                     )
             }
     )
-    public ResponseEntity<StatusResponseViewModel> sendNotification(@RequestBody NotificationRequest request) {
+    public ResponseEntity<StatusResponseViewModel<String>> sendNotification(@RequestBody NotificationRequest request) {
         return notificationRequestHandler.handleSendNotification(request);
     }
 }

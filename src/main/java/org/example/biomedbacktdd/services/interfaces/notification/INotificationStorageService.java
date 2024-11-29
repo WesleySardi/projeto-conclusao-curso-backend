@@ -7,7 +7,7 @@ import org.example.biomedbacktdd.entities.notification.NotificationStorage;
 import java.util.List;
 
 public interface INotificationStorageService {
-    NotificationStorage storeNotification(NotificationStorageCommand notificationDTO);
-    void deleteNotification(Long id);
+    NotificationStorage storeNotification(NotificationStorageCommand notificationStorageCommand);
+    void deleteNotification(int idNotificacao);
     List<NotificationStorage> getNotificationsByResponsavel(String cpfResponsavel);
 }

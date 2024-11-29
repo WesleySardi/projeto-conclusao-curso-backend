@@ -2,8 +2,10 @@ package org.example.biomedbacktdd.handlers.dependent;
 
 import org.example.biomedbacktdd.dto.commands.NewDependentCommand;
 import org.example.biomedbacktdd.dto.results.NewDependentResult;
+import org.example.biomedbacktdd.dto.viewmodels.DependentNameViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.NewDependentViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
+import org.example.biomedbacktdd.exceptions.ResourceNotFoundException;
 import org.example.biomedbacktdd.services.interfaces.dependent.IDependentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -134,6 +136,52 @@ public class DependentHandler {
         } catch (Exception e) {
             errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        }
+    }
+
+    public ResponseEntity<StatusResponseViewModel<DependentNameViewModel>> handleFindDependentNameByCpfDep(String cpfDep) {
+        StatusResponseViewModel<DependentNameViewModel> statusResponse;
+
+        try {
+            DependentNameViewModel nomeDep = dependentService.getDependentNameByCpf(cpfDep);
+
+            if (nomeDep != null) {
+                statusResponse = new StatusResponseViewModel<>(
+                        nomeDep,
+                        "Sucesso",
+                        "Nome do dependente encontrado com sucesso.",
+                        HttpStatus.OK.value(),
+                        true
+                );
+                return ResponseEntity.status(HttpStatus.OK).body(statusResponse);
+            } else {
+                statusResponse = new StatusResponseViewModel<>(
+                        null,
+                        "Erro",
+                        "Nenhum dependente encontrado para o CPF fornecido.",
+                        HttpStatus.BAD_REQUEST.value(),
+                        false
+                );
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(statusResponse);
+            }
+        } catch (ResourceNotFoundException ex) {
+            statusResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Não Encontrado",
+                    ex.getMessage(),
+                    HttpStatus.NOT_FOUND.value(),
+                    false
+            );
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(statusResponse);
+        } catch (Exception e) {
+            statusResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Erro Interno",
+                    "Um erro inesperado aconteceu: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                    false
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(statusResponse);
         }
     }
 }

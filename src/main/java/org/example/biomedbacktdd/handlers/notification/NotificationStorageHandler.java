@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class NotificationStorageHandler {
@@ -23,20 +22,19 @@ public class NotificationStorageHandler {
         this.mapperUtil = mapperUtil;
     }
 
-    // Handle Create
-    public ResponseEntity<StatusResponseViewModel> handleCreate(NotificationStorageCommand notificationStorageCommand) {
+    public ResponseEntity<StatusResponseViewModel<NotificationStorageCommand>> handleCreate(NotificationStorageCommand notificationStorageCommand) {
         try {
             NotificationStorage notification = notificationStorageService.storeNotification(notificationStorageCommand);
 
-            StatusResponseViewModel response = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationStorageCommand> response = new StatusResponseViewModel<>();
             response.setStatus(HttpStatus.OK.value());
             response.setIsOk(true);
             response.setInfoMessage("Notificação criada com sucesso.");
-            response.setContentResponse(mapperUtil.map(notification, NotificationStorageCommand.class)); // Map para DTO, se necessário
+            response.setContentResponse(mapperUtil.map(notification, NotificationStorageCommand.class));
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            StatusResponseViewModel errorResponse = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationStorageCommand> errorResponse = new StatusResponseViewModel<>();
             errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             errorResponse.setIsOk(false);
             errorResponse.setInfoMessage("Erro ao criar notificação: " + e.getMessage());
@@ -45,19 +43,18 @@ public class NotificationStorageHandler {
         }
     }
 
-    // Handle Delete
-    public ResponseEntity<StatusResponseViewModel> handleDelete(Long id) {
+    public ResponseEntity<StatusResponseViewModel<NotificationStorageCommand>> handleDelete(int id) {
         try {
             notificationStorageService.deleteNotification(id);
 
-            StatusResponseViewModel response = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationStorageCommand> response = new StatusResponseViewModel<>();
             response.setStatus(HttpStatus.OK.value());
             response.setIsOk(true);
             response.setInfoMessage("Notificação removida com sucesso.");
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            StatusResponseViewModel errorResponse = new StatusResponseViewModel<>();
+            StatusResponseViewModel<NotificationStorageCommand> errorResponse = new StatusResponseViewModel<>();
             errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             errorResponse.setIsOk(false);
             errorResponse.setInfoMessage("Erro ao remover notificação: " + e.getMessage());
@@ -66,22 +63,20 @@ public class NotificationStorageHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel> handleGetByResponsavel(String cpfResponsavel) {
+    public ResponseEntity<StatusResponseViewModel<List<NotificationStorageCommand>>> handleGetByResponsavel(String cpfResponsavel) {
         try {
             List<NotificationStorage> notifications = notificationStorageService.getNotificationsByResponsavel(cpfResponsavel);
 
-            // Mapear as entidades para DTOs
             List<NotificationStorageCommand> notificationDTOs = notifications.stream()
                     .map(notification -> {
                         NotificationStorageCommand command = mapperUtil.map(notification, NotificationStorageCommand.class);
-                        // Populando manualmente o cpfResponsavel no DTO
                         command.setCpfResponsavel(notification.getResponsavel().getCpfRes());
                         return command;
                     })
-                    .collect(Collectors.toList());
+                    .toList();
 
-            // Criar resposta de sucesso
-            StatusResponseViewModel response = new StatusResponseViewModel<>();
+
+            StatusResponseViewModel<List<NotificationStorageCommand>> response = new StatusResponseViewModel<>();
             response.setStatus(HttpStatus.OK.value());
             response.setIsOk(true);
             response.setInfoMessage("Notificações encontradas com sucesso.");
@@ -90,8 +85,7 @@ public class NotificationStorageHandler {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // Capturar erros e retornar resposta de erro
-            StatusResponseViewModel errorResponse = new StatusResponseViewModel<>();
+            StatusResponseViewModel<List<NotificationStorageCommand>> errorResponse = new StatusResponseViewModel<>();
             errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             errorResponse.setIsOk(false);
             errorResponse.setInfoMessage("Erro ao buscar notificações: " + e.getMessage());

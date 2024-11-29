@@ -15,4 +15,7 @@ public interface IDependentRepository extends JpaRepository<Dependent, String> {
 
     @Query("SELECT d FROM Dependent d WHERE d.cpfResDep LIKE :cpfResDep")
     Page<Dependent> findDependentsByCpfRes(@Param("cpfResDep") String cpfResDep, Pageable pageable);
+
+    @Query("SELECT d.nomeDep FROM Dependent d WHERE d.cpfDep = :cpfDep")
+    String findDependentNameByCpf(@Param("cpfDep") String cpfDep);
 }

@@ -27,28 +27,29 @@ public class NotificationStorageService implements INotificationStorageService {
         this.responsibleRepository = responsibleRepository;
     }
 
-    public NotificationStorage storeNotification(NotificationStorageCommand notificationDTO) {
-        if (notificationDTO.getDataEnvio() == null) {
-            notificationDTO.setDataEnvio(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
+    public NotificationStorage storeNotification(NotificationStorageCommand notificationStorageCommand) {
+        if (notificationStorageCommand.getDataEnvio() == null) {
+            notificationStorageCommand.setDataEnvio(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
         }
 
-        Responsible responsible = responsibleRepository.findResponsibleByCpf(notificationDTO.getCpfResponsavel())
-                .orElseThrow(() -> new ServiceException("Responsável não encontrado com CPF: " + notificationDTO.getCpfResponsavel()));
+        Responsible responsible = responsibleRepository.findResponsibleByCpf(notificationStorageCommand.getCpfResponsavel())
+                .orElseThrow(() -> new ServiceException("Responsável não encontrado com CPF: " + notificationStorageCommand.getCpfResponsavel()));
 
         NotificationStorage notification = new NotificationStorage();
-        notification.setTitulo(notificationDTO.getTitulo());
-        notification.setMensagem(notificationDTO.getMensagem());
+        notification.setTitulo(notificationStorageCommand.getTitulo());
+        notification.setMensagem(notificationStorageCommand.getMensagem());
         notification.setDataEnvio(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
         notification.setLida(false);
+        notification.setCpfDependente(notificationStorageCommand.getCpfDependente());
         notification.setResponsavel(responsible);
 
         // Salvar a notificação
         return notificationStorageRepository.save(notification);
     }
 
-    public void deleteNotification(Long id) {
-        NotificationStorage notification = notificationStorageRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Notificação não encontrada com ID: " + id));
+    public void deleteNotification(int idNotificacao) {
+        NotificationStorage notification = notificationStorageRepository.findByIdNotificacao(idNotificacao)
+                .orElseThrow(() -> new ServiceException("Notificação não encontrada com ID: " + idNotificacao));
 
         notificationStorageRepository.delete(notification);
     }

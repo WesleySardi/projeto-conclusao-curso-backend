@@ -4,16 +4,26 @@ public class NotificationRequestCommand {
     private String title;
     private String body;
     private String cpfResponsavel;
+    private String cpfDependente;
 
     // Construtor vazio
     public NotificationRequestCommand() {
     }
 
     // Construtor com parâmetros
-    public NotificationRequestCommand(String title, String body, String cpfResponsavel) {
+    public NotificationRequestCommand(String title, String body, String cpfResponsavel, String cpfDependente) {
         this.title = title;
         this.body = body;
         this.cpfResponsavel = cpfResponsavel;
+        this.cpfDependente = cpfDependente;
+    }
+
+    public String getCpfDependente() {
+        return cpfDependente;
+    }
+
+    public void setCpfDependente(String cpfDependente) {
+        this.cpfDependente = cpfDependente;
     }
 
     // Getters e Setters

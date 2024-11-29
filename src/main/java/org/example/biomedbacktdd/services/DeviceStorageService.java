@@ -13,8 +13,9 @@ import org.example.biomedbacktdd.util.MapperUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -46,11 +47,11 @@ public class DeviceStorageService implements IDeviceStorageService {
 
         return devices.stream()
                 .map(device -> mapperUtil.map(device, DeviceStorageVO.class))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional
-    public DeviceStorage createDevice(DeviceStorageCommand deviceStorageCommand) {
+    public DeviceStorageVO createDevice(DeviceStorageCommand deviceStorageCommand) {
         if (deviceStorageCommand.getCpfResponsavel() == null) {
             throw new ServiceException("O CPF do responsável não pode ser nulo.");
         }
@@ -58,10 +59,37 @@ public class DeviceStorageService implements IDeviceStorageService {
         Responsible responsible = responsibleRepository.findResponsibleByCpf(deviceStorageCommand.getCpfResponsavel())
                 .orElseThrow(() -> new ServiceException(RESPONSIBLE_NOT_FOUND + deviceStorageCommand.getCpfResponsavel()));
 
+        String tokenDispositivo = deviceStorageCommand.getTokenDispositivo();
+
+        // Verifique se o token já existe
+        Optional<DeviceStorage> existingDeviceOpt = deviceStorageRepository.findByTokenDispositivo(tokenDispositivo);
+
+        if (existingDeviceOpt.isPresent()) {
+            DeviceStorage existingDevice = existingDeviceOpt.get();
+
+            // Atualize dataCadastro
+            existingDevice.setDataCadastro(new Date());
+
+            // Opcional: Verifique se o responsável é o mesmo
+            if (!existingDevice.getResponsavel().getCpfRes().equals(deviceStorageCommand.getCpfResponsavel())) {
+                throw new ServiceException("Este token já está associado a outro responsável.");
+            }
+
+            deviceStorageRepository.save(existingDevice);
+            log.info("TokenDispositivo já existente. dataCadastro atualizado para: {}", existingDevice.getDataCadastro());
+
+            // Mapeie para VO e retorne
+            return mapperUtil.map(existingDevice, DeviceStorageVO.class);
+        }
+
+        // Se o token não existir, crie um novo
         DeviceStorage deviceStorage = new DeviceStorage();
-        deviceStorage.setTokenDispositivo(deviceStorageCommand.getTokenDispositivo());
+        deviceStorage.setTokenDispositivo(tokenDispositivo);
         deviceStorage.setResponsavel(responsible);
 
-        return deviceStorageRepository.save(deviceStorage);
+        DeviceStorage savedDevice = deviceStorageRepository.save(deviceStorage);
+        log.info("Novo dispositivo registrado com token: {}", savedDevice.getTokenDispositivo());
+
+        return mapperUtil.map(savedDevice, DeviceStorageVO.class);
     }
 }

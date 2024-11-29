@@ -9,4 +9,3 @@ public class MapperUtil {
         return DozerMapper.parseObject(source, targetClass);
     }
 }
-

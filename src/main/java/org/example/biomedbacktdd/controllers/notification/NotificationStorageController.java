@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/notifications")
 public class NotificationStorageController {
@@ -48,13 +50,7 @@ public class NotificationStorageController {
                     )
             }
     )
-    public ResponseEntity<StatusResponseViewModel> createNotification(@Valid @RequestBody NotificationStorageCommand notificationDTO) {
-        System.out.println("Payload recebido: " + notificationDTO); // Log para depuração
-        System.out.println("Payload recebido no controlador: " + notificationDTO);
-        System.out.println("Título: " + notificationDTO.getTitulo());
-        System.out.println("Mensagem: " + notificationDTO.getMensagem());
-        System.out.println("CPF: " + notificationDTO.getCpfResponsavel());
-        System.out.println("Data de Envio: " + notificationDTO.getDataEnvio());
+    public ResponseEntity<StatusResponseViewModel<NotificationStorageCommand>> createNotification(@Valid @RequestBody NotificationStorageCommand notificationDTO) {
         return notificationStorageHandler.handleCreate(notificationDTO);
     }
 
@@ -81,7 +77,7 @@ public class NotificationStorageController {
                     )
             }
     )
-    public ResponseEntity<StatusResponseViewModel> deleteNotification(@PathVariable Long id) {
+    public ResponseEntity<StatusResponseViewModel<NotificationStorageCommand>> deleteNotification(@PathVariable int id) {
         return notificationStorageHandler.handleDelete(id);
     }
 
@@ -108,7 +104,7 @@ public class NotificationStorageController {
                     )
             }
     )
-    public ResponseEntity<StatusResponseViewModel> getNotificationsByResponsavel(@PathVariable String cpfResponsavel) {
+    public ResponseEntity<StatusResponseViewModel<List<NotificationStorageCommand>>> getNotificationsByResponsavel(@PathVariable String cpfResponsavel) {
         return notificationStorageHandler.handleGetByResponsavel(cpfResponsavel);
     }
 }

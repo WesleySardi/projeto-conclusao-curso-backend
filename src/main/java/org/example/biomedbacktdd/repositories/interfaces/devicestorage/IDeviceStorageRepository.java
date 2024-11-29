@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IDeviceStorageRepository extends JpaRepository<DeviceStorage, Integer> {
@@ -18,6 +19,9 @@ public interface IDeviceStorageRepository extends JpaRepository<DeviceStorage, I
     List<DeviceStorage> findTokenDispositivosByCpfDep(String cpfDep);
 
     List<DeviceStorage> findByResponsavel(Responsible responsavel);
+
+    // Adicione este método se ainda não existir
+    Optional<DeviceStorage> findByTokenDispositivo(String tokenDispositivo);
 
 }
 
