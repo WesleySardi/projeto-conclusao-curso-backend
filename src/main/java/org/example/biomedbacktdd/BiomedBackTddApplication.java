@@ -4,16 +4,20 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.example.biomedbacktdd.s3.S3Service;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 @EnableWebMvc
 public class BiomedBackTddApplication {
+
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(BiomedBackTddApplication.class);
 
     private static final String BUCKET_NAME = "biomed-firebase-credentials";
     private static final String CREDENTIALS_FILE_KEY = "firebase-credentials.json";
@@ -23,7 +27,7 @@ public class BiomedBackTddApplication {
         try {
             initializeFirebase();
         } catch (IOException e) {
-            System.err.println("Erro ao inicializar o Firebase: " + e.getMessage());
+            logger.info("Erro ao inicializar o Firebase");
         }
 
         SpringApplication.run(BiomedBackTddApplication.class, args);
@@ -40,9 +44,9 @@ public class BiomedBackTddApplication {
 
         if (FirebaseApp.getApps().isEmpty()) {
             FirebaseApp.initializeApp(options);
-            System.out.println("Firebase inicializado com sucesso.");
+            logger.info("Firebase inicializado com sucesso.");
         } else {
-            System.out.println("Firebase já está inicializado.");
+            logger.info("Firebase já está inicializado.");
         }
     }
 }

@@ -36,13 +36,7 @@ public class NewSmsViewModel extends RepresentationModel<NewSmsViewModel> implem
     private String cpfDep;
 
 
-    public NewSmsViewModel() {
-    }
-
-    public NewSmsViewModel(int i, String s, String s1, String s2, String s3) {
-    }
-
-    public NewSmsViewModel(int smsCode, Timestamp sendDate, Timestamp returnDate, String phoneUser, String cpfDep) {
+    public NewSmsViewModel() { // EMPTY CONSTRUCTOR
     }
 
     public int getKey() {

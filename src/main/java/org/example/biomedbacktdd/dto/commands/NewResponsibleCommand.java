@@ -34,26 +34,7 @@ public class NewResponsibleCommand extends RepresentationModel<NewResponsibleCom
     private String cidade;
     private String estado;
 
-    public NewResponsibleCommand() {
-    }
-
-    public NewResponsibleCommand(String key, String nomeRes, Integer idadeRes, String contato1Res, String contato2Res, String contato3Res, Integer planoAssinado, String emailRes, String rgRes, String cepRes, String logradouro, Integer numero, String complemento, String bairro, String cidade, String estado) {
-        this.key = key;
-        this.nomeRes = nomeRes;
-        this.idadeRes = idadeRes;
-        this.contato1Res = contato1Res;
-        this.contato2Res = contato2Res;
-        this.contato3Res = contato3Res;
-        this.planoAssinado = planoAssinado;
-        this.emailRes = emailRes;
-        this.rgRes = rgRes;
-        this.cepRes = cepRes;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
+    public NewResponsibleCommand() { // EMPTY CONSTRUCTOR
     }
 
     public String getKey() {

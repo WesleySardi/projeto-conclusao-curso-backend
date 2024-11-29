@@ -38,21 +38,6 @@ public class NotificationStorageResult extends RepresentationModel<NotificationS
     @JsonProperty("cpfDependente")
     private String cpfDependente;
 
-    // Construtor padrão
-    public NotificationStorageResult() {}
-
-    // Construtor parametrizado
-    public NotificationStorageResult(int idNotificacao, String titulo, String mensagem, String cpfResponsavel, ZonedDateTime dataEnvio, Boolean lida, String cpfDependente) {
-        this.idNotificacao = idNotificacao;
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.cpfResponsavel = cpfResponsavel;
-        this.dataEnvio = dataEnvio;
-        this.lida = lida;
-        this.cpfDependente = cpfDependente;
-    }
-
-
     public String getCpfDependente() {
         return cpfDependente;
     }
@@ -61,7 +46,6 @@ public class NotificationStorageResult extends RepresentationModel<NotificationS
         this.cpfDependente = cpfDependente;
     }
 
-    // Getters e Setters
     public int getIdNotificacao() {
         return idNotificacao;
     }

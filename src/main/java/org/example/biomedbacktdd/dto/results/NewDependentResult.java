@@ -30,7 +30,7 @@ public class NewDependentResult extends RepresentationModel<NewDependentResult> 
     private Integer idCirurgiaDep;
     private Integer idScanDep;
 
-    public NewDependentResult() {
+    public NewDependentResult() { // EMPTY CONSTRUCTOR
     }
 
     public String getKey() {

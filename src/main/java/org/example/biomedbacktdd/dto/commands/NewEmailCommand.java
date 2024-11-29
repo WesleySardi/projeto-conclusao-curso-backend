@@ -35,10 +35,6 @@ public class NewEmailCommand extends RepresentationModel<NewEmailCommand> implem
     @JsonProperty("cpfDep")
     private String cpfDep;
 
-    // Construtores padrão e completo
-    public NewEmailCommand() {
-    }
-
     public NewEmailCommand(int key, Timestamp sendDate, Timestamp returnDate, String emailUser, String cpfDep) {
         this.key = key;
         this.sendDate = sendDate;

@@ -3,9 +3,6 @@ package org.example.biomedbacktdd.dto.commands;
 public class EncryptMessageCommand {
     private String url;
 
-    public EncryptMessageCommand() {
-    }
-
     public EncryptMessageCommand(String url) {
         this.url = url;
     }

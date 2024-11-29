@@ -27,7 +27,7 @@ public class SmsHandler implements Serializable {
     @Column(name = "cpf_dep")
     private String cpfDep;
 
-    public SmsHandler() {
+    public SmsHandler() { // EMPTY CONSTRUCTOR
     }
 
     public int getSmsCode() {

@@ -22,17 +22,6 @@ public class DeviceStorageResult implements Serializable {
     @JsonProperty("cpfResponsavel")
     private String cpfResponsavel;
 
-    // Construtor padrão
-    public DeviceStorageResult() {}
-
-    // Construtor parametrizado
-    public DeviceStorageResult(Long id, String tokenDispositivo, String cpfResponsavel) {
-        this.id = id;
-        this.tokenDispositivo = tokenDispositivo;
-        this.cpfResponsavel = cpfResponsavel;
-    }
-
-    // Getters e Setters
     public Long getId() {
         return id;
     }

@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EmailHandler {
-
+    private static final String SUCESSO = "Sucesso";
+    private static final String ERRO = "Erro";
+    private static final String UNKNOWN_ERROR = "Um erro inesperado aconteceu.";
     private final IEmailService emailService;
 
     @Autowired
@@ -30,14 +32,14 @@ public class EmailHandler {
             var response = emailService.findAll(pageable);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Emails encontrados com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Emails encontrados com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar os emails.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar os emails.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseViewModel(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
@@ -49,14 +51,14 @@ public class EmailHandler {
             var response = emailService.verifyEmailCode(email, code);
 
             if (response) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Código do email válido.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Código do email válido.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(false, "Erro", "Código do email inválido.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(false, ERRO, "Código do email inválido.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(false, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseViewModel(false, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
@@ -68,14 +70,14 @@ public class EmailHandler {
             var response = emailService.findById(id);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Email encontrado com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Email encontrado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao encontrar o email.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar o email.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseViewModel(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
@@ -87,14 +89,14 @@ public class EmailHandler {
             var response = emailService.create(dependent);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "Email criado com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Email criado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao criar email.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao criar email.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseViewModel(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
@@ -106,14 +108,14 @@ public class EmailHandler {
             var response = emailService.sendQrCodeWithSendGrid(toEmail);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, "Sucesso", "QR code enviado com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, "QR code enviado com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, "Erro", "Erro ao enviar o QR code.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao enviar o QR code.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
-            errorResponse = new StatusResponseViewModel(null, "Um erro inesperado aconteceu.", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            errorResponse = new StatusResponseViewModel(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }

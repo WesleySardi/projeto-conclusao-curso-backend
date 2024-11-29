@@ -38,22 +38,8 @@ public class NotificationStorageCommand implements Serializable {
     private String cpfDependente;
 
     // Construtor padrão
-    public NotificationStorageCommand() {
+    public NotificationStorageCommand() { // EMPTY CONSTRUCTOR
     }
-
-    // Construtor com parâmetros
-    public NotificationStorageCommand(int idNotificacao, String titulo, String mensagem, String cpfResponsavel, ZonedDateTime dataEnvio, Boolean lida, String cpfDependente) {
-        this.idNotificacao = idNotificacao;
-        this.titulo = titulo;
-        this.mensagem = mensagem;
-        this.cpfResponsavel = cpfResponsavel;
-        this.dataEnvio = dataEnvio;
-        this.lida = lida;
-        this.cpfDependente = cpfDependente;
-    }
-
-    // Getters e Setters
-
 
     public String getCpfDependente() {
         return cpfDependente;

@@ -26,7 +26,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 public class DependentService implements IDependentService {
-
+    private static final String NO_RECORDS = "No records found for this ID!";
     private final Logger logger = Logger.getLogger(DependentService.class.getName());
     private final IDependentRepository repository;
     private final PagedResourcesAssembler<NewDependentViewModel> assembler;
@@ -83,7 +83,7 @@ public class DependentService implements IDependentService {
         try {
             logger.info("Finding a dependent!");
 
-            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_RECORDS));
 
             var vo = DozerMapper.parseObject(entity, NewDependentViewModel.class);
 
@@ -128,7 +128,7 @@ public class DependentService implements IDependentService {
 
             logger.info("Updating a dependent!");
 
-            var entity = repository.findById(dependent.getKey()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            var entity = repository.findById(dependent.getKey()).orElseThrow(() -> new ResourceNotFoundException(NO_RECORDS));
 
             entity.setNomeDep(dependent.getNomeDep());
             entity.setIdadeDep(dependent.getIdadeDep());
@@ -161,7 +161,7 @@ public class DependentService implements IDependentService {
         try {
             logger.info("Deleting a Dependent!");
 
-            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+            var entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(NO_RECORDS));
 
             repository.delete(entity);
 
