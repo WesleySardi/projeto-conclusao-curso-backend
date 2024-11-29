@@ -148,7 +148,7 @@ public class EmailService implements IEmailService {
                        <body>
                            <div class="container">
                                <h1 class="title">Baixe o aplicativo lendo o QR Code abaixo!</h1>
-                               <img src="https://i.imgur.com/6fOfcTT.png" alt="QR Code para baixar o aplicativo" class="qr-code">
+                               <img src="https://i.imgur.com/v3txima.png" alt="QR Code para baixar o aplicativo" class="qr-code">
                            </div>
                        </body>
                        
