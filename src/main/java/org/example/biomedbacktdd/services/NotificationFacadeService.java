@@ -30,7 +30,7 @@ public class NotificationFacadeService implements INotificationFacadeService {
     public NotificationFacadeService(NotificationRequestService notificationRequestService,
                                      NotificationStorageService notificationStorageService,
                                      IResponsibleRepository responsibleRepository,
-                                     IDeviceStorageRepository deviceStorageRepository, IDependentRepository dependentRepository) {
+                                     IDeviceStorageRepository deviceStorageRepository) {
         this.notificationRequestService = notificationRequestService;
         this.notificationStorageService = notificationStorageService;
         this.responsibleRepository = responsibleRepository;
