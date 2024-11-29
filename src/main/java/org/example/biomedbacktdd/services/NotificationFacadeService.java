@@ -4,10 +4,12 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.biomedbacktdd.dto.commands.NotificationRequestCommand;
 import org.example.biomedbacktdd.dto.commands.NotificationStorageCommand;
+import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.notification.NotificationRequest;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.ServiceException;
+import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
 import org.example.biomedbacktdd.repositories.interfaces.devicestorage.IDeviceStorageRepository;
 import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.services.interfaces.notification.INotificationFacadeService;
@@ -29,18 +31,20 @@ public class NotificationFacadeService implements INotificationFacadeService {
     public NotificationFacadeService(NotificationRequestService notificationRequestService,
                                      NotificationStorageService notificationStorageService,
                                      IResponsibleRepository responsibleRepository,
-                                     IDeviceStorageRepository deviceStorageRepository) {
+                                     IDeviceStorageRepository deviceStorageRepository, IDependentRepository dependentRepository) {
         this.notificationRequestService = notificationRequestService;
         this.notificationStorageService = notificationStorageService;
         this.responsibleRepository = responsibleRepository;
         this.deviceStorageRepository = deviceStorageRepository;
 
+        this.dependentRepository = dependentRepository;
     }
 
     public void sendAndStoreNotification(NotificationRequestCommand notificationRequestCommand) {
         // Verificar se o responsável existe
         Responsible responsible = responsibleRepository.findById(notificationRequestCommand.getCpfResponsavel())
                 .orElseThrow(() -> new ServiceException("Responsável não encontrado com CPF: " + notificationRequestCommand.getCpfResponsavel()));
+
 
         // Obter os dispositivos do responsável
         List<DeviceStorage> devices = deviceStorageRepository.findByResponsavel(responsible);
@@ -69,6 +73,7 @@ public class NotificationFacadeService implements INotificationFacadeService {
         notificationStorageCommand.setTitulo(notificationRequestCommand.getTitle());
         notificationStorageCommand.setMensagem(notificationRequestCommand.getBody());
         notificationStorageCommand.setCpfResponsavel(notificationRequestCommand.getCpfResponsavel());
+        notificationStorageCommand.setCpfDependente(notificationRequestCommand.getCpfDependente());
 
         notificationStorageService.storeNotification(notificationStorageCommand);
     }
