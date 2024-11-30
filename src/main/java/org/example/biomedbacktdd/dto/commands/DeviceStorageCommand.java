@@ -28,7 +28,9 @@ public class DeviceStorageCommand implements Serializable {
     private String cpfResponsavel;
 
     // Construtor padrão
-    public DeviceStorageCommand() {}
+    public DeviceStorageCommand() { // EMPTY CONSTRUCTOR
+
+    }
 
     // Getters e Setters
     public String getTokenDispositivo() {
