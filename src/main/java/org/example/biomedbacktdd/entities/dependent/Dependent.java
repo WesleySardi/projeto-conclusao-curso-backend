@@ -51,7 +51,7 @@ public class Dependent implements Serializable {
     @Column(name = "id_scan_dep")
     private Integer idScanDep;
 
-    public Dependent() {
+    public Dependent() { // EMPTY CONSTRUCTOR
     }
 
     public String getCpfDep() {

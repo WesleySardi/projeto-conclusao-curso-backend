@@ -24,11 +24,11 @@ public class BiomedBackTddApplication {
 
 
     public static void main(String[] args) {
-        try {
+        /*try {
             initializeFirebase();
         } catch (IOException e) {
             logger.info("Erro ao inicializar o Firebase");
-        }
+        }*/
 
         SpringApplication.run(BiomedBackTddApplication.class, args);
     }
