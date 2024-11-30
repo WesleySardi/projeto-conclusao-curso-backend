@@ -7,6 +7,9 @@ public class EncryptMessageCommand {
         this.url = url;
     }
 
+    public EncryptMessageCommand() { // EMPTY CONSTRUCTOR
+    }
+
     public String getUrl() {
         return url;
     }

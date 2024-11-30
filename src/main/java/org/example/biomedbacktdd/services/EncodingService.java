@@ -20,11 +20,14 @@ public class EncodingService implements IEncodingService {
     private static final String TRANSFORMATION = "AES/GCM/NoPadding";
     private static final int IV_LENGTH = 12;
     private static final int TAG_LENGTH = 128;
+
     @Value("${security.encrypt.token.secret-key:default}")
-    private static final String SECRET_KEY = "";
+    private String SECRET_KEY = "";
 
     @Override
     public EncryptedMessageResult encryptUrl(String url) {
+        EncryptedMessageResult response = null;
+
         try {
             if (url == null || url.isEmpty()) {
                 throw new BadCredentialsException("URL cannot be null or empty");
@@ -42,15 +45,19 @@ public class EncodingService implements IEncodingService {
                     ":" +
                     Base64.getEncoder().encodeToString(encryptedBytes);
 
-            return new EncryptedMessageResult(encryptedMessage, "URL successfully encrypted");
+            response = new EncryptedMessageResult(encryptedMessage, "URL successfully encrypted");
 
         } catch (Exception e) {
-            throw new BadCredentialsException("Error encrypting the URL!", e);
+            return null;
         }
+
+        return response;
     }
 
     @Override
     public DecryptedMessageResult decryptUrl(String encryptedUrl) {
+        DecryptedMessageResult response = null;
+
         try {
             if (encryptedUrl == null || encryptedUrl.isEmpty()) {
                 throw new BadCredentialsException("Encrypted URL cannot be null or empty");
@@ -71,11 +78,13 @@ public class EncodingService implements IEncodingService {
             cipher.init(Cipher.DECRYPT_MODE, keySpec, gcmSpec);
             byte[] decryptedBytes = cipher.doFinal(encryptedBytes);
 
-            return new DecryptedMessageResult(new String(decryptedBytes), "URL successfully decrypted");
+            response = new DecryptedMessageResult(new String(decryptedBytes), "URL successfully decrypted");
 
         } catch (Exception e) {
-            throw new BadCredentialsException("Error decrypting the URL!", e);
+            return null;
         }
+
+        return response;
     }
 
     private byte[] generateIV() {

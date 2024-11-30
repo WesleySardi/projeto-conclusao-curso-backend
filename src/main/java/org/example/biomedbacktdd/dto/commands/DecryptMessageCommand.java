@@ -7,6 +7,9 @@ public class DecryptMessageCommand {
         this.url = url;
     }
 
+    public DecryptMessageCommand() { // EMPTY CONSTRUCTOR
+    }
+
     public String getUrl() {
         return url;
     }
