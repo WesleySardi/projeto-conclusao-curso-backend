@@ -9,9 +9,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * Command para encapsular os dados necessários para armazenar informações do dispositivo.
- */
 @JsonPropertyOrder({"tokenDispositivo", "cpfResponsavel"})
 public class DeviceStorageCommand implements Serializable {
 
@@ -27,10 +24,10 @@ public class DeviceStorageCommand implements Serializable {
     @JsonProperty("cpfResponsavel")
     private String cpfResponsavel;
 
-    // Construtor padrão
-    public DeviceStorageCommand() {}
 
-    // Getters e Setters
+    public DeviceStorageCommand() { // Empty Constructor
+    }
+
     public String getTokenDispositivo() {
         return tokenDispositivo;
     }
@@ -47,7 +44,6 @@ public class DeviceStorageCommand implements Serializable {
         this.cpfResponsavel = cpfResponsavel;
     }
 
-    // Métodos utilitários
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

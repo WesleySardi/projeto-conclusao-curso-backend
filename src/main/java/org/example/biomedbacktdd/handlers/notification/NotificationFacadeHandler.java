@@ -1,7 +1,6 @@
 package org.example.biomedbacktdd.handlers.notification;
 
 import org.example.biomedbacktdd.dto.commands.NotificationRequestCommand;
-import org.example.biomedbacktdd.dto.results.NotificationStorageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.services.interfaces.notification.INotificationFacadeService;
 import org.springframework.http.HttpStatus;
