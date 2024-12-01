@@ -1,7 +1,6 @@
 package org.example.biomedbacktdd.entities.notification;
 
 import jakarta.persistence.*;
-import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 
 import java.time.ZonedDateTime;
@@ -44,7 +43,7 @@ public class NotificationStorage {
         return idNotificacao;
     }
 
-    public void setIdNotificacao(int id) {
+    public void setIdNotificacao(int idNotificacao) {
         this.idNotificacao = idNotificacao;
     }
 

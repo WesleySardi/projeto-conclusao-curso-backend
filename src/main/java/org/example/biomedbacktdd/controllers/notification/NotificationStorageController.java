@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.example.biomedbacktdd.dto.commands.NotificationStorageCommand;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.notification.NotificationStorageHandler;
-import org.example.biomedbacktdd.services.NotificationStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ public class NotificationStorageController {
     private final NotificationStorageHandler notificationStorageHandler;
 
     @Autowired
-    public NotificationStorageController(NotificationStorageHandler notificationStorageHandler, NotificationStorageService notificationStorageService) {
+    public NotificationStorageController(NotificationStorageHandler notificationStorageHandler) {
         this.notificationStorageHandler = notificationStorageHandler;
     }
 

@@ -34,13 +34,13 @@ public class NotificationFacadeService implements INotificationFacadeService {
         this.notificationStorageService = notificationStorageService;
         this.responsibleRepository = responsibleRepository;
         this.deviceStorageRepository = deviceStorageRepository;
-
     }
 
     public void sendAndStoreNotification(NotificationRequestCommand notificationRequestCommand) {
         // Verificar se o responsável existe
         Responsible responsible = responsibleRepository.findById(notificationRequestCommand.getCpfResponsavel())
                 .orElseThrow(() -> new ServiceException("Responsável não encontrado com CPF: " + notificationRequestCommand.getCpfResponsavel()));
+
 
         // Obter os dispositivos do responsável
         List<DeviceStorage> devices = deviceStorageRepository.findByResponsavel(responsible);
@@ -69,6 +69,7 @@ public class NotificationFacadeService implements INotificationFacadeService {
         notificationStorageCommand.setTitulo(notificationRequestCommand.getTitle());
         notificationStorageCommand.setMensagem(notificationRequestCommand.getBody());
         notificationStorageCommand.setCpfResponsavel(notificationRequestCommand.getCpfResponsavel());
+        notificationStorageCommand.setCpfDependente(notificationRequestCommand.getCpfDependente());
 
         notificationStorageService.storeNotification(notificationStorageCommand);
     }
