@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
+import org.example.biomedbacktdd.dto.results.DeviceStorageResult;
 import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.ServiceException;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,22 +35,27 @@ public class DeviceStorageService implements IDeviceStorageService {
         this.mapperUtil = mapperUtil;
     }
 
-    public List<DeviceStorageVO> findDispositivosByCpfDep(String cpfDep) {
+    public List<DeviceStorageResult> findDispositivosByCpfDep(String cpfDep) {
         log.info("Procurando dispositivos associados ao CPF: {}", cpfDep);
 
-        List<DeviceStorage> devices = deviceStorageRepository.findTokenDispositivosByCpfDep(cpfDep);
+        List<Object[]> dispositivosDoResponsavel = deviceStorageRepository.findTokenDispositivosByCpfDep(cpfDep);
+        DeviceStorage indexFirstRow = (DeviceStorage) dispositivosDoResponsavel.get(0)[0];
+        Responsible indexSecondRow = (Responsible) dispositivosDoResponsavel.get(0)[1];
 
-        if (devices.isEmpty()) {
+        if (indexFirstRow == null) {
             throw new ServiceException(DEVICE_NOT_FOUND + cpfDep);
         }
 
-        return devices.stream()
-                .map(device -> mapperUtil.map(device, DeviceStorageVO.class))
-                .toList();
+        return dispositivosDoResponsavel.stream()
+                .map(device -> new DeviceStorageResult(
+                        indexFirstRow.getTokenDispositivo(),
+                        indexSecondRow.getCpfRes().toString()
+                        )
+                ).toList();
     }
 
     @Transactional
-    public DeviceStorageVO createDevice(DeviceStorageCommand deviceStorageCommand) {
+    public DeviceStorageResult createDevice(DeviceStorageCommand deviceStorageCommand) {
         if (deviceStorageCommand.getCpfResponsavel() == null) {
             throw new ServiceException("O CPF do responsável não pode ser nulo.");
         }
@@ -62,10 +66,11 @@ public class DeviceStorageService implements IDeviceStorageService {
         String tokenDispositivo = deviceStorageCommand.getTokenDispositivo();
 
         // Verifique se o token já existe
-        Optional<DeviceStorage> existingDeviceOpt = deviceStorageRepository.findByTokenDispositivo(tokenDispositivo);
+        List<Object[]> existingDeviceOpt = deviceStorageRepository.findByTokenDispositivo(tokenDispositivo);
+        var indexFirstRow = existingDeviceOpt.get(0)[0];
 
-        if (existingDeviceOpt.isPresent()) {
-            DeviceStorage existingDevice = existingDeviceOpt.get();
+        if (indexFirstRow != null) {
+            DeviceStorage existingDevice = (DeviceStorage) indexFirstRow;
 
             // Atualize dataCadastro
             existingDevice.setDataCadastro(new Date());
@@ -79,7 +84,7 @@ public class DeviceStorageService implements IDeviceStorageService {
             log.info("TokenDispositivo já existente. dataCadastro atualizado para: {}", existingDevice.getDataCadastro());
 
             // Mapeie para VO e retorne
-            return mapperUtil.map(existingDevice, DeviceStorageVO.class);
+            return mapperUtil.map(existingDevice, DeviceStorageResult.class);
         }
 
         // Se o token não existir, crie um novo
@@ -89,7 +94,9 @@ public class DeviceStorageService implements IDeviceStorageService {
 
         DeviceStorage savedDevice = deviceStorageRepository.save(deviceStorage);
         log.info("Novo dispositivo registrado com token: {}", savedDevice.getTokenDispositivo());
-
-        return mapperUtil.map(savedDevice, DeviceStorageVO.class);
+        return new DeviceStorageResult(
+                savedDevice.getTokenDispositivo(),
+                savedDevice.getResponsavel().getCpfRes().toString()
+        );
     }
 }
