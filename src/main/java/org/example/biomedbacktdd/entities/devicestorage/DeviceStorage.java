@@ -37,7 +37,7 @@ public class DeviceStorage {
     @Column(name = "data_cadastro")
     private Date dataCadastro;
 
-    public DeviceStorage(){ // EMPTY CONSTRUCTOR
+    public DeviceStorage(){ // Empty Constructor
     }
 
     @PrePersist

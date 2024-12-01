@@ -1,9 +1,11 @@
 package org.example.biomedbacktdd.services;
 
 import org.example.biomedbacktdd.dto.commands.NotificationStorageCommand;
+import org.example.biomedbacktdd.entities.dependent.Dependent;
 import org.example.biomedbacktdd.entities.notification.NotificationStorage;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.ServiceException;
+import org.example.biomedbacktdd.repositories.interfaces.dependent.IDependentRepository;
 import org.example.biomedbacktdd.repositories.interfaces.notification.INotificationStorageRepository;
 import org.example.biomedbacktdd.repositories.interfaces.responsible.IResponsibleRepository;
 import org.example.biomedbacktdd.services.interfaces.notification.INotificationStorageService;
@@ -19,12 +21,14 @@ public class NotificationStorageService implements INotificationStorageService {
 
     private final INotificationStorageRepository notificationStorageRepository;
     private final IResponsibleRepository responsibleRepository;
+    private final IDependentRepository dependentRepository;
 
     @Autowired
     public NotificationStorageService(INotificationStorageRepository notificationStorageRepository,
-                                      IResponsibleRepository responsibleRepository) {
+                                      IResponsibleRepository responsibleRepository, IDependentRepository dependentRepository) {
         this.notificationStorageRepository = notificationStorageRepository;
         this.responsibleRepository = responsibleRepository;
+        this.dependentRepository = dependentRepository;
     }
 
     public NotificationStorage storeNotification(NotificationStorageCommand notificationStorageCommand) {
@@ -35,12 +39,15 @@ public class NotificationStorageService implements INotificationStorageService {
         Responsible responsible = responsibleRepository.findResponsibleByCpf(notificationStorageCommand.getCpfResponsavel())
                 .orElseThrow(() -> new ServiceException("Responsável não encontrado com CPF: " + notificationStorageCommand.getCpfResponsavel()));
 
+        Dependent dependent = dependentRepository.findById(notificationStorageCommand.getCpfDependente())
+                .orElseThrow(() -> new ServiceException("Dependente não encontrado com CPF: " + notificationStorageCommand.getCpfDependente()));
+
         NotificationStorage notification = new NotificationStorage();
         notification.setTitulo(notificationStorageCommand.getTitulo());
         notification.setMensagem(notificationStorageCommand.getMensagem());
         notification.setDataEnvio(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
         notification.setLida(false);
-        notification.setCpfDependente(notificationStorageCommand.getCpfDependente());
+        notification.setCpfDependente(dependent.getCpfDep());
         notification.setResponsavel(responsible);
 
         // Salvar a notificação
