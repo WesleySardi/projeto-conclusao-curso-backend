@@ -1,8 +1,8 @@
 package org.example.biomedbacktdd.controller.devicestorage;
 
-import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
 import org.example.biomedbacktdd.controllers.devicestorage.DeviceStorageController;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
+import org.example.biomedbacktdd.dto.results.DeviceStorageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.devicestorage.DeviceStorageHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,16 +37,16 @@ class DeviceStorageControllerTest {
     void testFindDispositivosByCpfDep_Success() {
         String cpfDep = "12345678900";
 
-        StatusResponseViewModel<List<DeviceStorageVO>> successResponse = new StatusResponseViewModel<>();
+        StatusResponseViewModel<List<DeviceStorageResult>> successResponse = new StatusResponseViewModel<>();
         successResponse.setStatus(200);
         successResponse.setStatusMessage("Operation completed successfully.");
 
         when(handler.handleFindDispositivosByCpfDep(cpfDep))
                 .thenReturn(ResponseEntity.ok(successResponse));
 
-        ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> response = controller.findDispositivosByCpfDep(cpfDep);
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfDep(cpfDep);
 
-        StatusResponseViewModel<List<DeviceStorageVO>> responseBody = response.getBody();
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
 
         assertNotNull(response);
         assert responseBody != null;
@@ -66,9 +66,9 @@ class DeviceStorageControllerTest {
         when(handler.handleFindDispositivosByCpfDep(cpfDep))
                 .thenReturn(ResponseEntity.noContent().build());
 
-        ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> response = controller.findDispositivosByCpfDep(cpfDep);
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfDep(cpfDep);
 
-        StatusResponseViewModel<List<DeviceStorageVO>> responseBody = response.getBody();
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
         assertNotNull(response);
 
         if (responseBody != null) {
@@ -87,9 +87,9 @@ class DeviceStorageControllerTest {
         when(handler.handleFindDispositivosByCpfDep(cpfDep))
                 .thenReturn(ResponseEntity.notFound().build());
 
-        ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> response = controller.findDispositivosByCpfDep(cpfDep);
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfDep(cpfDep);
 
-        StatusResponseViewModel<List<DeviceStorageVO>> responseBody = response.getBody();
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
 
         assertNotNull(response);
         if (responseBody != null) {
@@ -105,16 +105,16 @@ class DeviceStorageControllerTest {
     void testCreateDevice_Success() {
         DeviceStorageCommand command = new DeviceStorageCommand();
 
-        StatusResponseViewModel<DeviceStorageVO> successResponse = new StatusResponseViewModel<>();
+        StatusResponseViewModel<DeviceStorageResult> successResponse = new StatusResponseViewModel<>();
         successResponse.setStatus(200);
         successResponse.setStatusMessage("Device created successfully.");
 
         when(handler.handleCreate(any(DeviceStorageCommand.class)))
                 .thenReturn(ResponseEntity.ok(successResponse));
 
-        ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> response = controller.create(command);
+        ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> response = controller.create(command);
 
-        StatusResponseViewModel<DeviceStorageVO> responseBody = response.getBody();
+        StatusResponseViewModel<DeviceStorageResult> responseBody = response.getBody();
         assertNotNull(response);
         assert responseBody != null;
         assertEquals(200, responseBody.getStatus());
@@ -133,9 +133,9 @@ class DeviceStorageControllerTest {
         when(handler.handleCreate(any(DeviceStorageCommand.class)))
                 .thenReturn(ResponseEntity.badRequest().build());
 
-        ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> response = controller.create(command);
+        ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> response = controller.create(command);
 
-        StatusResponseViewModel<DeviceStorageVO> responseBody = response.getBody();
+        StatusResponseViewModel<DeviceStorageResult> responseBody = response.getBody();
         assertNotNull(response);
         if (responseBody != null) {
             assertEquals(400, responseBody.getStatus());
@@ -153,9 +153,9 @@ class DeviceStorageControllerTest {
         when(handler.handleCreate(any(DeviceStorageCommand.class)))
                 .thenReturn(ResponseEntity.status(500).build());
 
-        ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> response = controller.create(command);
+        ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> response = controller.create(command);
 
-        StatusResponseViewModel<DeviceStorageVO> responseBody = response.getBody();
+        StatusResponseViewModel<DeviceStorageResult> responseBody = response.getBody();
         assertNotNull(response);
         if (responseBody != null) {
             assertEquals(500, responseBody.getStatus());
