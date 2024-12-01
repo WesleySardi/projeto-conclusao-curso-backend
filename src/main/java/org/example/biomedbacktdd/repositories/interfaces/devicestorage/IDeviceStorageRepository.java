@@ -7,21 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface IDeviceStorageRepository extends JpaRepository<DeviceStorage, Integer> {
 
-    @Query("SELECT d FROM DeviceStorage d " +
+    @Query("SELECT d,r FROM DeviceStorage d " +
             "JOIN d.responsavel r " +
             "JOIN Dependent dep ON dep.cpfResDep = r.cpfRes " +
             "WHERE dep.cpfDep = :cpfDep")
-    List<DeviceStorage> findTokenDispositivosByCpfDep(String cpfDep);
+    List<Object[]> findTokenDispositivosByCpfDep(String cpfDep);
 
     List<DeviceStorage> findByResponsavel(Responsible responsavel);
 
-    // Adicione este método se ainda não existir
-    Optional<DeviceStorage> findByTokenDispositivo(String tokenDispositivo);
+    @Query("SELECT ds, r FROM Responsible r INNER JOIN DeviceStorage ds ON r.cpfRes = ds.responsavel.cpfRes WHERE ds.tokenDispositivo = :tokenDispositivo")
+    List<Object[]> findByTokenDispositivo(String tokenDispositivo);
 
 }
 

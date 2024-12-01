@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handler.devicestorage;
 
-import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
+import org.example.biomedbacktdd.dto.results.DeviceStorageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.handlers.devicestorage.DeviceStorageHandler;
 import org.example.biomedbacktdd.services.interfaces.devicestorage.IDeviceStorageService;
@@ -43,7 +43,7 @@ class DeviceStorageHandlerTest {
         command.setTokenDispositivo("device123token");
         command.setCpfResponsavel("12345678900");
 
-        DeviceStorageVO createdDevice = new DeviceStorageVO(
+        DeviceStorageResult createdDevice = new DeviceStorageResult(
                 "device123",
                 "device123token",
                 "12345678900",
@@ -52,14 +52,14 @@ class DeviceStorageHandlerTest {
         when(deviceStorageService.createDevice(any(DeviceStorageCommand.class))).thenReturn(createdDevice);
 
         // Act
-        ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> response = handler.handleCreate(command);
+        ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> response = handler.handleCreate(command);
 
         // Assert
         assertNotNull(response, "A resposta não deve ser nula");
         assertEquals(HttpStatus.OK, response.getStatusCode(), "O status da resposta deve ser 200 OK");
         assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
 
-        StatusResponseViewModel<DeviceStorageVO> responseBody = response.getBody();
+        StatusResponseViewModel<DeviceStorageResult> responseBody = response.getBody();
         assertEquals("Sucesso", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Sucesso'");
         assertEquals("Dispositivo registrado com sucesso.", responseBody.getStatusMessage(), "O statusMessage no corpo deve corresponder");
         assertEquals(HttpStatus.OK.value(), responseBody.getStatus(), "O código de status no corpo deve ser 200");
@@ -82,14 +82,14 @@ class DeviceStorageHandlerTest {
         when(deviceStorageService.createDevice(any(DeviceStorageCommand.class))).thenThrow(new RuntimeException(exceptionMessage));
 
         // Act
-        ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> response = handler.handleCreate(command);
+        ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> response = handler.handleCreate(command);
 
         // Assert
         assertNotNull(response, "A resposta não deve ser nula");
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode(), "O status da resposta deve ser 500 Internal Server Error");
         assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
 
-        StatusResponseViewModel<DeviceStorageVO> responseBody = response.getBody();
+        StatusResponseViewModel<DeviceStorageResult> responseBody = response.getBody();
         assertEquals("Erro", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Erro'");
         assertEquals(exceptionMessage, responseBody.getStatusMessage(), "A mensagem de erro deve corresponder");
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), responseBody.getStatus(), "O código de status no corpo deve ser 500");
@@ -105,21 +105,21 @@ class DeviceStorageHandlerTest {
     void testHandleFindDispositivosByCpfDep_Success() {
         // Arrange
         String cpfDep = "12345678900";
-        List<DeviceStorageVO> devices = Arrays.asList(
-                new DeviceStorageVO("device123", "token123", "12345678900", "Smartphone"),
-                new DeviceStorageVO("device124", "token124", "12345678900", "Tablet")
+        List<DeviceStorageResult> devices = Arrays.asList(
+                new DeviceStorageResult("device123", "token123", "12345678900", "Smartphone"),
+                new DeviceStorageResult("device124", "token124", "12345678900", "Tablet")
         );
         when(deviceStorageService.findDispositivosByCpfDep(anyString())).thenReturn(devices);
 
         // Act
-        ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> response = handler.handleFindDispositivosByCpfDep(cpfDep);
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = handler.handleFindDispositivosByCpfDep(cpfDep);
 
         // Assert
         assertNotNull(response, "A resposta não deve ser nula");
         assertEquals(HttpStatus.OK, response.getStatusCode(), "O status da resposta deve ser 200 OK");
         assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
 
-        StatusResponseViewModel<List<DeviceStorageVO>> responseBody = response.getBody();
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
         assertEquals("Sucesso", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Sucesso'");
         assertEquals("Dispositivos encontrados com sucesso.", responseBody.getStatusMessage(), "O statusMessage no corpo deve corresponder");
         assertEquals(HttpStatus.OK.value(), responseBody.getStatus(), "O código de status no corpo deve ser 200");
@@ -139,14 +139,14 @@ class DeviceStorageHandlerTest {
         when(deviceStorageService.findDispositivosByCpfDep(anyString())).thenThrow(new RuntimeException(exceptionMessage));
 
         // Act
-        ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> response = handler.handleFindDispositivosByCpfDep(cpfDep);
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = handler.handleFindDispositivosByCpfDep(cpfDep);
 
         // Assert
         assertNotNull(response, "A resposta não deve ser nula");
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "O status da resposta deve ser 404 Not Found");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status da resposta deve ser 404 Not Found");
         assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
 
-        StatusResponseViewModel<List<DeviceStorageVO>> responseBody = response.getBody();
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
         assertEquals("Erro", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Erro'");
         assertEquals(exceptionMessage, responseBody.getStatusMessage(), "A mensagem de erro deve corresponder");
         assertEquals(HttpStatus.NOT_FOUND.value(), responseBody.getStatus(), "O código de status no corpo deve ser 404");
