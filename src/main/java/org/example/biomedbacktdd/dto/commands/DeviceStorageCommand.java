@@ -24,7 +24,6 @@ public class DeviceStorageCommand implements Serializable {
     @JsonProperty("cpfResponsavel")
     private String cpfResponsavel;
 
-
     public DeviceStorageCommand() { // Empty Constructor
     }
 

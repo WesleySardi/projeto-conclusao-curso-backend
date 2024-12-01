@@ -38,7 +38,6 @@ public class DeviceStorage {
     private Date dataCadastro;
 
     public DeviceStorage(){ // Empty Constructor
-
     }
 
     @PrePersist
