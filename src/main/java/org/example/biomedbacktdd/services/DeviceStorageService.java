@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
+import org.example.biomedbacktdd.vo.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
 import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.responsible.Responsible;

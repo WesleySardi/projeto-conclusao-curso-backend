@@ -43,6 +43,10 @@ public class NewEmailCommand extends RepresentationModel<NewEmailCommand> implem
         this.cpfDep = cpfDep;
     }
 
+    public NewEmailCommand() { // Empty Constructor
+
+    }
+
     // Getters e Setters
     public int getKey() {
         return key;

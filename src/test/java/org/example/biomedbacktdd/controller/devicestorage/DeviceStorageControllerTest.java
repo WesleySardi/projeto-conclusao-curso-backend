@@ -1,6 +1,6 @@
 package org.example.biomedbacktdd.controller.devicestorage;
 
-import org.example.biomedbacktdd.VO.auth.DeviceStorageVO;
+import org.example.biomedbacktdd.vo.DeviceStorageVO;
 import org.example.biomedbacktdd.controllers.devicestorage.DeviceStorageController;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;

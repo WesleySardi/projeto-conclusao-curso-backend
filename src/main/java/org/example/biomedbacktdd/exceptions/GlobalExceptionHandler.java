@@ -2,16 +2,18 @@ package org.example.biomedbacktdd.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    Logger logger;
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<String> handleResourceNotFound(ResourceNotFoundException ex) {
@@ -25,11 +27,11 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error -> {
             String field = error.getField();
             String message = error.getDefaultMessage();
-            System.out.println("Erro no campo: " + field + " - Mensagem: " + message); // Log detalhado
+            logger.info("Erro no campo: " + field + " - Mensagem: " + message); // Log detalhado
             errors.put(field, message);
         });
 
-        System.out.println("Resumo dos erros: " + errors); // Log adicional
+        logger.info("Resumo dos erros: " + errors); // Log adicional
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 

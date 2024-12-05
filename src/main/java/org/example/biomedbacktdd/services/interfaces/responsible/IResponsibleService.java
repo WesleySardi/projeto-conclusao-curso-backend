@@ -13,4 +13,5 @@ public interface IResponsibleService {
     NewResponsibleResult create(NewResponsibleCommand responsible);
     NewResponsibleResult update(NewResponsibleCommand responsible);
     NewResponsibleViewModel findByEmail(String email);
+    NewResponsibleViewModel findByTelefone(String telefone);
 }

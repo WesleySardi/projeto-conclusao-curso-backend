@@ -39,7 +39,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<EncryptedMessageResult> body = response.getBody();
         assertNotNull(body);
         assertEquals("Sucesso", body.getInfoMessage());
         assertEquals("Mensagem codificada com sucesso.", body.getStatusMessage());
@@ -55,7 +55,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<EncryptedMessageResult> body = response.getBody();
 
         assertNotNull(body);
         assertEquals("Erro", body.getInfoMessage());
@@ -72,7 +72,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<EncryptedMessageResult>> response = encodingHandler.handleEncryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<EncryptedMessageResult> body = response.getBody();
         assertNotNull(body);
         assertEquals("Um erro inesperado aconteceu.", body.getInfoMessage());
         assertEquals("Unexpected error", body.getStatusMessage());
@@ -90,7 +90,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<DecryptedMessageResult> body = response.getBody();
         assertNotNull(body);
         assertEquals("Sucesso", body.getInfoMessage());
         assertEquals("Mensagem decodificada com sucesso.", body.getStatusMessage());
@@ -106,7 +106,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<DecryptedMessageResult> body = response.getBody();
         assertNotNull(body);
         assertEquals("Erro", body.getInfoMessage());
         assertEquals("Erro ao decodificar a mensagem.", body.getStatusMessage());
@@ -122,7 +122,7 @@ class EncodingHandlerTest {
 
         ResponseEntity<StatusResponseViewModel<DecryptedMessageResult>> response = encodingHandler.handleDecryptUrl(url);
 
-        StatusResponseViewModel body = response.getBody();
+        StatusResponseViewModel<DecryptedMessageResult> body = response.getBody();
         assertNotNull(body);
         assertEquals("Um erro inesperado aconteceu.", body.getInfoMessage());
         assertEquals("Unexpected error", body.getStatusMessage());
