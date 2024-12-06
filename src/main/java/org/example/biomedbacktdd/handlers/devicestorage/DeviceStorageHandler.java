@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.handlers.devicestorage;
 
-import org.example.biomedbacktdd.vo.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
+import org.example.biomedbacktdd.dto.results.DeviceStorageResult;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
 import org.example.biomedbacktdd.exceptions.ServiceException;
 import org.example.biomedbacktdd.services.interfaces.devicestorage.IDeviceStorageService;
@@ -20,10 +20,10 @@ public class DeviceStorageHandler {
         this.deviceStorageService = deviceStorageService;
     }
 
-    public ResponseEntity<StatusResponseViewModel<DeviceStorageVO>> handleCreate(DeviceStorageCommand deviceStorageCommand) {
+    public ResponseEntity<StatusResponseViewModel<DeviceStorageResult>> handleCreate(DeviceStorageCommand deviceStorageCommand) {
         try {
-            DeviceStorageVO createdDevice = deviceStorageService.createDevice(deviceStorageCommand);
-            StatusResponseViewModel<DeviceStorageVO> response = new StatusResponseViewModel<>(
+            DeviceStorageResult createdDevice = deviceStorageService.createDevice(deviceStorageCommand);
+            StatusResponseViewModel<DeviceStorageResult> response = new StatusResponseViewModel<>(
                     createdDevice,
                     "Sucesso",
                     "Dispositivo registrado com sucesso.",
@@ -32,7 +32,7 @@ public class DeviceStorageHandler {
             );
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (ServiceException se) {
-            StatusResponseViewModel<DeviceStorageVO> errorResponse = new StatusResponseViewModel<>(
+            StatusResponseViewModel<DeviceStorageResult> errorResponse = new StatusResponseViewModel<>(
                     null,
                     "Erro",
                     se.getMessage(),
@@ -41,7 +41,7 @@ public class DeviceStorageHandler {
             );
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
         } catch (Exception e) {
-            StatusResponseViewModel<DeviceStorageVO> errorResponse = new StatusResponseViewModel<>(
+            StatusResponseViewModel<DeviceStorageResult> errorResponse = new StatusResponseViewModel<>(
                     null,
                     "Erro",
                     "Erro interno do servidor.",
@@ -52,10 +52,10 @@ public class DeviceStorageHandler {
         }
     }
 
-    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageVO>>> handleFindDispositivosByCpfDep(String cpfDep) {
+    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> handleFindDispositivosByCpfDep(String cpfDep) {
         try {
-            List<DeviceStorageVO> devices = deviceStorageService.findDispositivosByCpfDep(cpfDep);
-            StatusResponseViewModel<List<DeviceStorageVO>> response = new StatusResponseViewModel<>(
+            List<DeviceStorageResult> devices = deviceStorageService.findDispositivosByCpfDep(cpfDep);
+            StatusResponseViewModel<List<DeviceStorageResult>> response = new StatusResponseViewModel<>(
                     devices,
                     "Sucesso",
                     "Dispositivos encontrados com sucesso.",
@@ -64,14 +64,14 @@ public class DeviceStorageHandler {
             );
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            StatusResponseViewModel<List<DeviceStorageVO>> errorResponse = new StatusResponseViewModel<>(
+            StatusResponseViewModel<List<DeviceStorageResult>> errorResponse = new StatusResponseViewModel<>(
                     null,
                     "Erro",
                     e.getMessage(),
                     HttpStatus.NOT_FOUND.value(),
                     false
             );
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
 }

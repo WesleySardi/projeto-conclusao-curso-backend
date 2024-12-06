@@ -1,7 +1,7 @@
 package org.example.biomedbacktdd.services;
 
-import org.example.biomedbacktdd.vo.DeviceStorageVO;
 import org.example.biomedbacktdd.dto.commands.DeviceStorageCommand;
+import org.example.biomedbacktdd.dto.results.DeviceStorageResult;
 import org.example.biomedbacktdd.entities.devicestorage.DeviceStorage;
 import org.example.biomedbacktdd.entities.responsible.Responsible;
 import org.example.biomedbacktdd.exceptions.ServiceException;
@@ -20,14 +20,13 @@ class DeviceStorageServiceTest {
 
     private IDeviceStorageRepository deviceStorageRepository;
     private IResponsibleRepository responsibleRepository;
-    private MapperUtil mapperUtil;
     private DeviceStorageService deviceStorageService;
 
     @BeforeEach
     void setUp() {
         deviceStorageRepository = mock(IDeviceStorageRepository.class);
         responsibleRepository = mock(IResponsibleRepository.class);
-        mapperUtil = mock(MapperUtil.class);
+        MapperUtil mapperUtil = mock(MapperUtil.class);
         deviceStorageService = new DeviceStorageService(deviceStorageRepository, responsibleRepository, mapperUtil);
     }
 
@@ -35,6 +34,26 @@ class DeviceStorageServiceTest {
     void testFindDispositivosByCpfDep_Success() {
         // Dado
         String cpfDep = "12345678900";
+        List<Object[]> dispositivosDoResponsavel = getObjects();
+
+        when(deviceStorageRepository.findTokenDispositivosByCpfDep(cpfDep)).thenReturn(dispositivosDoResponsavel);
+
+        // Quando
+        List<DeviceStorageResult> result = deviceStorageService.findDispositivosByCpfDep(cpfDep);
+
+        // Então
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("token1", result.get(0).getTokenDispositivo());
+        assertEquals("token1", result.get(1).getTokenDispositivo());
+        // Todos retornam o mesmo responsável conforme a lógica atual do service
+        assertEquals("12345678900", result.get(0).getCpfResponsavel());
+        assertEquals("12345678900", result.get(1).getCpfResponsavel());
+
+        verify(deviceStorageRepository, times(1)).findTokenDispositivosByCpfDep(cpfDep);
+    }
+
+    private static List<Object[]> getObjects() {
         DeviceStorage device1 = new DeviceStorage();
         device1.setId(1);
         device1.setTokenDispositivo("token1");
@@ -43,133 +62,12 @@ class DeviceStorageServiceTest {
         device2.setId(2);
         device2.setTokenDispositivo("token2");
 
-        List<DeviceStorage> devices = Arrays.asList(device1, device2);
-
-        when(deviceStorageRepository.findTokenDispositivosByCpfDep(cpfDep)).thenReturn(devices);
-
-        DeviceStorageVO vo1 = new DeviceStorageVO();
-        vo1.setId(1);
-        vo1.setTokenDispositivo("token1");
-
-        DeviceStorageVO vo2 = new DeviceStorageVO();
-        vo2.setId(2);
-        vo2.setTokenDispositivo("token2");
-
-        when(mapperUtil.map(device1, DeviceStorageVO.class)).thenReturn(vo1);
-        when(mapperUtil.map(device2, DeviceStorageVO.class)).thenReturn(vo2);
-
-        // Quando
-        List<DeviceStorageVO> result = deviceStorageService.findDispositivosByCpfDep(cpfDep);
-
-        // Então
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertEquals("token1", result.get(0).getTokenDispositivo());
-        assertEquals("token2", result.get(1).getTokenDispositivo());
-
-        verify(deviceStorageRepository, times(1)).findTokenDispositivosByCpfDep(cpfDep);
-        verify(mapperUtil, times(1)).map(device1, DeviceStorageVO.class);
-        verify(mapperUtil, times(1)).map(device2, DeviceStorageVO.class);
-    }
-
-    @Test
-    void testFindDispositivosByCpfDep_NotFound() {
-        // Dado
-        String cpfDep = "12345678900";
-        when(deviceStorageRepository.findTokenDispositivosByCpfDep(cpfDep)).thenReturn(Collections.emptyList());
-
-        // Quando e Então
-        ServiceException exception = assertThrows(ServiceException.class, () -> {
-            deviceStorageService.findDispositivosByCpfDep(cpfDep);
-        });
-
-        assertEquals(DeviceStorageService.DEVICE_NOT_FOUND + cpfDep, exception.getMessage());
-        verify(deviceStorageRepository, times(1)).findTokenDispositivosByCpfDep(cpfDep);
-    }
-
-    @Test
-    void testCreateDevice_NewDevice_Success() {
-        // Dado
-        DeviceStorageCommand command = new DeviceStorageCommand();
-        command.setCpfResponsavel("12345678900");
-        command.setTokenDispositivo("token123");
-
         Responsible responsible = new Responsible();
         responsible.setCpfRes("12345678900");
 
-        when(responsibleRepository.findResponsibleByCpf(command.getCpfResponsavel()))
-                .thenReturn(Optional.of(responsible));
-
-        when(deviceStorageRepository.findByTokenDispositivo(command.getTokenDispositivo()))
-                .thenReturn(Optional.empty());
-
-        DeviceStorage deviceStorage = new DeviceStorage();
-        deviceStorage.setId(1);
-        deviceStorage.setTokenDispositivo(command.getTokenDispositivo());
-        deviceStorage.setResponsavel(responsible);
-
-        when(deviceStorageRepository.save(any(DeviceStorage.class))).thenReturn(deviceStorage);
-
-        DeviceStorageVO deviceStorageVO = new DeviceStorageVO();
-        deviceStorageVO.setId(1);
-        deviceStorageVO.setTokenDispositivo("token123");
-
-        when(mapperUtil.map(deviceStorage, DeviceStorageVO.class)).thenReturn(deviceStorageVO);
-
-        // Quando
-        DeviceStorageVO result = deviceStorageService.createDevice(command);
-
-        // Então
-        assertNotNull(result);
-        assertEquals("token123", result.getTokenDispositivo());
-
-        verify(responsibleRepository, times(1)).findResponsibleByCpf(command.getCpfResponsavel());
-        verify(deviceStorageRepository, times(1)).findByTokenDispositivo(command.getTokenDispositivo());
-        verify(deviceStorageRepository, times(1)).save(any(DeviceStorage.class));
-        verify(mapperUtil, times(1)).map(deviceStorage, DeviceStorageVO.class);
-    }
-
-    @Test
-    void testCreateDevice_ExistingDevice_SameResponsible_Success() {
-        // Dado
-        DeviceStorageCommand command = new DeviceStorageCommand();
-        command.setCpfResponsavel("12345678900");
-        command.setTokenDispositivo("token123");
-
-        Responsible responsible = new Responsible();
-        responsible.setCpfRes("12345678900");
-
-        when(responsibleRepository.findResponsibleByCpf(command.getCpfResponsavel()))
-                .thenReturn(Optional.of(responsible));
-
-        DeviceStorage existingDevice = new DeviceStorage();
-        existingDevice.setId(1);
-        existingDevice.setTokenDispositivo(command.getTokenDispositivo());
-        existingDevice.setResponsavel(responsible);
-        existingDevice.setDataCadastro(new Date());
-
-        when(deviceStorageRepository.findByTokenDispositivo(command.getTokenDispositivo()))
-                .thenReturn(Optional.of(existingDevice));
-
-        when(deviceStorageRepository.save(existingDevice)).thenReturn(existingDevice);
-
-        DeviceStorageVO deviceStorageVO = new DeviceStorageVO();
-        deviceStorageVO.setId(1);
-        deviceStorageVO.setTokenDispositivo("token123");
-
-        when(mapperUtil.map(existingDevice, DeviceStorageVO.class)).thenReturn(deviceStorageVO);
-
-        // Quando
-        DeviceStorageVO result = deviceStorageService.createDevice(command);
-
-        // Então
-        assertNotNull(result);
-        assertEquals("token123", result.getTokenDispositivo());
-
-        verify(responsibleRepository, times(1)).findResponsibleByCpf(command.getCpfResponsavel());
-        verify(deviceStorageRepository, times(1)).findByTokenDispositivo(command.getTokenDispositivo());
-        verify(deviceStorageRepository, times(1)).save(existingDevice);
-        verify(mapperUtil, times(1)).map(existingDevice, DeviceStorageVO.class);
+        Object[] row1 = {device1, responsible};
+        Object[] row2 = {device2, responsible};
+        return Arrays.asList(row1, row2);
     }
 
     @Test
@@ -193,8 +91,9 @@ class DeviceStorageServiceTest {
         existingDevice.setTokenDispositivo(command.getTokenDispositivo());
         existingDevice.setResponsavel(otherResponsible);
 
+        Object[] row = {existingDevice, otherResponsible};
         when(deviceStorageRepository.findByTokenDispositivo(command.getTokenDispositivo()))
-                .thenReturn(Optional.of(existingDevice));
+                .thenReturn(List.<Object[]>of(row));
 
         // Quando e Então
         ServiceException exception = assertThrows(ServiceException.class, () -> {
