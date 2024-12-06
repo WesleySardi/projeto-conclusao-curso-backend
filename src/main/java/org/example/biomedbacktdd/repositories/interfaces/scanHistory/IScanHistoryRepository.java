@@ -1,6 +1,6 @@
 package org.example.biomedbacktdd.repositories.interfaces.scanHistory;
 
-import org.example.biomedbacktdd.entities.scanHistory.ScanHistory;
+import org.example.biomedbacktdd.entities.scanhistory.ScanHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

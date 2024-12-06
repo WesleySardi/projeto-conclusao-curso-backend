@@ -4,7 +4,7 @@ import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.springframework.beans.factory.annotation.Value;
 
-import static org.example.biomedbacktdd.sms.codeGenerator.CodeGenerator.gerarCodigoSMS;
+import static org.example.biomedbacktdd.sms.codegenerator.CodeGenerator.gerarCodigoSMS;
 
 public class MessageSms {
     @Value("${twillio.account.sid:default}")

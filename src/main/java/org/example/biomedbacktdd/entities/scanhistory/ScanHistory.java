@@ -1,9 +1,10 @@
-package org.example.biomedbacktdd.entities.scanHistory;
+package org.example.biomedbacktdd.entities.scanhistory;
 
 import jakarta.persistence.*;
 
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "scanhistory")
@@ -97,5 +98,18 @@ public class ScanHistory {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScanHistory that = (ScanHistory) o;
+        return Objects.equals(scanId, that.scanId) && Objects.equals(scanName, that.scanName) && Objects.equals(scanEmail, that.scanEmail) && Objects.equals(scanPhone, that.scanPhone) && Objects.equals(depCpf, that.depCpf) && Objects.equals(scanDateTime, that.scanDateTime) && Objects.equals(latitude, that.latitude) && Objects.equals(longitude, that.longitude);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scanId, scanName, scanEmail, scanPhone, depCpf, scanDateTime, latitude, longitude);
     }
 }

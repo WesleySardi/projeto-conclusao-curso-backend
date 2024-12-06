@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class EncodingControllerTest {
+class EncodingControllerTest {
 
     @Mock
     private EncodingHandler encodingHandler;
@@ -32,7 +32,7 @@ public class EncodingControllerTest {
     }
 
     @Test
-    public void testEncryptUrl() {
+    void testEncryptUrl() {
         EncryptMessageCommand encryptMessageCommand = new EncryptMessageCommand("testUrl");
 
         StatusResponseViewModel statusResponse = new StatusResponseViewModel(
@@ -59,7 +59,7 @@ public class EncodingControllerTest {
     }
 
     @Test
-    public void testDecryptUrl() {
+    void testDecryptUrl() {
         DecryptMessageCommand decryptMessageCommand = new DecryptMessageCommand("testUrl");
 
         StatusResponseViewModel statusResponse = new StatusResponseViewModel(

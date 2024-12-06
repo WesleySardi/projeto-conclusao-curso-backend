@@ -176,7 +176,7 @@ public class EmailService implements IEmailService {
         return response;
     }
 
-    private void sendEmailWithSendGrid(String toEmail, String content) {
+   void sendEmailWithSendGrid(String toEmail, String content) {
         Email from = new Email("wesleysardi.random@gmail.com");
         String subject = "Seu código de verificação!";
         Email to = new Email(toEmail);

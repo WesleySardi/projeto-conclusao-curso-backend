@@ -18,6 +18,8 @@ public class ResponsibleHandler {
     private static final String SUCESSO = "Sucesso";
     private static final String ERRO = "Erro";
     private static final String UNKNOWN_ERROR = "Um erro inesperado aconteceu.";
+    private static final String RESPONSIBLE_FOUND_SUCCESS = "Responsavel encontrado com sucesso.";
+    private static final String RESPONSIBLE_NOT_FOUND = "Erro ao encontrar o responsavel.";
 
     private final IResponsibleService responsibleService;
 
@@ -36,7 +38,7 @@ public class ResponsibleHandler {
                 errorResponse = new StatusResponseViewModel(response, SUCESSO, "Responsáveis encontrados com sucesso.", HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar os responsávei.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar os responsáveis.", HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
@@ -52,10 +54,10 @@ public class ResponsibleHandler {
             var response = responsibleService.findById(id);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Responsavel encontrado com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, RESPONSIBLE_FOUND_SUCCESS, HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, RESPONSIBLE_NOT_FOUND, HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
@@ -109,14 +111,33 @@ public class ResponsibleHandler {
             var response = responsibleService.findByEmail(id);
 
             if (response != null) {
-                errorResponse = new StatusResponseViewModel(response, SUCESSO, "Responsavel encontrado com sucesso.", HttpStatus.OK.value(), true);
+                errorResponse = new StatusResponseViewModel(response, SUCESSO, RESPONSIBLE_FOUND_SUCCESS, HttpStatus.OK.value(), true);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             } else {
-                errorResponse = new StatusResponseViewModel(null, ERRO, "Erro ao encontrar o responsavel.", HttpStatus.BAD_REQUEST.value(), false);
+                errorResponse = new StatusResponseViewModel(null, ERRO, RESPONSIBLE_NOT_FOUND, HttpStatus.BAD_REQUEST.value(), false);
                 return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
             }
         } catch (Exception e) {
             errorResponse = new StatusResponseViewModel(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        }
+    }
+
+    public ResponseEntity<StatusResponseViewModel<NewResponsibleViewModel>> handleFindByTelefone(String telefone) {
+        StatusResponseViewModel<NewResponsibleViewModel> errorResponse;
+
+        try {
+            var response = responsibleService.findByTelefone(telefone);
+
+            if (response != null) {
+                errorResponse = new StatusResponseViewModel<>(response, SUCESSO, RESPONSIBLE_FOUND_SUCCESS, HttpStatus.OK.value(), true);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            } else {
+                errorResponse = new StatusResponseViewModel<>(null, ERRO, RESPONSIBLE_NOT_FOUND, HttpStatus.BAD_REQUEST.value(), false);
+                return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+            }
+        } catch (Exception e) {
+            errorResponse = new StatusResponseViewModel<>(null, UNKNOWN_ERROR, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), false);
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }

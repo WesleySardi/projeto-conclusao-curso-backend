@@ -152,4 +152,22 @@ public class ResponsibleService implements IResponsibleService {
 
         return response;
     }
+
+    public NewResponsibleViewModel findByTelefone(String telefone){
+        NewResponsibleViewModel response = null;
+
+        try{
+            logger.info("Finding Responsible by Telefone!");
+
+            Responsible result = repository.findResponsibleByTelefone(telefone)
+                    .orElseThrow(() -> new ResourceNotFoundException("No records found for this e-mail!"));
+
+            response = DozerMapper.parseObject(result, NewResponsibleViewModel.class);
+
+        } catch (Exception e){
+            return null;
+        }
+
+        return response;
+    }
 }
