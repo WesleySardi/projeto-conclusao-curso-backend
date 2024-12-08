@@ -3,14 +3,17 @@ package org.example.biomedbacktdd.sms;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import static org.example.biomedbacktdd.sms.codegenerator.CodeGenerator.gerarCodigoSMS;
 
+@Service
 public class MessageSms {
-    @Value("${twillio.account.sid:default}")
-    private static final String ACCOUNT_SID = "";
-    @Value("${twillio.account.authtoken:default}")
-    private static final String AUTH_TOKEN = "";
+    @Value("${twillio.account.sid}")
+    private String ACCOUNT_SID;
+
+    @Value("${twillio.account.authtoken}")
+    private String AUTH_TOKEN;
 
     private Integer codigoSMS;
 

@@ -34,6 +34,9 @@ public class SmsHandlerService implements ISmsHandlerService {
     private final PagedResourcesAssembler<NewSmsViewModel> assembler;
 
     @Autowired
+    private MessageSms smsMessage;
+
+    @Autowired
     public SmsHandlerService(ISmsHandlerRepository repository,
                              PagedResourcesAssembler<NewSmsViewModel> assembler) {
         this.repository = repository;
@@ -87,7 +90,6 @@ public class SmsHandlerService implements ISmsHandlerService {
 
             logger.info("Creating a SMS!");
 
-            MessageSms smsMessage = new MessageSms();
             smsMessage.setCodigoSMS();
 
             sms.setKey(smsMessage.getCodigoSMS());
