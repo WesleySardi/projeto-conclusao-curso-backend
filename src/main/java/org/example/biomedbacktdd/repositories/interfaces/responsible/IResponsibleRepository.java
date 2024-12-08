@@ -15,4 +15,7 @@ public interface IResponsibleRepository extends JpaRepository<Responsible, Strin
 
     @Query("SELECT r FROM Responsible r WHERE r.cpfRes = :cpfRes")
     Optional<Responsible> findResponsibleByCpf(@Param("cpfRes") String cpfRes);
+
+    @Query("SELECT r FROM Responsible r WHERE r.contato1Res = :telefone")
+    Optional<Responsible> findResponsibleByTelefone(@Param("telefone") String telefone);
 }

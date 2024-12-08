@@ -1,4 +1,4 @@
-package org.example.biomedbacktdd.VO.auth;
+package org.example.biomedbacktdd.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,6 +38,11 @@ public class DeviceStorageVO extends RepresentationModel<DeviceStorageVO> implem
     }
 
     public DeviceStorageVO(String device124, String token124, String number, String tablet) { // EMPTY CONSTRUCTOR
+    }
+
+
+    public DeviceStorageVO() { // Empty Constructor
+
     }
 
     public static DeviceStorageVO of(Integer id, String tokenDispositivo, Date dataCadastro) {

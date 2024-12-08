@@ -165,6 +165,17 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>org/example/biomedbacktdd/config/**</exclude>
+                        <exclude>org/example/biomedbacktdd/s3/**</exclude>
+                        <exclude>org/example/biomedbacktdd/security/**</exclude>
+                        <exclude>org/example/biomedbacktdd/services/interfaces/**</exclude>
+                        <exclude>org/example/biomedbacktdd/VO/**</exclude>
+                        <exclude>org/example/biomedbacktdd/repositories/**</exclude>
+                        <exclude>org/example/biomedbacktdd/util/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -177,12 +188,6 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <includes>
-                                <include>org/example/biomedbacktdd/controllers/**</include>
-                                <include>org/example/biomedbacktdd/handlers/**</include>
-                            </includes>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

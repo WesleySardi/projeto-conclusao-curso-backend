@@ -3,7 +3,7 @@ package org.example.biomedbacktdd.handler.scanHistory;
 import org.example.biomedbacktdd.dto.commands.ScanHistoryCommand;
 import org.example.biomedbacktdd.dto.viewmodels.ScanHistoryViewModel;
 import org.example.biomedbacktdd.dto.viewmodels.StatusResponseViewModel;
-import org.example.biomedbacktdd.entities.scanHistory.ScanHistory;
+import org.example.biomedbacktdd.entities.scanhistory.ScanHistory;
 import org.example.biomedbacktdd.handlers.scanHistory.ScanHistoryHandler;
 import org.example.biomedbacktdd.repositories.interfaces.scanHistory.IScanHistoryRepository;
 import org.junit.jupiter.api.BeforeEach;

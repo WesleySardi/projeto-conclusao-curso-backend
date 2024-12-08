@@ -15,7 +15,4 @@ public class RequiredObjectIsNullException extends RuntimeException {
         super("It is not allowed to persist a null object!");
     }
 
-    public RequiredObjectIsNullException(String ex) {
-        super(ex);
-    }
 }
