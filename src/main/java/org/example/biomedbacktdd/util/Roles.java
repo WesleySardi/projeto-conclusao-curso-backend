@@ -3,7 +3,8 @@ package org.example.biomedbacktdd.util;
 public enum Roles {
     ADMIN("ADMIN"),
     CUIDADOR("CUIDADOR"),
-    RESPONSAVEL("RESPONSAVEL");
+    RESPONSAVEL("RESPONSAVEL"),
+    TEMPUSER("TEMPUSER");
 
     private final String role;
 
