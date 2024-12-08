@@ -17,7 +17,7 @@ Este é o back-end da aplicação **ZloTrackband**, responsável por gerenciar a
 ### Principais Funcionalidades:
 
 - **Autenticação JWT**: Proteção das rotas com base em papéis (Roles) definidos.
-- **Gerenciamento de Dependentes**: CRUD completo para dependentes e responsáveis.
+- **Gerenciamento de Dependentes e Responsáveis**: CRUD completo para dependentes e responsáveis.
 - **Notificações**: Envio e recebimento de notificações via e-mail e SMS.
 - **Histórico de Localizações**: Registro e consulta das localizações dos dependentes.
 - **Interação com Dispositivos**: Integração com NFC e dispositivos externos para interação com as pulseiras.
