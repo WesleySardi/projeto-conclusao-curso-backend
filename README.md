@@ -37,7 +37,7 @@ O back-end do **ZloTrackband** foi desenvolvido utilizando **Spring Boot**. Ele 
 ### Estrutura do Projeto
 
 ```bash
-biomed-backend/
+zlotrackbandbackend/
 ├── src/
 │   ├── main/
 │   │   ├── java/
@@ -145,5 +145,6 @@ Este back-end foi projetado para oferecer segurança, escalabilidade e organiza�
 ### Desenvolvedores
 
 - Wesley Erik Sardi
+- Davi Prudente Ferreira
 
 ### Contribuições são bem-vindas! Para contribuir, abra uma issue ou envie um pull request.
