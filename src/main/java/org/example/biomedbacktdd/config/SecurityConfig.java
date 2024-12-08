@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 Paths.RES_MANAGER_PATH.getPath()+"/**").hasAnyRole(Roles.CUIDADOR.getRole(), Roles.ADMIN.getRole())
                         .requestMatchers(
                                 Paths.DEP_COMMONUSER_PATH.getPath()+"/**",
-                                Paths.RES_COMMONUSER_PATH.getPath()+"/**").hasAnyRole(Roles.RESPONSAVEL.getRole(), Roles.CUIDADOR.getRole(), Roles.ADMIN.getRole())
+                                Paths.RES_COMMONUSER_PATH.getPath()+"/**").hasAnyRole(Roles.TEMPUSER.getRole(), Roles.RESPONSAVEL.getRole(), Roles.CUIDADOR.getRole(), Roles.ADMIN.getRole())
                         .requestMatchers(
                                 "/api/responsible/findByTelefone/**",
                                 "/api/url/*",
