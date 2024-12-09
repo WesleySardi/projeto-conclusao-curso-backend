@@ -55,4 +55,20 @@ public class DeviceStorageController {
         return handler.handleCreate(deviceStorageCommand);
     }
 
+    @GetMapping("/responsible/{cpfRes}")
+    @Operation(summary = "Finds devices by responsible CPF",
+            description = "Encontra dispositivos associados ao CPF do responsável",
+            tags = {"Devices"},
+            responses = {
+                    @ApiResponse(description = "Success", responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = StatusResponseViewModel.class))
+                    ),
+                    @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+                    @ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
+            })
+    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> findDispositivosByCpfRes(@PathVariable(value = "cpfRes") String cpfRes) {
+        return handler.handleFindDispositivosByCpfRes(cpfRes);
+    }
+
 }

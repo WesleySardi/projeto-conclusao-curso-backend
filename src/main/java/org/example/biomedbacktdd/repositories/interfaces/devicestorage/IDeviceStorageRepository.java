@@ -21,5 +21,10 @@ public interface IDeviceStorageRepository extends JpaRepository<DeviceStorage, I
     @Query("SELECT ds, r FROM Responsible r INNER JOIN DeviceStorage ds ON r.cpfRes = ds.responsavel.cpfRes WHERE ds.tokenDispositivo = :tokenDispositivo")
     List<Object[]> findByTokenDispositivo(String tokenDispositivo);
 
+    @Query("SELECT d, r FROM DeviceStorage d " +
+            "JOIN d.responsavel r " +
+            "WHERE r.cpfRes = :cpfRes")
+    List<Object[]> findTokenDispositivosByCpfRes(String cpfRes);
+
 }
 

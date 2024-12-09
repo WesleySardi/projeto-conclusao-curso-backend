@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IDeviceStorageService {
     List<DeviceStorageResult> findDispositivosByCpfDep(String cpfDep);
+    List<DeviceStorageResult> findDispositivosByCpfRes(String cpfRes);
     DeviceStorageResult createDevice(DeviceStorageCommand deviceStorageDTO);
 }

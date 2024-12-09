@@ -64,18 +64,35 @@ public class DeviceStorageService implements IDeviceStorageService {
                 .orElseThrow(() -> new ServiceException(RESPONSIBLE_NOT_FOUND + deviceStorageCommand.getCpfResponsavel()));
 
         String tokenDispositivo = deviceStorageCommand.getTokenDispositivo();
-
         // Verifique se o token já existe
-        List<Object[]> existingDeviceOpt = deviceStorageRepository.findByTokenDispositivo(tokenDispositivo);
-        var indexFirstRow = existingDeviceOpt.get(0)[0];
+        List<Object[]> existingDeviceList = deviceStorageRepository.findByTokenDispositivo(tokenDispositivo);
 
-        if (indexFirstRow != null) {
-            DeviceStorage existingDevice = (DeviceStorage) indexFirstRow;
+        // Se não houver nenhum dispositivo com esse token, cria um novo
+        if (existingDeviceList.isEmpty()) {
+            DeviceStorage newDevice = new DeviceStorage();
+            newDevice.setTokenDispositivo(tokenDispositivo);
+            newDevice.setResponsavel(responsible);
 
-            // Atualize dataCadastro
+            DeviceStorage savedDevice = deviceStorageRepository.save(newDevice);
+            log.info("Novo dispositivo registrado com token: {}", savedDevice.getTokenDispositivo());
+
+            return new DeviceStorageResult(
+                    savedDevice.getTokenDispositivo(),
+                    savedDevice.getResponsavel().getCpfRes().toString()
+            );
+        }
+
+        // Caso a lista não esteja vazia, pegue a primeira linha do resultado
+        Object firstRow = existingDeviceList.get(0)[0];
+
+        // Caso exista um dispositivo já associado ao token
+        if (firstRow != null) {
+            DeviceStorage existingDevice = (DeviceStorage) firstRow;
+
+            // Atualize a data de cadastro
             existingDevice.setDataCadastro(new Date());
 
-            // Opcional: Verifique se o responsável é o mesmo
+            // Verifique se o responsável é o mesmo
             if (!existingDevice.getResponsavel().getCpfRes().equals(deviceStorageCommand.getCpfResponsavel())) {
                 throw new ServiceException("Este token já está associado a outro responsável.");
             }
@@ -87,16 +104,42 @@ public class DeviceStorageService implements IDeviceStorageService {
             return mapperUtil.map(existingDevice, DeviceStorageResult.class);
         }
 
-        // Se o token não existir, crie um novo
+        // Se chegar aqui, significa que a consulta retornou uma linha, mas sem dispositivo (indexFirstRow nulo).
+        // Nesse caso, cria-se um novo dispositivo.
         DeviceStorage deviceStorage = new DeviceStorage();
         deviceStorage.setTokenDispositivo(tokenDispositivo);
         deviceStorage.setResponsavel(responsible);
 
         DeviceStorage savedDevice = deviceStorageRepository.save(deviceStorage);
         log.info("Novo dispositivo registrado com token: {}", savedDevice.getTokenDispositivo());
+
         return new DeviceStorageResult(
                 savedDevice.getTokenDispositivo(),
                 savedDevice.getResponsavel().getCpfRes().toString()
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<DeviceStorageResult> findDispositivosByCpfRes(String cpfRes) {
+        log.info("Procurando dispositivos associados ao CPF do responsável: {}", cpfRes);
+
+        List<Object[]> dispositivosDoResponsavel = deviceStorageRepository.findTokenDispositivosByCpfRes(cpfRes);
+
+        if (dispositivosDoResponsavel.isEmpty() || dispositivosDoResponsavel.get(0)[0] == null) {
+            throw new ServiceException(DEVICE_NOT_FOUND + cpfRes);
+        }
+
+        return dispositivosDoResponsavel.stream()
+                .map(row -> {
+                    DeviceStorage device = (DeviceStorage) row[0];
+                    Responsible responsible = (Responsible) row[1];
+                    return new DeviceStorageResult(
+                            device.getTokenDispositivo(),
+                            responsible.getCpfRes().toString()
+                    );
+                })
+                .toList();
+    }
+
+
 }

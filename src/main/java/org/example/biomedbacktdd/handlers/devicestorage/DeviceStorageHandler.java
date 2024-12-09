@@ -15,6 +15,7 @@ import java.util.List;
 public class DeviceStorageHandler {
 
     private final IDeviceStorageService deviceStorageService;
+    private static final String SUCCESS = "Sucesso";
 
     public DeviceStorageHandler(IDeviceStorageService deviceStorageService) {
         this.deviceStorageService = deviceStorageService;
@@ -25,7 +26,7 @@ public class DeviceStorageHandler {
             DeviceStorageResult createdDevice = deviceStorageService.createDevice(deviceStorageCommand);
             StatusResponseViewModel<DeviceStorageResult> response = new StatusResponseViewModel<>(
                     createdDevice,
-                    "Sucesso",
+                    SUCCESS,
                     "Dispositivo registrado com sucesso.",
                     HttpStatus.OK.value(),
                     true
@@ -57,7 +58,7 @@ public class DeviceStorageHandler {
             List<DeviceStorageResult> devices = deviceStorageService.findDispositivosByCpfDep(cpfDep);
             StatusResponseViewModel<List<DeviceStorageResult>> response = new StatusResponseViewModel<>(
                     devices,
-                    "Sucesso",
+                    SUCCESS,
                     "Dispositivos encontrados com sucesso.",
                     HttpStatus.OK.value(),
                     true
@@ -74,4 +75,28 @@ public class DeviceStorageHandler {
             return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
         }
     }
+
+    public ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> handleFindDispositivosByCpfRes(String cpfRes) {
+        try {
+            List<DeviceStorageResult> devices = deviceStorageService.findDispositivosByCpfRes(cpfRes);
+            StatusResponseViewModel<List<DeviceStorageResult>> response = new StatusResponseViewModel<>(
+                    devices,
+                    SUCCESS,
+                    "Dispositivos encontrados com sucesso.",
+                    HttpStatus.OK.value(),
+                    true
+            );
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            StatusResponseViewModel<List<DeviceStorageResult>> errorResponse = new StatusResponseViewModel<>(
+                    null,
+                    "Erro",
+                    e.getMessage(),
+                    HttpStatus.NOT_FOUND.value(),
+                    false
+            );
+            return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        }
+    }
+
 }
