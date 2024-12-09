@@ -156,4 +156,61 @@ class DeviceStorageHandlerTest {
         verify(deviceStorageService, times(1)).findDispositivosByCpfDep(cpfDep);
     }
 
+    @Test
+    @DisplayName("handleFindDispositivosByCpfRes - Sucesso (200)")
+    void testHandleFindDispositivosByCpfRes_Success() {
+        // Arrange
+        String cpfRes = "12345678900";
+        List<DeviceStorageResult> devices = Arrays.asList(
+                new DeviceStorageResult("device123", "token123", "12345678900", "Smartphone"),
+                new DeviceStorageResult("device124", "token124", "12345678900", "Tablet")
+        );
+        when(deviceStorageService.findDispositivosByCpfRes(anyString())).thenReturn(devices);
+
+        // Act
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = handler.handleFindDispositivosByCpfRes(cpfRes);
+
+        // Assert
+        assertNotNull(response, "A resposta não deve ser nula");
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status da resposta deve ser 200 OK");
+        assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
+
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
+        assertEquals("Sucesso", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Sucesso'");
+        assertEquals("Dispositivos encontrados com sucesso.", responseBody.getStatusMessage(), "O statusMessage deve corresponder");
+        assertEquals(HttpStatus.OK.value(), responseBody.getStatus(), "O código de status no corpo deve ser 200");
+        assertTrue(responseBody.getIsOk(), "O campo 'isOk' deve ser verdadeiro");
+        assertEquals(devices, responseBody.getContentResponse(), "Os dados retornados devem corresponder à lista de dispositivos");
+
+        verify(deviceStorageService, times(1)).findDispositivosByCpfRes(cpfRes);
+    }
+
+    @Test
+    @DisplayName("handleFindDispositivosByCpfRes - Não Encontrado (404)")
+    void testHandleFindDispositivosByCpfRes_NotFound() {
+        // Arrange
+        String cpfRes = "00000000000";
+        String exceptionMessage = "Dispositivos não encontrados para o CPF do responsável fornecido";
+        when(deviceStorageService.findDispositivosByCpfRes(anyString())).thenThrow(new RuntimeException(exceptionMessage));
+
+        // Act
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = handler.handleFindDispositivosByCpfRes(cpfRes);
+
+        // Assert
+        assertNotNull(response, "A resposta não deve ser nula");
+        // Observação: Conforme o padrão do handler, o status HTTP final é 200,
+        // mas o corpo indica o erro (status interno 404 e mensagem de erro)
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status da resposta HTTP deve ser 200, apesar do erro lógico");
+        assertNotNull(response.getBody(), "O corpo da resposta não deve ser nulo");
+
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
+        assertEquals("Erro", responseBody.getInfoMessage(), "O infoMessage no corpo deve ser 'Erro'");
+        assertEquals(exceptionMessage, responseBody.getStatusMessage(), "A mensagem de erro deve corresponder");
+        assertEquals(HttpStatus.NOT_FOUND.value(), responseBody.getStatus(), "O código de status interno deve ser 404");
+        assertFalse(responseBody.getIsOk(), "O campo 'isOk' deve ser falso");
+        assertNull(responseBody.getContentResponse(), "Os dados retornados devem ser nulos em caso de erro");
+
+        verify(deviceStorageService, times(1)).findDispositivosByCpfRes(cpfRes);
+    }
+
 }

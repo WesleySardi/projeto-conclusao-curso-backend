@@ -146,4 +146,46 @@ class DeviceStorageServiceTest {
         verify(deviceStorageRepository, never()).findByTokenDispositivo(anyString());
         verify(deviceStorageRepository, never()).save(any(DeviceStorage.class));
     }
+
+    @Test
+    void testFindDispositivosByCpfRes_Success() {
+        // Dado
+        String cpfRes = "12345678900";
+        List<Object[]> dispositivosDoResponsavel = getObjects(); // Reuso do método getObjects() ou algo similar
+
+        when(deviceStorageRepository.findTokenDispositivosByCpfRes(cpfRes)).thenReturn(dispositivosDoResponsavel);
+
+        // Quando
+        List<DeviceStorageResult> result = deviceStorageService.findDispositivosByCpfRes(cpfRes);
+
+        // Então
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("token1", result.get(0).getTokenDispositivo());
+        assertEquals("token2", result.get(1).getTokenDispositivo());
+        // Todos retornam o mesmo responsável conforme a lógica atual do service
+        assertEquals("12345678900", result.get(0).getCpfResponsavel());
+        assertEquals("12345678900", result.get(1).getCpfResponsavel());
+
+        verify(deviceStorageRepository, times(1)).findTokenDispositivosByCpfRes(cpfRes);
+    }
+
+    @Test
+    void testFindDispositivosByCpfRes_NotFound() {
+        // Dado
+        String cpfRes = "00000000000";
+        when(deviceStorageRepository.findTokenDispositivosByCpfRes(cpfRes)).thenReturn(Collections.emptyList());
+
+        // Quando e Então
+        ServiceException exception = assertThrows(ServiceException.class, () -> {
+            deviceStorageService.findDispositivosByCpfRes(cpfRes);
+        });
+
+        assertTrue(exception.getMessage().contains(DeviceStorageService.DEVICE_NOT_FOUND));
+        assertTrue(exception.getMessage().contains(cpfRes));
+
+        verify(deviceStorageRepository, times(1)).findTokenDispositivosByCpfRes(cpfRes);
+        verify(deviceStorageRepository, never()).save(any(DeviceStorage.class));
+    }
+
 }

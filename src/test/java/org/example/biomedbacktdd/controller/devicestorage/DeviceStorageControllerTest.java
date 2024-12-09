@@ -164,4 +164,67 @@ class DeviceStorageControllerTest {
 
         verify(handler, times(1)).handleCreate(command);
     }
+
+    @Test
+    @DisplayName("GET /api/devicestorage/{cpfRes} - Sucesso (200)")
+    void testFindDispositivosByCpfRes_Success() {
+        String cpfRes = "12345678900";
+
+        StatusResponseViewModel<List<DeviceStorageResult>> successResponse = new StatusResponseViewModel<>();
+        successResponse.setStatus(200);
+        successResponse.setStatusMessage("Operation completed successfully.");
+
+        when(handler.handleFindDispositivosByCpfRes(cpfRes))
+                .thenReturn(ResponseEntity.ok(successResponse));
+
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfRes(cpfRes);
+
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
+
+        assertNotNull(response);
+        assertNotNull(responseBody);
+        assertEquals(200, responseBody.getStatus());
+        assertEquals("Operation completed successfully.", responseBody.getStatusMessage());
+
+        verify(handler, times(1)).handleFindDispositivosByCpfRes(cpfRes);
+    }
+
+    @Test
+    @DisplayName("GET /api/devicestorage/{cpfRes} - Sem Conteúdo (204)")
+    void testFindDispositivosByCpfRes_NoContent() {
+        String cpfRes = "00000000000";
+
+        when(handler.handleFindDispositivosByCpfRes(cpfRes))
+                .thenReturn(ResponseEntity.noContent().build());
+
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfRes(cpfRes);
+
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
+
+        assertNotNull(response);
+        // Como é noContent, não existe body
+        assertNull(responseBody);
+
+        verify(handler, times(1)).handleFindDispositivosByCpfRes(cpfRes);
+    }
+
+    @Test
+    @DisplayName("GET /api/devicestorage/{cpfRes} - Não Encontrado (404)")
+    void testFindDispositivosByCpfRes_NotFound() {
+        String cpfRes = "99999999999";
+
+        when(handler.handleFindDispositivosByCpfRes(cpfRes))
+                .thenReturn(ResponseEntity.notFound().build());
+
+        ResponseEntity<StatusResponseViewModel<List<DeviceStorageResult>>> response = controller.findDispositivosByCpfRes(cpfRes);
+
+        StatusResponseViewModel<List<DeviceStorageResult>> responseBody = response.getBody();
+
+        assertNotNull(response);
+        // Como é notFound, também não deverá haver body
+        assertNull(responseBody);
+
+        verify(handler, times(1)).handleFindDispositivosByCpfRes(cpfRes);
+    }
+
 }
