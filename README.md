@@ -14,6 +14,34 @@
 
 Este é o back-end da aplicação **ZloTrackband**, responsável por gerenciar as funcionalidades relacionadas às pulseiras de auxílio para pessoas dependentes. Ele provê os serviços necessários para autenticação, gerenciamento de dependentes, notificações, histórico de localizações e integração com dispositivos externos.
 
+## Objetivo do ZloTrackband - Back-End
+
+O **ZloTrackband Back-End** foi desenvolvido para gerenciar de forma segura e eficiente todas as funcionalidades relacionadas ao sistema de pulseiras ZloTrackband. Ele serve como a base para operações críticas da aplicação, garantindo a proteção de dados sensíveis, a escalabilidade do sistema e a integração fluida com dispositivos e serviços externos.
+
+### Principais Objetivos:
+1. **Gerenciamento de Dependentes e Responsáveis**:
+   - Fornecer operações completas de cadastro, atualização, exclusão e consulta para dependentes e responsáveis, com controle de permissões baseado em papéis (Roles).
+
+2. **Segurança e Conformidade**:
+   - Implementar autenticação robusta utilizando tokens JWT e proteção avançada das rotas com base em permissões.
+   - Garantir conformidade com normas como **HIPAA**, preservando a segurança de dados sensíveis (PHI).
+
+3. **Notificações e Comunicação**:
+   - Integrar serviços de e-mail e SMS para envio de notificações em tempo real, promovendo uma comunicação direta e eficiente com os responsáveis.
+
+4. **Histórico de Localizações**:
+   - Armazenar e disponibilizar registros detalhados de localização dos dependentes, com rastreabilidade e transparência para os usuários.
+
+5. **Integração com Dispositivos Externos**:
+   - Permitir interações seguras e consistentes com as pulseiras NFC, garantindo a sincronização de dados entre hardware e software.
+
+6. **Escalabilidade e Organização**:
+   - Seguir uma arquitetura em camadas (Controller, Service, Repository) que facilita a manutenção, testes e expansão do sistema conforme as necessidades do projeto.
+
+Com esses objetivos, o back-end do ZloTrackband garante uma base robusta, confiável e segura para as funcionalidades do sistema, alinhada às melhores práticas de desenvolvimento e às demandas dos usuários. 
+
+--- 
+
 ### Principais Funcionalidades:
 
 - **Autenticação JWT**: Proteção das rotas com base em papéis (Roles) definidos.
